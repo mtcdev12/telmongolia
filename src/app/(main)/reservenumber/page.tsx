@@ -6,6 +6,7 @@ import Prefix from "./prefix";
 import List from "./list";
 import Grade from "./grade";
 import { getNumbers } from "@/api/rest";
+import { number } from "zod";
 
 
 const breadcrumb = ["Дугаар захиалах"];
@@ -38,12 +39,15 @@ const Page = () => {
     },[currentNumber, grade]);
 
     const getData = async (page:number) => {
+        console.log(number)
         if(currentNumber){
+            console.log(currentNumber)
             let data = await getNumbers(currentNumber, grade, page);
+console.log(data)
             setList(data);
         }
     }
-
+console.log(list, "listtt")
     return (
         <div>
             <Breadcrumb data={breadcrumb} />

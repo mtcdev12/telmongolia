@@ -14,6 +14,7 @@ const List = (props: any) => {
   const handleModalClose = () =>{
     setIsOpen(false);
   }
+  console.log(props, "aaaaaaaa")
   return (
     <div>
       {isOpen && <Reserver selected={selected} onModalClose={handleModalClose}/>}

@@ -272,6 +272,7 @@ export const paymentPay = async (values:any) => {
         body: JSON.stringify(values),
       };
     let url = process.env.API + "/payment/pay";
+    console.log(url, "ddddd")
     try{
         const res = await fetch(url, requestOptions);
         const data = await res.json();
