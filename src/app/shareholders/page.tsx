@@ -33,12 +33,12 @@ const Page = () => {
         <section className="mt-6">
           <h5 className="font-bold mb-2">Хувьцаа эзэмшигчдийн анхааралд:</h5>
           <div className="space-y-2 space-x-3">
-            <Link href="http://202.179.23.66:8088/eoffice/uploads/1745847058204.pdf" target="_blank">
+            <Link href="https://drive.google.com/file/d/1NRuMK-OhaQn9pfZFU0inXur2pTtWarYB/view?usp=sharing" target="_blank">
               <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 Хурлын материал PDF татах
               </button>
             </Link>
-            <Link href="http://202.179.23.66:8088/eoffice/uploads/1745840198260.pdf" target="_blank">
+            <Link href="https://drive.google.com/file/d/16n0mCZ0PPvzxO4XmaOYGegV6PHjFpYGy/view?usp=sharing" target="_blank">
             <button className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
                 Саналын хуудас PDF татах
               </button>
