@@ -33,7 +33,7 @@ const Page = () => {
         <section className="mt-6">
           <h5 className="font-bold mb-2">Хувьцаа эзэмшигчдийн анхааралд:</h5>
           <div className="space-y-2 space-x-3">
-            <Link href="https://drive.google.com/file/d/1NRuMK-OhaQn9pfZFU0inXur2pTtWarYB/view?usp=sharing" target="_blank">
+            <Link href="https://drive.google.com/file/d/1uHc1TBj_m2gzEcyEhLr_1p_zAQ-tPURa/view" target="_blank">
               <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 Хурлын материал PDF татах
               </button>
