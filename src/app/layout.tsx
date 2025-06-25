@@ -6,6 +6,7 @@ import Topbar from './topbar'
 import Footer from './footer'
 import { Toaster } from "@/components/ui/toaster"
 import Feedback from '@/components/feedback'
+import Chatbot from '@/components/chatbot'
 import FacebookMessenger from '@/components/facebookMessenger'
 
 const font = Montserrat({ subsets: ['cyrillic'] })
@@ -20,7 +21,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  
+
   return (
     <html lang="en">
       <body className={`${font.className} flex flex-col min-h-screen`}>
@@ -33,6 +34,9 @@ export default function RootLayout({
           }
         </main>
         <Feedback />
+        <div className='fixed right-20 bottom-20'>
+          <Chatbot />
+        </div>
         <Footer />
         <Toaster />
       </body>

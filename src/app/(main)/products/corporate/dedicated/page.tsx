@@ -32,10 +32,10 @@ const Page = () => {
             desc="МУ-ын 21 аймаг, 251 сум сууринд манай компанийн сүлжээ хүрсэн"
             img="baiguullaga/icon9.png"
           />
-          <Advantage
+          {/* <Advantage
             desc="24 цагийн турш монгол дахь интернэт сүлжээнд, 00:00 – 08:00 цаг хүртэл гадаад интернэт сүлжээнд хурдны хязгааргүй холбогдоно."
             img="baiguullaga/icon10.png"
-          />
+          /> */}
           <Advantage
             desc="Facebook cache, Google cache сервертэй"
             img="baiguullaga/icon11.png"
