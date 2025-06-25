@@ -36,6 +36,7 @@ const Page = () => {
             desc="24 цагийн турш монгол дахь интернэт сүлжээнд, 00:00 – 08:00 цаг хүртэл гадаад интернэт сүлжээнд хурдны хязгааргүй холбогдоно."
             img="baiguullaga/icon10.png"
           /> */}
+          
           <Advantage
             desc="Facebook cache, Google cache сервертэй"
             img="baiguullaga/icon11.png"
