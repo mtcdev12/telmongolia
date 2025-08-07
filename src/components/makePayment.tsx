@@ -68,22 +68,25 @@ const Payment = (props: any) => {
                   <tr>
                     <td className="text-brand-1 bg-yellow-100">Хаан банк</td>
                     <td className="text-center">
+                       MN 78000500<br/>
                       {props.paymentdata['account']['khaan_bank']}
-                      <BiCopyAlt className="text-[20px] float-right cursor-pointer" onClick={()=>copier(props.paymentdata['account']['khaan_bank'])}/>
+                      <BiCopyAlt className="text-[20px] float-right cursor-pointer" onClick={()=>copier(`MN78000500${props.paymentdata['account']['khaan_bank']}`)}/>
                     </td>
                   </tr>
                   <tr>
                     <td className="text-brand-1 bg-yellow-100">Төрийн банк</td>
                     <td className="text-center">
+                       MN 910034 <br/>
                       {props.paymentdata['account']['state_bank']}
-                      <BiCopyAlt className="text-[20px] float-right cursor-pointer" onClick={()=>copier(props.paymentdata['account']['state_bank'])}/>
+                      <BiCopyAlt className="text-[20px] float-right cursor-pointer" onClick={()=>copier(`MN910034${props.paymentdata['account']['state_bank']}`)}/>
                     </td>
                   </tr>
                   <tr>
                     <td className="text-brand-1 bg-yellow-100">Голомт банк</td>
                     <td className="text-center">
+                      MN 06001500 <br/>
                       {props.paymentdata['account']['golomt_bank']}
-                      <BiCopyAlt className="text-[20px] float-right cursor-pointer" onClick={()=>copier(props.paymentdata['account']['golomt_bank'])}/>
+                      <BiCopyAlt className="text-[20px] float-right cursor-pointer" onClick={()=>copier(`MN06001500${props.paymentdata['account']['golomt_bank']}`)}/>
                     </td>
                   </tr>
                   <tr>
