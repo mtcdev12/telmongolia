@@ -158,7 +158,7 @@ const Page = () => {
         </h5>
         <div className="relative w-full xl:h-[800px] min-h-[300px]">
           <Image
-            src="/assets/images/bvtets.jpg"
+            src="/assets/images/bvtets2.jpg"
             fill
             alt="butets"
             className="object-contain"
