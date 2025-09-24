@@ -36,11 +36,11 @@ const Page = () => {
           pic="7.jpg"
         />
                 <Card
-          name="Содномдовжид Нямбаяр"
-          desc="Маркетинг, борлуулалтын газрын захирал"
+          name="Омбоосүрэн Цолмон"
+          desc="Маркетингийн захирал"
           tel="311717"
-          email="nyambayar@mtcone.net"
-          pic="IMG_9582.jpg"
+          email="tsolmon@mtcone.net"
+          pic="tsolmon.png"
         />
                 <Card
           name="Гончигсүрэн Нямжав"
@@ -56,13 +56,20 @@ const Page = () => {
           email="iderbat@mtcone.net"
           pic="noimageuser.png"
         />
-                        <Card
+        <Card
+          name="Нямбуугийн Мягмарсүрэн"
+          desc="Санхүү бүртгэл, аж ахуйн газар захирал"
+          tel="70102155"
+          email="myagaa@mtcone.net"
+          pic="Myangmar.png"
+        />
+                        {/* <Card
           name="Болд Биндэръяа"
           desc="Эм Ти Си СЕРВИС ХХК-ийн захирал"
           tel="70106879"
           email="binderiya@mtcone.net"
           pic="6.jpg"
-        />
+        /> */}
       </div>
     </div>
   );
