@@ -40,7 +40,7 @@ const Page = () => {
           desc="Маркетингийн захирал"
           tel="311717"
           email="tsolmon@mtcone.net"
-          pic="tsolmon.png"
+          pic="tsolmon1.png"
         />
                 <Card
           name="Гончигсүрэн Нямжав"
