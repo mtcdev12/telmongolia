@@ -37,7 +37,7 @@ const Page = () => {
         />
                 <Card
           name="Омбоосүрэн Цолмон"
-          desc="Маркетингийн захирал"
+          desc="Маркетинг, борлуулалтын газрын захирал"
           tel="311717"
           email="tsolmon@mtcone.net"
           pic="tsolmon1.png"
@@ -58,7 +58,7 @@ const Page = () => {
         />
         <Card
           name="Нямбуугийн Мягмарсүрэн"
-          desc="Санхүү бүртгэл, аж ахуйн газар захирал"
+          desc="Санхүү бүртгэл, аж ахуйн газрын захирал"
           tel="70102155"
           email="myagaa@mtcone.net"
           pic="Myangmar.png"
