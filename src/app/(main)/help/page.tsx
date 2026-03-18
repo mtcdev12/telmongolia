@@ -100,6 +100,9 @@ const Page = () => {
           <TableRow className="cursor-pointer" onClick={() => openModal(15)}>
             <TableCell>Сүлжээ хоорондын харилцан холболтын гэрээ</TableCell>
           </TableRow>
+          <TableRow className="cursor-pointer" onClick={() => openModal(16)}>
+            <TableCell>Оюуны өмчийн гэрчилгээ</TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </div>
