@@ -10,7 +10,7 @@ const Topbar = () => {
                     <Link href="https://servers.mn/" target="_blank" rel="noreferrer">Data center</Link>
                     <Link href="https://tvroom.mn/" target="_blank" rel="noreferrer">TVROOM</Link>
                     <Link href="https://www.facebook.com/1109.mn" target="_blank" rel="noreferrer">Үндэсний лавлах 1109</Link>
-                    <Link href="/shareholders/news/32" className="text-yellow-300">МЦХ ХК-ИЙН ХУВЬЦАА ЭЗЭМШИГЧДИЙН АНХААРАЛД</Link>
+                    <Link href="/shareholders/news/AUTO_INCREMENT" className="text-yellow-300">МЦХ ХК-ИЙН ХУВЬЦАА ЭЗЭМШИГЧДИЙН АНХААРАЛД</Link>
                 </ul>
                 <ul className="text-lg">
                     <li>
