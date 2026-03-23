@@ -33,7 +33,7 @@ const Page = () => {
         <section className="mt-6">
           <h5 className="font-bold mb-2">Хувьцаа эзэмшигчдийн анхааралд:</h5>
           <div className="space-y-2 space-x-3">
-            <Link href="https://drive.google.com/file/d/1MmgedPZkJexVOKGKQNmYj-O78gEO621k/view?usp=sharing" target="_blank">
+            {/* <Link href="https://drive.google.com/file/d/1MmgedPZkJexVOKGKQNmYj-O78gEO621k/view?usp=sharing" target="_blank">
               <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 Хурлын материал PDF татах
               </button>
@@ -42,7 +42,7 @@ const Page = () => {
             <button className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
                 Саналын хуудас PDF татах
               </button>
-            </Link>
+            </Link> */}
             {/* <Link href="/shareholders/document">
               <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 Хурлын материал PDF татах
@@ -100,8 +100,8 @@ const Page = () => {
             <li>Ногдол ашиг хуваарилах тухай ТУЗ-ийн тогтоолыг танилцуулах тухай</li>
             <li>Төлөөлөн удирдах зөвлөлийн гишүүнийг чөлөөлж, сонгох тухай</li>
             <li>Төлөөлөн удирдах зөвлөлийн 2026 оны зардлын төсвийг батлах тухай</li>
-            <h6>Хурлын материалтай 2026 оны 4 дүгээр сарын 10-ны өдрөөс эхлэн танилцах боломжтой.</h6>
           </ol>
+          <h6>Хурлын материалтай 2026 оны 4 дүгээр сарын 10-ны өдрөөс эхлэн танилцах боломжтой.</h6>
         </section>
 
         <section className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -109,12 +109,12 @@ const Page = () => {
           <div>
             <h5 className="font-bold mb-2">Хурал зохион байгуулах комисс:</h5>
             <p>Комиссын дарга: Ч.Цогтгэрэл</p>
-            <p>Гишүүд: Х.Цэцэгмаа, Г.Отгончимэг</p>
-            <p>Утас: 7010 2210, 7010 2266</p>
+            <p>Гишүүд: Х.Цэцэгмаа, Г.Батнасан</p>
+            <p>Утас: 7010 2210, 7010 2390</p>
             <p>И-мэйл:</p>
             <ul className="list-disc list-inside ml-4">
-              <li>otgonchimreg@mtcone.net</li>
-              <li>azlawyer@mtcone.net</li>
+              <li>batnasan@mtcone.net</li>
+              <li>tsetsegmaa@mtcone.net</li>
               <li>ch.tsogtgerel@mtcone.net</li>
             </ul>
           </div>
@@ -124,7 +124,7 @@ const Page = () => {
             <h5 className="font-bold mb-2">Тооллогын комисс:</h5>
             <p>Комиссын дарга: Т.Бямбасүрэн</p>
             <p>Гишүүд: Б.Дагвадорж, Э.Булганчимэг</p>
-            <p>Утас: 7010 2211, 7010 2244</p>
+            <p>Утас: 7010 2211, 7010 2305</p>
             <p>И-мэйл:</p>
             <ul className="list-disc list-inside ml-4">
               <li>planning@mtcone.net</li>
