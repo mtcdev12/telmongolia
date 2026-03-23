@@ -31,7 +31,7 @@ const Page = () => {
         <h1 className="font-bold text-2xl text-center">2026 оны Хувьцаа эзэмшигчдийн ээлжит хурал</h1>
 
         <section className="mt-6">
-          <h5 className="font-bold mb-2">Хувьцаа эзэмшигчдийн анхааралд:</h5>
+          {/* <h5 className="font-bold mb-2">Хувьцаа эзэмшигчдийн анхааралд:</h5> */}
           <div className="space-y-2 space-x-3">
             {/* <Link href="https://drive.google.com/file/d/1MmgedPZkJexVOKGKQNmYj-O78gEO621k/view?usp=sharing" target="_blank">
               <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
