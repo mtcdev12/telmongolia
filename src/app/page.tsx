@@ -6,7 +6,7 @@ import HomeAlert from "@/components/homeAlert";
 const Home = () => {
   return (
     <div>
-      {/* <HomeAlert/> */}
+      <HomeAlert/>
       <div className="2xl:block">
         <Slogans />
       </div>
