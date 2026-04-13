@@ -1,12 +1,10 @@
 import Caraosel from "@/components/caraosel";
 import Shortcut from "@/components/shortcut";
 import Slogans from "@/components/slogans";
-import HomeAlert from "@/components/homeAlert";
 
 const Home = () => {
   return (
     <div>
-      <HomeAlert/>
       <div className="2xl:block">
         <Slogans />
       </div>
