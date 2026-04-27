@@ -32,7 +32,7 @@ const Page = () => {
 
         <section className="mt-6">
           {/* <h5 className="font-bold mb-2">Хувьцаа эзэмшигчдийн анхааралд:</h5> */}
-          <div className="space-y-2 space-x-3">
+          <div className="flex justify-end pr-10 space-x-3">
             {/* <Link href="https://drive.google.com/file/d/1MmgedPZkJexVOKGKQNmYj-O78gEO621k/view?usp=sharing" target="_blank">
               <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 Хурлын материал PDF татах
@@ -43,12 +43,23 @@ const Page = () => {
                 Саналын хуудас PDF татах
               </button>
             </Link> */}
-            {/* <Link href="/shareholders/document">
-              <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                Хурлын материал PDF татах
-              </button>
-            </Link>
-            <Link href="/shareholders/document1">
+              <a
+                href="/assets/huwtsaa/hewleliin-eh.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                Хурлын материал нээх
+              </a>
+              <a
+                href="/assets/huwtsaa/sanaliin-huudas.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+              >
+                Саналын хуудас
+              </a>
+            {/* <Link href="/shareholders/document1">
               <button className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
                 Саналын хуудас PDF татах
               </button>
