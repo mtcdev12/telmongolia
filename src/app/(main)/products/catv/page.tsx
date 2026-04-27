@@ -44,8 +44,8 @@ const Page = () => {
             img="baiguullaga/icon24.png"
           />
           <Advantage
-            title="SPS"
-            desc="SPS спорт багц, MovieBox-ийн сувгуудтай"
+            title="PSN"
+            desc="PSN спорт багц, MovieBox-ийн сувгуудтай"
             img="urh/icon2.png"
           />
         </div>

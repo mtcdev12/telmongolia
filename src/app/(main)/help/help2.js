@@ -733,7 +733,7 @@ function Help2() {
 <p>51</p>
 </td>
 <td width="135">
-<p>SPS National</p>
+<p>PSN 1</p>
 </td>
 <td width="120">
 <p>Спорт</p>
@@ -747,7 +747,7 @@ function Help2() {
 <p>52</p>
 </td>
 <td width="135">
-<p>SPS Prime&nbsp;&nbsp;</p>
+<p>PSN 2</p>
 </td>
 <td width="120">
 <p>Спорт</p>
@@ -761,7 +761,7 @@ function Help2() {
 <p>53</p>
 </td>
 <td width="135">
-<p>SPS Classic&nbsp;</p>
+<p>PSN 3</p>
 </td>
 <td width="120">
 <p>Спорт</p>
@@ -775,7 +775,7 @@ function Help2() {
 <p>54</p>
 </td>
 <td width="135">
-<p>SPS World&nbsp;&nbsp;</p>
+<p>PSN 4</p>
 </td>
 <td width="120">
 <p>Спорт</p>
@@ -789,7 +789,7 @@ function Help2() {
 <p>55</p>
 </td>
 <td width="135">
-<p>SPS Fight&nbsp;</p>
+<p>PSN 5</p>
 </td>
 <td width="120">
 <p>Спорт</p>
@@ -966,7 +966,7 @@ function Help2() {
 <p>Цэнгээнт</p>
 </td>
 </tr>
-<tr>
+{/* <tr>
 <td width="96">
 <p>68</p>
 </td>
@@ -979,7 +979,7 @@ function Help2() {
 <td width="279">
 <p>Нийгэм эдийн засаг</p>
 </td>
-</tr>
+</tr> */}
 <tr>
 <td width="96">
 <p>69</p>
@@ -1106,7 +1106,7 @@ function Help2() {
 <p>Кино суваг</p>
 </td>
 </tr>
-<tr>
+{/* <tr>
 <td width="96">
 <p>78</p>
 </td>
@@ -1119,8 +1119,8 @@ function Help2() {
 <td width="279">
 <p>Кино суваг</p>
 </td>
-</tr>
-<tr>
+</tr> */}
+{/* <tr>
 <td width="96">
 <p>79</p>
 </td>
@@ -1133,7 +1133,7 @@ function Help2() {
 <td width="279">
 <p>Хүүхэд, боловсрол</p>
 </td>
-</tr>
+</tr> */}
 <tr>
 <td width="96">
 <p>80</p>
@@ -1148,7 +1148,7 @@ function Help2() {
 <p>Хүүхэд, боловсрол</p>
 </td>
 </tr>
-<tr>
+{/* <tr>
 <td width="96">
 <p>81</p>
 </td>
@@ -1161,7 +1161,7 @@ function Help2() {
 <td width="279">
 <p>Хүүхэд, боловсрол</p>
 </td>
-</tr>
+</tr> */}
 <tr>
 <td width="96">
 <p>82</p>
