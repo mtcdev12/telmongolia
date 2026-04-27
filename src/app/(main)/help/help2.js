@@ -966,7 +966,7 @@ function Help2() {
 <p>Цэнгээнт</p>
 </td>
 </tr>
-<tr>
+{/* <tr>
 <td width="96">
 <p>68</p>
 </td>
@@ -979,7 +979,7 @@ function Help2() {
 <td width="279">
 <p>Нийгэм эдийн засаг</p>
 </td>
-</tr>
+</tr> */}
 <tr>
 <td width="96">
 <p>69</p>
