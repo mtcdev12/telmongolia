@@ -1,4 +1,5 @@
 "use client";
+
 import { getShareHoldersNews } from "@/api/rest";
 import { useState, useEffect } from "react";
 import Image from "next/image";
@@ -8,74 +9,147 @@ import Link from "next/link";
 import Paginator from "@/components/ui/paginator";
 import Loader from "@/components/ui/loader";
 import { BsFolder2Open } from "react-icons/bs";
+import { CalendarDays, ArrowRight, FileText } from "lucide-react";
 
 const breadcrumb = ["Хувьцаа эзэмшигчдэд", "Мэдээлэл"];
 
+interface NewsItem {
+  id: number;
+  title: string;
+  cover_img: string;
+  created_at: string;
+}
+
+interface NewsType {
+  data: NewsItem[];
+  currentPage: number;
+  currentPageSize: number;
+  totalDatas: number;
+  totalPages: number;
+}
+
 const Page = () => {
-  interface NewsType {
-    data: [];
-    currentPage: number;
-    currentPageSize: number;
-    totalDatas: number;
-    totalPages: number;
-  }
   const [news, setNews] = useState<NewsType>();
   const [loading, setLoading] = useState(false);
+
   const getData = async (page: number) => {
     setLoading(true);
-    const res = await getShareHoldersNews('shareholders', page);
-    setNews(res);
-    setLoading(false);
+
+    try {
+      const res = await getShareHoldersNews("shareholders", page);
+      setNews(res);
+    } catch (error) {
+      console.error("Shareholders news load error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
+
   useEffect(() => {
     getData(1);
   }, []);
+
   return (
-    <div className="mt-4">
-    {loading && <Loader />}
+    <div className="min-h-screen bg-gradient-to-b from-[#f4f8ff] via-white to-white">
+      {loading && <Loader />}
+
       <Breadcrumb data={breadcrumb} />
-      {news && (
-        <div>
-          <div className="flex flex-wrap gap-2">
-            {news["data"].map((d) => (
-              <Link
-                href={"/shareholders/news/" + d["id"]}
-                key={d["id"]}
-                className="w-[356px] border border-gray-300 mx-auto rounded-2xl overflow-hidden relative group"
-              >
-                <div className="absolute inset-0 bg-brand-2/70 h-full z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <span className="text-white border-double border-2 border-slate-50 p-4 rounded-2xl font-semibold flex gap-1 items-center">
-                    <BsFolder2Open className="text-2xl"/>Дэлгэрэнгүй
-                  </span>
-                </div>
-                <div className="relative h-[200px] w-full z-0 border-b border-slate-100">
-                  <Image
-                    src={process.env.API2 + "/uploads/" + d["cover_img"]}
-                    className="object-cover group-hover:scale-[1.1] transition-transform duration-300"
-                    fill
-                    alt={d["title"]}
-                    sizes="(max-width: 300px) 40vw"
-                    quality={70}
-                  />
-                </div>
-                <div className="text-sm font-semibold w-full h-[40px] overflow-ellipsis overflow-hidden mt-4 px-4 tracking-tight text-center">
-                  {d["title"]}
-                </div>
-                <div className="mx-6 my-2 text-center text-gray-500">
-                  Нийтлэгдсэн {format_date(d["created_at"])}
-                </div>
-              </Link>
-            ))}
-          </div>
-          <div className="flex justify-center my-4">
-            <Paginator
-              totalPages={news.totalPages}
-              currentPage={news.currentPage}
-              handlePageChange={getData}
-            />
-          </div>
+
+      <section className="mx-auto max-w-[1280px] px-4 py-8 md:py-12">
+        {/* Header */}
+        <div className="mb-8 overflow-hidden rounded-[28px] bg-gradient-to-r from-[#062b78] via-[#0b5fe8] to-[#1a9cff] p-7 text-white shadow-[0_20px_55px_rgba(37,99,235,0.25)] md:p-10">
+          <p className="mb-3 inline-flex rounded-full bg-white/15 px-4 py-1.5 text-sm font-semibold backdrop-blur">
+            Хувьцаа эзэмшигчдэд
+          </p>
+
+          <h1 className="flex items-center gap-3 text-3xl font-black tracking-[-0.7px] md:text-5xl">
+            <FileText className="hidden md:block" size={42} />
+            Мэдээлэл
+          </h1>
+
+          <p className="mt-4 max-w-[720px] text-base leading-7 text-white/85 md:text-lg">
+            Хувьцаа эзэмшигчдэд зориулсан мэдээ, зар, тайлан болон холбогдох
+            мэдээллүүд.
+          </p>
         </div>
-      )}
+
+        {news && (
+          <>
+            <div className="mb-5 flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-black text-[#061f57] md:text-2xl">
+                  Мэдээллийн жагсаалт
+                </h2>
+
+                <p className="mt-1 text-sm text-slate-500">
+                  Нийт {news.totalDatas} мэдээлэл байна
+                </p>
+              </div>
+            </div>
+
+            {/* News grid */}
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {news.data.map((d) => (
+                <Link
+                  href={`/shareholders/news/${d.id}`}
+                  key={d.id}
+                  className="group overflow-hidden rounded-[26px] border border-slate-200/80 bg-white shadow-[0_16px_40px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_24px_60px_rgba(37,99,235,0.16)]"
+                >
+                  <div className="relative h-[230px] w-full overflow-hidden bg-slate-100">
+                    <Image
+                      src={`${process.env.API2}/uploads/${d.cover_img}`}
+                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                      fill
+                      alt={d.title}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      quality={80}
+                    />
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent opacity-80" />
+
+                    <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full bg-white/90 px-3 py-1.5 text-xs font-bold text-blue-700 shadow-md backdrop-blur">
+                      <FileText size={15} />
+                      Мэдээлэл
+                    </div>
+
+                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#063b91]/70 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
+                      <span className="flex items-center gap-2 rounded-2xl border border-white/60 bg-white/15 px-5 py-3 text-sm font-bold text-white shadow-lg">
+                        <BsFolder2Open className="text-xl" />
+                        Дэлгэрэнгүй
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-5">
+                    <h3 className="line-clamp-2 min-h-[56px] text-[18px] font-black leading-7 tracking-[-0.3px] text-[#061f57] transition group-hover:text-blue-700">
+                      {d.title}
+                    </h3>
+
+                    <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-4">
+                      <div className="flex items-center gap-2 text-sm font-medium text-slate-500">
+                        <CalendarDays size={17} className="text-blue-600" />
+                        {format_date(d.created_at)}
+                      </div>
+
+                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-50 text-blue-600 transition group-hover:bg-blue-600 group-hover:text-white">
+                        <ArrowRight size={18} />
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            <div className="mt-10 flex justify-center">
+              <Paginator
+                totalPages={news.totalPages}
+                currentPage={news.currentPage}
+                handlePageChange={getData}
+              />
+            </div>
+          </>
+        )}
+      </section>
     </div>
   );
 };

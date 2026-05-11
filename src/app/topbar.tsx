@@ -1,26 +1,74 @@
 import Link from "next/link";
 import { BiGlobe } from "react-icons/bi";
+
 const Topbar = () => {
-    return (
-        <div className="hidden md:block bg-brand-1">
-            <div className="container text-slate-50 flex justify-between items-center tracking-tight">
-                <ul className="flex gap-4 text-xs py-2">
-                    <Link href="https://www.facebook.com/profile.php?id=100058955362068" target="_blank" rel="noreferrer">MTC Service</Link>
-                    <Link href="https://www.facebook.com/profile.php?id=100058955362068" target="_blank" rel="noreferrer">MTC Acadamy</Link>
-                    <Link href="https://servers.mn/" target="_blank" rel="noreferrer">Data center</Link>
-                    <Link href="https://tvroom.mn/" target="_blank" rel="noreferrer">TVROOM</Link>
-                    <Link href="https://www.facebook.com/1109.mn" target="_blank" rel="noreferrer">Үндэсний лавлах 1109</Link>
-                    <Link href="/shareholders/news/AUTO_INCREMENT" className="text-yellow-300">МЦХ ХК-ИЙН ХУВЬЦАА ЭЗЭМШИГЧДИЙН АНХААРАЛД</Link>
-                </ul>
-                <ul className="text-lg">
-                    <li>
-                        <BiGlobe />
-                    </li>
-                </ul>
-            </div>
-            
+  return (
+    <div className="hidden border-b border-white/10 bg-[#001b55] md:block">
+      <div className="mx-auto flex h-9 max-w-[1280px] items-center justify-between px-4 text-white">
+        <div className="flex items-center gap-7 text-[12px] font-medium tracking-tight text-white/85">
+          <Link
+            href="https://www.facebook.com/profile.php?id=100058955362068"
+            target="_blank"
+            rel="noreferrer"
+            className="transition hover:text-white"
+          >
+            MTC Service
+          </Link>
+
+          <Link
+            href="https://www.facebook.com/profile.php?id=100058955362068"
+            target="_blank"
+            rel="noreferrer"
+            className="transition hover:text-white"
+          >
+            MTC Academy
+          </Link>
+
+          <Link
+            href="https://servers.mn/"
+            target="_blank"
+            rel="noreferrer"
+            className="transition hover:text-white"
+          >
+            Data center
+          </Link>
+
+          <Link
+            href="https://tvroom.mn/"
+            target="_blank"
+            rel="noreferrer"
+            className="transition hover:text-white"
+          >
+            TVROOM
+          </Link>
+
+          <Link
+            href="https://www.facebook.com/1109.mn"
+            target="_blank"
+            rel="noreferrer"
+            className="transition hover:text-white"
+          >
+            Үндэсний лавлах 1109
+          </Link>
+
+          <Link
+            href="/shareholders/news/AUTO_INCREMENT"
+            className="font-semibold text-yellow-300 transition hover:text-yellow-200"
+          >
+            МЦХ ХК-ИЙН ХУВЬЦАА ЭЗЭМШИГЧДИЙН АНХААРАЛД
+          </Link>
         </div>
-    );
-}
+
+        <Link
+          href="/en"
+          className="flex items-center gap-2 text-[13px] font-semibold text-white/90 transition hover:text-white"
+        >
+          <BiGlobe className="text-[18px]" />
+          <span>EN</span>
+        </Link>
+      </div>
+    </div>
+  );
+};
 
 export default Topbar;
