@@ -51,12 +51,12 @@ const Topbar = () => {
             Үндэсний лавлах 1109
           </Link>
 
-          <Link
+          {/* <Link
             href="/shareholders/news/AUTO_INCREMENT"
             className="font-semibold text-yellow-300 transition hover:text-yellow-200"
           >
             МЦХ ХК-ИЙН ХУВЬЦАА ЭЗЭМШИГЧДИЙН АНХААРАЛД
-          </Link>
+          </Link> */}
         </div>
 
         <Link
