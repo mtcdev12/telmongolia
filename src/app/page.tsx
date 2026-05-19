@@ -13,7 +13,7 @@ const Home = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowModal(false);
-    }, 2000);
+    }, 5000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -36,7 +36,7 @@ const Home = () => {
             </button>
 
             <h2 className="mb-3 text-2xl font-bold text-[#061f57]">
-              МЦХ захирлын сонгон шалгаруулах зар
+              МЦХ ХК-ийн захирлын сонгон шалгаруулах зар
             </h2>
 
             {/* <p className="mb-5 text-gray-600">
