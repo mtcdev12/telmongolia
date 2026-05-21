@@ -22,11 +22,11 @@ const modemGuides = [
     desc: "KASDA WIFI ADSL router тохиргооны заавар",
     href: "/assets/help/modem/KASDA WIFI ADSL ROUTER.pdf",
   },
-  {
-    title: "Grandstream",
-    desc: "Grandstream 1610 төхөөрөмжийн тохиргооны заавар",
-    href: "/assets/help/modem/grandstream1610 (1).pdf",
-  },
+  // {
+  //   title: "Grandstream",
+  //   desc: "Grandstream 1610 төхөөрөмжийн тохиргооны заавар",
+  //   href: "/assets/help/modem/grandstream1610 (1).pdf",
+  // },
 ];
 
 function GuideCard({ title, desc, href }) {
