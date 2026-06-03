@@ -50,6 +50,14 @@ const Topbar = () => {
           >
             Үндэсний лавлах 1109
           </Link>
+          <Link 
+            href="https://e-zasag.mn/"
+            target="_blank"
+            rel="noreferrer"
+            className="transition hover:text-white"
+          >
+            Е-засаг
+          </Link>
 
           {/* <Link
             href="/shareholders/news/AUTO_INCREMENT"
