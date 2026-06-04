@@ -56,7 +56,7 @@ const Topbar = () => {
             rel="noreferrer"
             className="transition hover:text-white"
           >
-            Е-засаг
+            E-zasag.mn
           </Link>
 
           {/* <Link

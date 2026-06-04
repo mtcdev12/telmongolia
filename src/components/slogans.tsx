@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const Slogans = () => {
   return (
@@ -39,6 +40,15 @@ const Slogans = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="max-w-[640px]"
         >
+          <Link href="https://e-zasag.mn/">
+          <Image
+              src="/assets/images/logo-dark.png"
+              alt="Logo"
+              width={150}
+              height={150}
+              className="mb-4 object-contain"
+            />
+          </Link>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
