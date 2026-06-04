@@ -40,7 +40,7 @@ const Slogans = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="max-w-[640px]"
         >
-          <Link href="https://e-zasag.mn/">
+          <Link href="https://e-zasag.mn/" target="_blank">
           <Image
               src="/assets/images/logo-dark.png"
               alt="Logo"
