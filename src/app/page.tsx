@@ -48,7 +48,7 @@ const Home = () => {
         </div>
       )} */}
 
-      <Slogans />
+      {/* <Slogans /> */}
 
       <div className="mx-auto max-w-[1280px] px-4">
         <div className="-mt-0 md:mt-3">

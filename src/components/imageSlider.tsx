@@ -55,15 +55,15 @@ const ImageSlider = ({ data }: { data: any }) => {
       Шинэ хэрэглэгчдэд зориулсан
     </p>
 
-    <h2 className="text-[44px] font-black uppercase leading-[0.9] tracking-[-2px] md:text-[56px] lg:text-[68px]">
+    <h2 className="text-[22px] font-black uppercase leading-[0.9] tracking-[-2px] md:text-[28px] lg:text-[34px]">
       Онцгой
       <br />
       урамшуулал
     </h2>
 
-    <p className="mt-3 text-sm font-medium text-white/90 md:text-base">
+    {/* <p className="mt-3 text-sm font-medium text-white/90 md:text-base">
       Гэрээ байгуулж нэмэгдэл дата + урамшуулал аваарай!
-    </p>
+    </p> */}
 
     <Link
       href="/bonus"

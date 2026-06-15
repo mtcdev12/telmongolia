@@ -68,7 +68,7 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop menu */}
-          <ul className="hidden items-center gap-8 text-[14px] font-semibold text-white md:flex">
+          <ul className="hidden items-center gap-8 text-[14px] text-white md:flex">
             <Dropdown title="Өрхийн хэрэглэгч" items={personal} />
             <Dropdown title="Байгууллага" items={corporate} />
 
