@@ -5,7 +5,7 @@ const breadcrumb = ["Ил тод байдал", "ТУЗ-ИЙН ТАЙЛАН"];
 const duties = [
   [
     "ТӨЛӨӨЛӨН УДИРДАХ ЗӨВЛӨЛИЙН 2025 ОНЫ ҮЙЛ АЖИЛЛАГААНЫ ТАЙЛАН",
-    "iltodbaidal/Төлөөлөн удирдах зөвлөлийн 2025 оны үйл ажиллагааны тайлан-2026.04.10.pdf",
+    "iltodbaidal/тайлан-2026.04.10.pdf",
   ],
   [
     "ТӨЛӨӨЛӨН УДИРДАХ ЗӨВЛӨЛИЙН 2024 ОНЫ ҮЙЛ АЖИЛЛАГААНЫ ТАЙЛАН",
@@ -22,15 +22,15 @@ const duties2 = [
     "iltodbaidal/Report_BOD_secretatry-2025.pdf",
   ],
 ];
-const titleRow: Row = {
-  type: "title",
-  text: "НАРИЙН БИЧГИЙН ДАРГЫН ТАЙЛАН",
-} as const;
-const titleRow2: Row = {
-  type: "title",
-  text: "ТӨЛӨӨЛӨН УДИРДАХ ЗӨВЛӨЛИЙН ҮЙЛ АЖИЛЛАГААНЫ ТАЙЛАН",
-} as const;
-const mergedList: Row[] = [titleRow2, ...duties, titleRow, ...duties2];
+// const titleRow: Row = {
+//   type: "title",
+//   text: "НАРИЙН БИЧГИЙН ДАРГЫН ТАЙЛАН",
+// } as const;
+// const titleRow2: Row = {
+//   type: "title",
+//   text: "ТӨЛӨӨЛӨН УДИРДАХ ЗӨВЛӨЛИЙН ҮЙЛ АЖИЛЛАГААНЫ ТАЙЛАН",
+// } as const;
+const mergedList: Row[] = [...duties, ...duties2];
 const Page = () => {
   return (
     <div>
