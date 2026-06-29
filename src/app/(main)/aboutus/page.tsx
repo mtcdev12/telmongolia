@@ -8,7 +8,7 @@ const Page = () => {
   return (
     <div>
       <Breadcrumb data={breadcrumb} />
-      <div className="border border-slate-300 p-6 rounded-2xl">
+      {/* <div className="border border-slate-300 p-6 rounded-2xl">
         <h5 className="text-brand-1 text-xl font-semibold tracking-tight text-right my-2">
           Захирлын мэндчилгээ
         </h5>
@@ -70,7 +70,7 @@ const Page = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="border border-slate-300 p-6 rounded-2xl mt-8 bg-indigo-50 bg-[url('/assets/images/overlay.png')] bg-right bg-contain bg-no-repeat">
         <h5 className="text-brand-1 text-xl font-semibold tracking-tight text-right my-2">
           Танилцуулга
