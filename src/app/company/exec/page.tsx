@@ -8,60 +8,60 @@ const Page = () => {
       <Breadcrumb data={breadcrumb} />
       <div className="flex gap-4 flex-wrap">
         <Card
-          name="Баатаржав Чинбат"
+          name="Т.Сайнжаргал"
           desc="Гүйцэтгэх захирал"
           tel="70102245"
-          email="chinbat@mtcone.net"
-          pic="3.jpg"
+          email="sainjargal@mtcone.net"
+          pic="Т.Сайнжаргал.png"
         />
-        <Card
-          name="Гомбосүрэн Болдсайхан"
-          desc="Дотоод аудитын газрын захирал"
-          tel="70102902"
-          email="boldsaikhan@mtcone.net"
-          pic="5.jpg"
-        />
-                <Card
-          name="Чимэдцэрэн Цогтгэрэл"
+         <Card
+          name="Ч.Цогтгэрэл"
           desc="Удирдлага, хүний нөөцийн газрын захирал"
           tel="70102900"
           email="ch.tsogtgerel@mtcone.net"
-          pic="4.jpg"
+          pic="Ч.Цогтгэрэл.png"
         />
-                <Card
-          name="Жанчивдорж Баасандорж"
+        <Card
+          name="Л.Батбаяр"
+          desc="Дотоод аудитын газрын захирал"
+          tel="70102902"
+          email="batbayar@mtcone.net"
+          pic="Л.Батбаяр.png"
+        />
+        <Card
+          name="Ч.Содхүү"
           desc="Инновац, бизнес хөгжлийн газрын захирал"
           tel="70102424"
-          email="baasandorj@mtcone.net"
-          pic="7.jpg"
+          email="sodkhuu@mtcone.net"
+          pic="Ч.Содхүү.png"
         />
-                <Card
-          name="Омбоосүрэн Цолмон"
+        <Card
+          name="О.Цолмон"
           desc="Маркетинг, борлуулалтын газрын захирал"
-          tel="311717"
+          tel="11311717"
           email="tsolmon@mtcone.net"
-          pic="tsolmon1.png"
+          pic="О.Цолмон.png"
         />
-                <Card
-          name="Гончигсүрэн Нямжав"
+        <Card
+          name="Г.Нямжав"
           desc="Техник, технологийн ашиглалтын газрын захирал"
           tel="70102220"
           email="nyamjav@mtcone.net"
           pic="2.jpg"
         />
-                <Card
-          name="Бямбацогт Идэрбат"
+        <Card
+          name="Б.Идэрбат"
           desc="Mэдээллийн технологийн төвийн захирал"
-          tel="70102503"
+          tel="70102509"
           email="iderbat@mtcone.net"
-          pic="noimageuser.png"
+          pic="Б.Идэрбат.png"
         />
         <Card
-          name="Нямбуугийн Мягмарсүрэн"
+          name="Н.Цэрэнбанзад"
           desc="Санхүү бүртгэл, аж ахуйн газрын захирал"
           tel="70102155"
-          email="myagaa@mtcone.net"
-          pic="Myangmar.png"
+          email="tserenbanzad@mtcone.net"
+          pic="Н.Цэрэнбанзад.png"
         />
                         {/* <Card
           name="Болд Биндэръяа"
