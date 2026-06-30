@@ -3,7 +3,7 @@ import PdfTable from "../../pdfTable";
 
 const breadcrumb = ["Ил тод байдал", "Жилийн тайлан"];
 const duties = [
-    ['Жилийн тайлан 2025', 'iltodbaidal/2025_report-MTC-web.pdf'],
+    ['Жилийн тайлан 2025', 'iltodbaidal/2025_report-MTC-web'],
     ['Жилийн тайлан 2023', 'iltodbaidal/2023jil.PDF'],
     ['Жилийн тайлан 2022', 'iltodbaidal/2022jil.pdf'],
     ['Жилийн тайлан 2021', 'iltodbaidal/2021jil.pdf'],
