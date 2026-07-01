@@ -63,13 +63,13 @@ const Page = () => {
           email="tserenbanzad@mtcone.net"
           pic="Н.Цэрэнбанзад.png"
         />
-                        {/* <Card
-          name="Болд Биндэръяа"
-          desc="Эм Ти Си СЕРВИС ХХК-ийн захирал"
+        <Card
+          name="Б.Батсайхан"
+          desc="Эм Ти Си Сервис ХХК Гүйцэтгэх захирал"
           tel="70106879"
-          email="binderiya@mtcone.net"
-          pic="6.jpg"
-        /> */}
+          email="batsaikhan@mtcone.net"
+          pic="Б.Батсайхан.png"
+        />
       </div>
     </div>
   );
