@@ -65,7 +65,7 @@ const Page = () => {
 
             <Advantage
               title="Ээлтэй"
-              desc="Радиа долгион ялгаруулдаггүй"
+              desc="Радио долгион ялгаруулдаггүй"
               img="urh/icon11.png"
             />
           </div>
