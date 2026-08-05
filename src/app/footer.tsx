@@ -9,21 +9,51 @@ import {
   Globe,
 } from "lucide-react";
 
-const Footer = () => {
+const Footer = ({ locale = "mn" }: { locale?: "mn" | "en" }) => {
+  const isEnglish = locale === "en";
+  const copy = isEnglish
+    ? {
+        slogan: "Connecting people and organizations.",
+        company: "About the company",
+        about: "About us",
+        transparency: "Transparency account",
+        shareholders: "Shareholders",
+        legal: "Company information",
+        governance: "Corporate governance",
+        locations: "Service locations",
+        careers: "Careers",
+        contact: "Contact",
+        copyright: "© 1921 - 2026 Telecom Mongolia JSC.",
+        rights: "All rights reserved.",
+      }
+    : {
+        slogan: "Харилцааг өрхийн холбоо.",
+        company: "Компанийн тухай",
+        about: "Бидний тухай",
+        transparency: "Шилэн данс",
+        shareholders: "Хувьцаа эзэмшигчдэд",
+        legal: "Хууль эрх зүй",
+        governance: "Компанийн засаглал",
+        locations: "Салбарын байршил",
+        careers: "Хүний нөөц",
+        contact: "Холбоо барих",
+        copyright: "© 1921 - 2026 Монголын Цахилгаан Холбоо ХК.",
+        rights: "Бүх эрх хуулиар хамгаалагдсан.",
+      };
   return (
     <footer className="bg-gradient-to-r from-[#001b4f] via-[#002b78] to-[#001b4f] text-white">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 gap-8 py-8 md:grid-cols-5">
           {/* Logo + social */}
           <div className="md:col-span-1">
-            <Link href="/" className="inline-block">
+            <Link href={isEnglish ? "/en" : "/"} className="inline-block">
               <div className="text-lg font-bold tracking-wide">
                 TELECOM<span className="ml-1 text-white/80">MONGOLIA</span>
               </div>
             </Link>
 
             <p className="mt-3 text-xs text-white/70">
-              Харилцааг өрхийн холбоо.
+              {copy.slogan}
             </p>
 
             <div className="mt-5 flex items-center gap-3">
@@ -66,13 +96,13 @@ const Footer = () => {
           {/* Company */}
           <div>
             <h4 className="mb-4 text-sm font-semibold text-white">
-              Компанийн тухай
+              {copy.company}
             </h4>
 
             <ul className="space-y-3 text-xs text-white/75">
               <li>
-                <Link href="/aboutus" className="transition hover:text-white">
-                  Бидний тухай
+                <Link href={isEnglish ? "/en/about-us" : "/aboutus"} className="transition hover:text-white">
+                  {copy.about}
                 </Link>
               </li>
               <li>
@@ -82,15 +112,15 @@ const Footer = () => {
                   rel="noreferrer"
                   className="transition hover:text-white"
                 >
-                  Шилэн данс
+                  {copy.transparency}
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/shareholders/news"
+                  href={isEnglish ? "/en/shareholders" : "/shareholders/news"}
                   className="transition hover:text-white"
                 >
-                  Хувьцаа эзэмшигчдэд
+                  {copy.shareholders}
                 </Link>
               </li>
             </ul>
@@ -99,26 +129,26 @@ const Footer = () => {
           {/* Legal */}
           <div>
             <h4 className="mb-4 text-sm font-semibold text-white">
-              Хууль эрх зүй
+              {copy.legal}
             </h4>
 
             <ul className="space-y-3 text-xs text-white/75">
               <li>
                 <Link
-                  href="/company/construct"
+                  href={isEnglish ? "/en/company/governance" : "/company/construct"}
                   className="transition hover:text-white"
                 >
-                  Компанийн засаглал
+                  {copy.governance}
                 </Link>
               </li>
               <li>
-                <Link href="/locations" className="transition hover:text-white">
-                  Салбарын байршил
+                <Link href={isEnglish ? "/en/locations" : "/locations"} className="transition hover:text-white">
+                  {copy.locations}
                 </Link>
               </li>
               <li>
-                <Link href="/hr" className="transition hover:text-white">
-                  Хүний нөөц
+                <Link href={isEnglish ? "/en/careers" : "/hr"} className="transition hover:text-white">
+                  {copy.careers}
                 </Link>
               </li>
             </ul>
@@ -152,7 +182,7 @@ const Footer = () => {
           {/* Contact */}
           <div>
             <h4 className="mb-4 text-sm font-semibold text-white">
-              Холбоо барих
+              {copy.contact}
             </h4>
 
             <ul className="space-y-3 text-xs text-white/75">
@@ -175,8 +205,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-white/10 py-4 text-center text-xs text-white/55">
-          © 1921 - 2026 Монголын Цахилгаан Холбоо ХК.<br/> Бүх эрх хуулиар
-          хамгаалагдсан.
+          {copy.copyright}<br/> {copy.rights}
         </div>
       </div>
     </footer>

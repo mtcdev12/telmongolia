@@ -6,8 +6,37 @@ import Link from "next/link";
 import { RxDotFilled } from "react-icons/rx";
 import { ArrowRight } from "lucide-react";
 
-const ImageSlider = ({ data }: { data: any }) => {
+type Locale = "mn" | "en";
+
+const ENGLISH_COVER_IMAGES: Record<string, string> = {
+  "1678440326646.png": "/assets/images/covers/building-en-v2.png",
+  "1678440333397.PNG": "/assets/images/covers/tv-room-en-v2.png",
+  "1687940183464.png": "/assets/images/covers/7070-en-v2.png",
+  "1762514680994.jpg": "/assets/images/covers/anti-corruption-en-v2.png",
+};
+
+const ImageSlider = ({ data, locale = "mn" }: { data: any; locale?: Locale }) => {
   const [currenIndex, setCurrentIndex] = useState(0);
+
+  const copy = locale === "en"
+    ? {
+        eyebrow: "For new customers",
+        titleTop: "Special",
+        titleBottom: "offer",
+        action: "Learn more",
+        actionHref: "/en/offers",
+        slideLabel: "Show slide",
+        bannerAlt: "Telecom Mongolia banner",
+      }
+    : {
+        eyebrow: "Шинэ хэрэглэгчдэд зориулсан",
+        titleTop: "Онцгой",
+        titleBottom: "урамшуулал",
+        action: "Дэлгэрэнгүй",
+        actionHref: "/bonus",
+        slideLabel: "Слайд харуулах",
+        bannerAlt: "Монголын Цахилгаан Холбооны баннер",
+      };
 
   useEffect(() => {
     if (!data || data.length === 0) return;
@@ -36,9 +65,13 @@ const ImageSlider = ({ data }: { data: any }) => {
         key={d.id}
       >
         <Image
-          src={`${process.env.API2}/uploads/${d.image}`}
+          src={
+            locale === "en" && ENGLISH_COVER_IMAGES[d.image]
+              ? ENGLISH_COVER_IMAGES[d.image]
+              : `${process.env.API2}/uploads/${d.image}`
+          }
           fill
-          alt={d.image || "banner"}
+          alt={copy.bannerAlt}
           priority={index === 0}
           className={`object-cover transition-opacity duration-700 ease-in-out ${
             currenIndex === index ? "opacity-100" : "opacity-0"
@@ -52,13 +85,13 @@ const ImageSlider = ({ data }: { data: any }) => {
    <div className="absolute inset-0 flex items-center px-6 md:px-10 lg:px-14">
   <div className="max-w-[620px] text-white">
     <p className="mb-2 text-sm font-semibold text-white/90 md:text-base">
-      Шинэ хэрэглэгчдэд зориулсан
+      {copy.eyebrow}
     </p>
 
     <h2 className="text-[22px] font-black uppercase leading-[0.9] tracking-[-2px] md:text-[28px] lg:text-[34px]">
-      Онцгой
+      {copy.titleTop}
       <br />
-      урамшуулал
+      {copy.titleBottom}
     </h2>
 
     {/* <p className="mt-3 text-sm font-medium text-white/90 md:text-base">
@@ -66,10 +99,10 @@ const ImageSlider = ({ data }: { data: any }) => {
     </p> */}
 
     <Link
-      href="/bonus"
+      href={copy.actionHref}
       className="mt-6 inline-flex h-12 items-center gap-3 rounded-xl bg-[#2494ff] px-7 text-base font-bold text-white transition hover:bg-[#087bf0]"
     >
-      Дэлгэрэнгүй
+      {copy.action}
       <ArrowRight size={20} />
     </Link>
   </div>
@@ -82,7 +115,8 @@ const ImageSlider = ({ data }: { data: any }) => {
             key={d.id}
             className="text-4xl text-white/55 transition-all"
             onClick={() => setCurrentIndex(index)}
-            title="slide"
+            title={`${copy.slideLabel} ${index + 1}`}
+            aria-label={`${copy.slideLabel} ${index + 1}`}
             type="button"
           >
             <RxDotFilled
@@ -99,4 +133,4 @@ const ImageSlider = ({ data }: { data: any }) => {
   );
 };
 
-export default ImageSlider; 
+export default ImageSlider;

@@ -11,15 +11,17 @@ import {
 import { ChevronRight, FileText } from "lucide-react";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import Modal from "./modal";
 
 const breadcrumb = ["Тусламж"];
-const Page = () => {
+const HelpPage = ({ locale = "mn" }: { locale?: "mn" | "en" }) => {
+  const isEnglish = locale === "en";
   const [isOpen, setIsOpen] = useState(false);
   const [help, setHelp] = useState<number>(0);
   const openModal = (num: number) => {
     if (num === 3) {
-      window.location.href = "/products/catv";
+      window.location.href = isEnglish ? "/en/services/national-catv" : "/products/catv";
     } else if (num === 12) {
       window.location.href = "/assets/help/Stats-Handbook-for MTC.pdf";
     } else if (num === 13) {
@@ -54,27 +56,45 @@ const Page = () => {
   { id: 15, title: "Сүлжээ хоорондын харилцан холболтын гэрээ" },
   { id: 16, title: "Оюуны өмчийн гэрчилгээ" },
 ];
+  const englishHelpItems = [
+    { id: 1, title: "Bundle service tariffs for organizations and households" },
+    { id: 2, title: "Cable TV channel list" },
+    { id: 3, title: "Cable TV pricing" },
+    { id: 4, title: "How to scan Cable TV channels" },
+    { id: 5, title: "Internet monthly fees and tariffs" },
+    { id: 6, title: "Documents required for a service agreement" },
+    { id: 7, title: "Connection and monthly fees" },
+    { id: 8, title: "How to use an international calling card" },
+    { id: 9, title: "How to use MTC70 SIP" },
+    { id: 10, title: "How to use TV ROOM and order movies" },
+    { id: 11, title: "Modem configuration" },
+    { id: 12, title: "Call Center guide" },
+    { id: 13, title: "International calling tariffs" },
+    { id: 14, title: "Multichannel television connection agreement" },
+    { id: 15, title: "Network interconnection agreement" },
+    { id: 16, title: "Intellectual-property certificates" },
+  ];
+  const localizedItems = isEnglish ? englishHelpItems : helpItems;
   return (
   <div className="min-h-screen bg-gradient-to-b from-[#f4f8ff] via-white to-white">
-    <Breadcrumb data={breadcrumb} />
+    <div className="container"><Breadcrumb data={isEnglish ? ["Help"] : breadcrumb} locale={locale} /></div>
 
-    {isOpen && <Modal help={help} closeHelp={handleCloseHelp} />}
+    {isOpen && <Modal help={help} closeHelp={handleCloseHelp} locale={locale} />}
 
     <section className="mx-auto max-w-[1180px] px-4 py-8 md:py-12">
       {/* Header */}
       <div className="mb-8 overflow-hidden rounded-[28px] bg-gradient-to-r from-[#062b78] via-[#0b5fe8] to-[#1a9cff] p-7 text-white shadow-[0_20px_55px_rgba(37,99,235,0.25)] md:p-10">
         <div className="max-w-[680px]">
           <p className="mb-3 inline-flex rounded-full bg-white/15 px-4 py-1.5 text-sm font-semibold backdrop-blur">
-            Тусламжийн төв
+            {isEnglish ? "Help center" : "Тусламжийн төв"}
           </p>
 
           <h1 className="text-3xl font-black tracking-[-0.7px] md:text-5xl">
-            Түгээмэл асуултууд
+            {isEnglish ? "Frequently requested information" : "Түгээмэл асуултууд"}
           </h1>
 
           <p className="mt-4 text-base leading-7 text-white/85 md:text-lg">
-            Үйлчилгээ, тариф, гэрээ, тохиргоо болон ашиглах заавруудыг нэг
-            дороос үзээрэй.
+            {isEnglish ? "Find service, tariff, agreement, setup and usage guidance in one place." : "Үйлчилгээ, тариф, гэрээ, тохиргоо болон ашиглах заавруудыг нэг дороос үзээрэй."}
           </p>
         </div>
       </div>
@@ -84,16 +104,16 @@ const Page = () => {
         <div className="mb-4 flex items-center justify-between px-2 md:px-3">
           <div>
             <h2 className="text-xl font-black text-[#061f57] md:text-2xl">
-              Асуултын жагсаалт
+              {isEnglish ? "Help topics" : "Асуултын жагсаалт"}
             </h2>
             <p className="mt-1 text-sm text-slate-500">
-              Нийт {helpItems.length} тусламжийн мэдээлэл байна
+              {isEnglish ? `${localizedItems.length} help topics` : `Нийт ${localizedItems.length} тусламжийн мэдээлэл байна`}
             </p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          {helpItems.map((item, index) => (
+          {localizedItems.map((item, index) => (
             <button
               key={item.id}
               type="button"
@@ -128,4 +148,7 @@ const Page = () => {
 );
 };
 
-export default Page;
+export default function Page() {
+  const locale = usePathname().startsWith("/en") ? "en" : "mn";
+  return <HelpPage locale={locale} />;
+}

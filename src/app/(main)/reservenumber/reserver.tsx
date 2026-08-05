@@ -27,15 +27,15 @@ import { bookNumber } from "@/api/rest";
 
 
 
-const formSchema = z.object({
+const createFormSchema = (isEnglish: boolean) => z.object({
     number: z.string().min(8, {
-      message: "Захиалагдсан дугаар дутуу байна!",
+      message: isEnglish ? "The selected number is incomplete." : "Захиалагдсан дугаар дутуу байна!",
     }),
     email: z.string().min(1, {
-      message: "Та И-майл хаягаа оруулна уу!",
+      message: isEnglish ? "Enter your email address." : "Та И-майл хаягаа оруулна уу!",
     }),
     registernumber: z.string().min(10, {
-        message: "Та регистрийн дугаараа оруулна уу!",
+        message: isEnglish ? "Enter your registration number." : "Та регистрийн дугаараа оруулна уу!",
     }),
     grade: z.string(),
     location: z.string()
@@ -96,6 +96,11 @@ const formSchema = z.object({
   };
 
 const Reserver = (props:any) => {
+    const isEnglish = props.locale === "en";
+    const formSchema = createFormSchema(isEnglish);
+    const copy = isEnglish
+      ? { title: "Reserve a number", selected: "Selected number", grade: "Number category", region: "Number region", register: "Registration number", email: "Email address", submit: "Reserve", toast: "Number reservation", alert: "Please note", notice: "Your reservation remains valid for five days." }
+      : { title: "Дугаар захиалах", selected: "Таны сонгосон дугаар", grade: "Дугаарын төрөл", region: "Дугаар харъяалагдах бүс", register: "Регистрийн дугаар", email: "И-майл хаяг", submit: "Захиалах", toast: "Дугаар захиалга", alert: "Өдрийн мэнд", notice: "Таны захиалсан дугаар 5 хоног хүчинтэй байхыг анхаарна уу!" };
     const { toast } = useToast();
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(true);
@@ -106,17 +111,17 @@ const Reserver = (props:any) => {
       }
     const gradeToWord = (grade:string) =>{
         if(grade == 'G1'){
-            return 'Алтан 1';
+            return isEnglish ? 'Gold 1' : 'Алтан 1';
         }else if(grade == 'G2'){
-            return 'Алтан 2';
+            return isEnglish ? 'Gold 2' : 'Алтан 2';
         }else if(grade == 'G3'){
-            return 'Алтан 3';
+            return isEnglish ? 'Gold 3' : 'Алтан 3';
         }else if(grade == 'S'){
-            return 'Мөнгөн';
+            return isEnglish ? 'Silver' : 'Мөнгөн';
         }else if(grade == 'C'){
-            return 'Хүрэл';
+            return isEnglish ? 'Bronze' : 'Хүрэл';
         }else{
-            return 'Энгийн';
+            return isEnglish ? 'Standard' : 'Энгийн';
         }
     }
     const locationFinder = (num:string) => {
@@ -125,14 +130,14 @@ const Reserver = (props:any) => {
             return 'MIP70';
         }
         if(ub.includes(prefix)){
-            return 'Улаанбаатар';
+            return isEnglish ? 'Ulaanbaatar' : 'Улаанбаатар';
         }else{
             const province = Object.keys(countryside).find(key => countryside[key as keyof typeof countryside] === prefix);
             if(province){
-                return province;
+                return isEnglish ? province : province;
             }
         }
-        return 'Тодорхойгүй';
+        return isEnglish ? 'Unknown' : 'Тодорхойгүй';
     }
       const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -147,10 +152,16 @@ const Reserver = (props:any) => {
 
       async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true);
-        const res = await bookNumber(values);
+        const payload = {
+          number: values.number,
+          email: values.email,
+          register: values.registernumber,
+          place: values.location,
+        };
+        const res = await bookNumber(payload);
         setLoading(false);
         toast({
-          title: "Дугаар захиалга",
+          title: copy.toast,
           description: res["message"],
         });
         if (res["result"] === "ok") {
@@ -163,7 +174,7 @@ const Reserver = (props:any) => {
         <DialogContent className="sm:max-w-[525px]">
           {loading && <Loader />}
           <DialogHeader>
-            <DialogTitle>Дугаар захиалах</DialogTitle>
+            <DialogTitle>{copy.title}</DialogTitle>
           </DialogHeader>
 
           <Form {...form}>
@@ -173,9 +184,9 @@ const Reserver = (props:any) => {
               name="number"
               render={({ field }) => (
                 <FormItem>
-                    <FormLabel>Таны сонгосон дугаар</FormLabel>
+                    <FormLabel>{copy.selected}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Таны захиалсан дугаар" {...field} readOnly/>
+                    <Input placeholder={copy.selected} {...field} readOnly/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -186,9 +197,9 @@ const Reserver = (props:any) => {
               name="grade"
               render={({ field }) => (
                 <FormItem>
-                    <FormLabel>Дугаарын төрөл</FormLabel>
+                    <FormLabel>{copy.grade}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Дугаарын төрөл" {...field} readOnly/>
+                    <Input placeholder={copy.grade} {...field} readOnly/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -199,9 +210,9 @@ const Reserver = (props:any) => {
               name="location"
               render={({ field }) => (
                 <FormItem>
-                    <FormLabel>Дугаар харъяалагдах бүс</FormLabel>
+                    <FormLabel>{copy.region}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Дугаар харъяалагдах бүс" {...field} readOnly/>
+                    <Input placeholder={copy.region} {...field} readOnly/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -212,7 +223,7 @@ const Reserver = (props:any) => {
               name="registernumber"
               render={({ field }) => (
                 <FormItem>
-                    <FormLabel>Регистрийн дугаар</FormLabel>
+                    <FormLabel>{copy.register}</FormLabel>
                   <FormControl>
                     <Input {...field} required/>
                   </FormControl>
@@ -225,7 +236,7 @@ const Reserver = (props:any) => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                    <FormLabel>И-майл хаяг</FormLabel>
+                    <FormLabel>{copy.email}</FormLabel>
                   <FormControl>
                     <Input {...field} type="email" required/>
                   </FormControl>
@@ -233,14 +244,14 @@ const Reserver = (props:any) => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Захиалах</Button>
+            <Button type="submit">{copy.submit}</Button>
           </form>
         </Form>
         <Alert className="bg-brand-2/10 text-brand-1 tracking-tight">
             <BsFillExclamationTriangleFill className="h-4 w-4 text-brand-1" />
-            <AlertTitle>Өдрийн мэнд</AlertTitle>
+            <AlertTitle>{copy.alert}</AlertTitle>
             <AlertDescription>
-                Таны захиалсан дугаар 5 хоног хүчинтэй байхыг анхаарна уу!
+                {copy.notice}
             </AlertDescription>
             </Alert>
         </DialogContent>

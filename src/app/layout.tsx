@@ -1,13 +1,9 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
-import Navbar from './navbar'
-import Topbar from './topbar'
-import Footer from './footer'
+import { headers } from 'next/headers'
 import { Toaster } from "@/components/ui/toaster"
-import Feedback from '@/components/feedback'
-import Chatbot from '@/components/chatbot'
-import FacebookMessenger from '@/components/facebookMessenger'
+import SiteChrome from '@/components/site-chrome'
 
 const font = Montserrat({ subsets: ['cyrillic'] })
 
@@ -16,28 +12,18 @@ export const metadata: Metadata = {
   description: process.env.DESC,
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const requestHeaders = await headers()
+  const locale = requestHeaders.get('x-site-locale') === 'en' ? 'en' : 'mn'
 
   return (
-    <html lang="en">
+    <html lang={locale} suppressHydrationWarning>
       <body className={`${font.className} flex flex-col min-h-screen`}>
-        <Topbar />
-        <Navbar />
-        <main className='grow'>
-          {children}
-          {
-            (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ? false : <FacebookMessenger />
-          }
-        </main>
-        <Feedback />
-        <div className='fixed right-20 bottom-20'>
-          <Chatbot />
-        </div>
-        <Footer />
+        <SiteChrome>{children}</SiteChrome>
         <Toaster />
       </body>
     </html>

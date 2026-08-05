@@ -3,7 +3,7 @@ import { getCaraosel } from "../api/rest";
 import ImageSlider from "./imageSlider";
 import { useEffect, useState } from "react";
 
-const Caraosel = () => {
+const Caraosel = ({ locale = "mn" }: { locale?: "mn" | "en" }) => {
   const [caraosel, setCaraosel] = useState();
   useEffect(() => {
     const fetchData = async () => {
@@ -16,7 +16,7 @@ const Caraosel = () => {
     <>
       {caraosel && (
         <div>
-          <ImageSlider data={caraosel} />
+          <ImageSlider data={caraosel} locale={locale} />
         </div>
       )}
     </>

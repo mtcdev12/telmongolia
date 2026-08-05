@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { BiGlobe } from "react-icons/bi";
+import LanguageSwitchLink from "@/components/language-switch-link";
 
-const Topbar = () => {
+const Topbar = ({ locale = "mn" }: { locale?: "mn" | "en" }) => {
+  const isEnglish = locale === "en";
   return (
     <div className="hidden border-b border-white/10 bg-[#001b55] md:block">
       <div className="mx-auto flex h-9 max-w-[1280px] items-center justify-between px-4 text-white">
@@ -48,7 +50,7 @@ const Topbar = () => {
             rel="noreferrer"
             className="transition hover:text-white"
           >
-            Үндэсний лавлах 1109
+            {isEnglish ? "National Directory 1109" : "Үндэсний лавлах 1109"}
           </Link>
           <Link 
             href="https://e-zasag.mn/"
@@ -67,13 +69,13 @@ const Topbar = () => {
           </Link> */}
         </div>
 
-        <Link
-          href="/en"
+        <LanguageSwitchLink
+          locale={isEnglish ? "mn" : "en"}
           className="flex items-center gap-2 text-[13px] font-semibold text-white/90 transition hover:text-white"
         >
           <BiGlobe className="text-[18px]" />
-          <span>EN</span>
-        </Link>
+          <span>{isEnglish ? "MN" : "EN"}</span>
+        </LanguageSwitchLink>
       </div>
     </div>
   );

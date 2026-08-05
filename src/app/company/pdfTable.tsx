@@ -15,11 +15,11 @@ export type Row =
       text: string;
     };
 
-const PdfTable = ({ list }: { list: Row[] }) => {
+const PdfTable = ({ list, locale = "mn" }: { list: Row[]; locale?: "mn" | "en" }) => {
   return (
     <div>
       <Table>
-        <TableCaption>Жагсаалт</TableCaption>
+        <TableCaption>{locale === "en" ? "Document list" : "Жагсаалт"}</TableCaption>
         {/* <TableHeader>
                 <TableRow>
                 <TableHead className="w-[20px]"></TableHead>
@@ -63,7 +63,7 @@ const PdfTable = ({ list }: { list: Row[] }) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Үзэх
+                    {locale === "en" ? "View" : "Үзэх"}
                   </a>
                 </TableCell>
               </TableRow>

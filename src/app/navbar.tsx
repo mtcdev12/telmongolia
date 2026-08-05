@@ -10,8 +10,10 @@ import {
   Globe2,
 } from "lucide-react";
 import Login from "@/components/login";
+import LanguageSwitchLink from "@/components/language-switch-link";
 
-const personal = [
+const personalMn = [
+  ["Шинэ дугаар захиалах", "/reservenumber"],
   ["Суурин утас", "/products/single"],
   ["Хосолсон багц", "/products/double"],
   ["Гуравласан багц", "/products/triple"],
@@ -20,7 +22,7 @@ const personal = [
   ["MIP70", "/products/sip"],
 ];
 
-const corporate = [
+const corporateMn = [
   ["Суурин утас", "/products/corporate/single"],
   ["Хосолсон багц", "/products/corporate/double"],
   ["National КаТВ", "/products/corporate/catv"],
@@ -29,15 +31,29 @@ const corporate = [
   ["Бодит хурдны интернет", "/products/corporate/dedicated"],
 ];
 
-const topLinks = [
-  ["MTC Service", "/"],
-  ["MTC Academy", "/"],
-  ["Data center", "/"],
-  ["TVROOM", "/products/iptv"],
-  ["Үндэсний лавлах 1109", "/"],
+const personalEn = [
+  ["Reserve a new number", "/en/reserve-number"],
+  ["Fixed-line telephone", "/en/services/fixed-line"],
+  ["Double-play bundles", "/en/services/double-play"],
+  ["Triple-play bundles", "/en/services/triple-play"],
+  ["National Cable TV", "/en/services/national-catv"],
+  ["TV ROOM", "/en/services/tv-room"],
+  ["MIP70", "/en/services/mip70"],
 ];
 
-const Navbar = () => {
+const corporateEn = [
+  ["Fixed-line telephone", "/en/services/fixed-line"],
+  ["Double-play bundles", "/en/services/double-play"],
+  ["National Cable TV", "/en/services/national-catv"],
+  ["TV ROOM", "/en/services/tv-room"],
+  ["Call Center", "/en/services/call-center"],
+  ["Dedicated internet", "/en/services"],
+];
+
+const Navbar = ({ locale = "mn" }: { locale?: "mn" | "en" }) => {
+  const isEnglish = locale === "en";
+  const personal = isEnglish ? personalEn : personalMn;
+  const corporate = isEnglish ? corporateEn : corporateMn;
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => {
@@ -56,7 +72,7 @@ const Navbar = () => {
       <div className="rounded-b-[28px] bg-gradient-to-r from-[#001b55] via-[#002a78] to-[#002064] shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
         <nav className="mx-auto flex h-[70px] max-w-[1280px] items-center justify-between px-4">
           {/* Logo */}
-          <Link href="/" className="relative h-[50px] w-[190px]">
+          <Link href={isEnglish ? "/en" : "/"} className="relative h-[50px] w-[190px]">
             <Image
               src="/assets/images/logo_white.png"
               fill
@@ -69,12 +85,12 @@ const Navbar = () => {
 
           {/* Desktop menu */}
           <ul className="hidden items-center gap-8 text-[14px] text-white md:flex">
-            <Dropdown title="Өрхийн хэрэглэгч" items={personal} />
-            <Dropdown title="Байгууллага" items={corporate} />
+            <Dropdown title={isEnglish ? "Residential" : "Өрхийн хэрэглэгч"} items={personal} />
+            <Dropdown title={isEnglish ? "Business" : "Байгууллага"} items={corporate} />
 
-            <NavItem href="/bonus">Урамшуулал</NavItem>
-            <NavItem href="/news">Мэдээ мэдээлэл</NavItem>
-            <NavItem href="/help">Тусламж</NavItem>
+            <NavItem href={isEnglish ? "/en/offers" : "/bonus"}>{isEnglish ? "Offers" : "Урамшуулал"}</NavItem>
+            <NavItem href={isEnglish ? "/en/news" : "/news"}>{isEnglish ? "News" : "Мэдээ мэдээлэл"}</NavItem>
+            <NavItem href={isEnglish ? "/en/help" : "/help"}>{isEnglish ? "Help" : "Тусламж"}</NavItem>
           </ul>
 
           {/* Right buttons */}
@@ -82,14 +98,14 @@ const Navbar = () => {
             <button
               type="button"
               className="flex h-11 w-11 items-center justify-center rounded-full text-white transition hover:bg-white/10"
-              title="Search"
+              title={isEnglish ? "Search" : "Хайх"}
             >
               <Search size={23} />
             </button>
 
             <div className="rounded-full border border-white/25 bg-white/5 px-6 py-3 shadow-inner backdrop-blur transition hover:bg-white/10">
               {/* Хэрвээ Login component чинь зураг шиг харагдахгүй байвал доорх button-г ашиглаж болно */}
-              <Login />
+              <Login locale={locale} />
 
               {/* 
               <Link href="/login" className="flex items-center gap-3 text-sm font-semibold">
@@ -104,7 +120,7 @@ const Navbar = () => {
           <button
             className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-white md:hidden"
             onClick={handleOpen}
-            title="menu open"
+            title={isEnglish ? "Open menu" : "Цэс нээх"}
           >
             <Menu size={24} />
           </button>
@@ -127,11 +143,11 @@ const Navbar = () => {
           onClick={(e) => e.stopPropagation()}
         >
           <div className="mb-8 flex items-center justify-between">
-            <Link href="/" className="relative h-14 w-36" onClick={handleClose}>
+            <Link href={isEnglish ? "/en" : "/"} className="relative h-14 w-36" onClick={handleClose}>
               <Image
                 src="/assets/images/logo_white.png"
                 fill
-                alt="logo"
+                alt="Telecom Mongolia"
                 className="object-contain"
                 sizes="144px"
               />
@@ -140,29 +156,36 @@ const Navbar = () => {
             <button
               className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10"
               onClick={handleClose}
-              title="menu close"
+              title={isEnglish ? "Close menu" : "Цэс хаах"}
             >
               <X size={22} />
             </button>
           </div>
 
           <div className="space-y-6 text-[15px] font-medium">
-            <MobileGroup title="Өрхийн хэрэглэгч" items={personal} onClose={handleClose} />
-            <MobileGroup title="Байгууллага" items={corporate} onClose={handleClose} />
+            <MobileGroup title={isEnglish ? "Residential" : "Өрхийн хэрэглэгч"} items={personal} onClose={handleClose} />
+            <MobileGroup title={isEnglish ? "Business" : "Байгууллага"} items={corporate} onClose={handleClose} />
 
-            <MobileLink href="/bonus" onClose={handleClose}>
-              Урамшуулал
+            <MobileLink href={isEnglish ? "/en/offers" : "/bonus"} onClose={handleClose}>
+              {isEnglish ? "Offers" : "Урамшуулал"}
             </MobileLink>
-            <MobileLink href="/news" onClose={handleClose}>
-              Мэдээ мэдээлэл
+            <MobileLink href={isEnglish ? "/en/news" : "/news"} onClose={handleClose}>
+              {isEnglish ? "News" : "Мэдээ мэдээлэл"}
             </MobileLink>
-            <MobileLink href="/help" onClose={handleClose}>
-              Тусламж
+            <MobileLink href={isEnglish ? "/en/help" : "/help"} onClose={handleClose}>
+              {isEnglish ? "Help" : "Тусламж"}
             </MobileLink>
+
+            <LanguageSwitchLink
+              locale={isEnglish ? "mn" : "en"}
+              className="flex items-center gap-2 rounded-xl border border-white/20 px-4 py-3 text-sm font-bold"
+            >
+              <Globe2 size={17} /> {isEnglish ? "Mongolian" : "English"}
+            </LanguageSwitchLink>
 
             <div className="pt-4">
               <div className="rounded-2xl border border-white/15 bg-white/10 px-5 py-4">
-                <Login />
+                <Login locale={locale} />
               </div>
             </div>
           </div>

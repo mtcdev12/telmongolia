@@ -4,18 +4,20 @@ import { getEachNewsShareholders } from "@/api/rest";
 import { format_date } from "@/lib/helper";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import parse from "html-react-parser";
+import { useParams } from "next/navigation";
 
 const breadcrumb = ["Хувьцаа эзэмшигчдэд", "Мэдээлэл"];
 
-const Page = ({ params }: { params: { each: number } }) => {
+const Page = () => {
+  const { each } = useParams<{ each: string }>();
   const [news, setNews] = useState();
   useEffect(() => {
     const fetchData = async () => {
-      const res = await getEachNewsShareholders(params.each);
+      const res = await getEachNewsShareholders(Number(each));
       setNews(res);
     };
-    fetchData();
-  }, []);
+    void fetchData();
+  }, [each]);
 
   return (
     <div className="mt-5">

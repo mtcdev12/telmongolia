@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+"use client";
+
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -20,51 +22,61 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import SelectedCard from "./selectedCard";
+import { translateCardText, type SiteLocale } from "@/lib/i18n/ui";
 
-const Cards = (props: any) => {
+type CardsProps = {
+  open: boolean;
+  onCardClose: (open: boolean) => void;
+  locale?: SiteLocale;
+};
+
+const Cards = ({ open, onCardClose, locale = "mn" }: CardsProps) => {
+  const isEnglish = locale === "en";
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
-  const [cards, setCards] = useState<any>({});
+  const [cards, setCards] = useState<Record<string, any[]>>({});
   const [cardType, setCardType] = useState("ALL");
-  const [selectedCard, setSelectedCard] = useState({});
+  const [selectedCard, setSelectedCard] = useState<Record<string, unknown>>({});
 
-  const handleOpenChange = () => {
-    props.onCardClose(false);
-  };
-  function onCardChange(e: any) {
-    setCardType(e.toUpperCase());
-  }
   useEffect(() => {
+    let active = true;
     setLoading(true);
-    const res = getCards().then((res) => {
-      setLoading(false);
-      var groups = ["TYPE"];
-      var grouped = {};
-      res["data"].forEach(function (a: any) {
-        groups
-          .reduce(function (o: any, g, i) {
-            o[a[g as keyof typeof a] as keyof typeof o] =
-              o[a[g]] || (i + 1 === groups.length ? [] : {});
-            return o[a[g]];
-          }, grouped)
-          .push(a);
+
+    getCards()
+      .then((response) => {
+        if (!active) return;
+        const rows: Array<Record<string, any>> = Array.isArray(response?.data)
+          ? response.data
+          : [];
+        const grouped = rows.reduce<Record<string, any[]>>((result, card) => {
+          const type = String(card.TYPE ?? "ALL");
+          (result[type] ??= []).push(card);
+          return result;
+        }, {});
+        setCards(grouped);
+      })
+      .catch(() => {
+        if (!active) return;
+        toast({
+          title: isEnglish ? "Cards" : "Карт",
+          description: isEnglish
+            ? "The available card list could not be loaded."
+            : "Боломжит картын жагсаалтыг ачаалж чадсангүй.",
+        });
+      })
+      .finally(() => {
+        if (active) setLoading(false);
       });
-      setCards(grouped);
-      // console.log(grouped);
-    });
-  }, []);
+
+    return () => {
+      active = false;
+    };
+  }, [isEnglish, toast]);
+
   const typeName = (raw: string) => {
-    if (raw === "ALL") {
-      return "Энгийн";
-    } else if (raw === "MIP") {
-      return "MIP70";
-    } else {
-      return "Олон улсын";
-    }
-  };
-  const selectCard = (d: any) => {
-    // console.log(d);
-    setSelectedCard(d);
+    if (raw === "ALL") return isEnglish ? "Standard" : "Энгийн";
+    if (raw === "MIP") return "MIP70";
+    return isEnglish ? "International" : "Олон улсын";
   };
 
   return (
@@ -73,67 +85,74 @@ const Cards = (props: any) => {
         <SelectedCard
           onCardClose={() => setSelectedCard({})}
           card={selectedCard}
+          locale={locale}
         />
       ) : (
-        <Dialog open={props.open} onOpenChange={handleOpenChange}>
-          <DialogContent className="sm:max-w-[525px] max-h-[90%] overflow-y-scroll">
+        <Dialog open={open} onOpenChange={() => onCardClose(false)}>
+          <DialogContent className="max-h-[90%] overflow-y-scroll sm:max-w-[525px]">
             {loading && <Loader />}
             <DialogHeader>
-              <DialogTitle className="text-brand-1">Карт</DialogTitle>
+              <DialogTitle className="text-brand-1">
+                {isEnglish ? "Service cards" : "Карт"}
+              </DialogTitle>
             </DialogHeader>
             <RadioGroup
               defaultValue={cardType}
               className="flex justify-center gap-4"
-              onValueChange={onCardChange}
+              onValueChange={(value) => setCardType(value.toUpperCase())}
             >
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="ALL" id="r1" />
-                <Label htmlFor="r1" className="text-[16px]">
-                  Энгийн
+                <RadioGroupItem value="ALL" id="card-standard" />
+                <Label htmlFor="card-standard" className="text-[16px]">
+                  {isEnglish ? "Standard" : "Энгийн"}
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="IDD" id="r2" />
-                <Label htmlFor="r2" className="text-[16px]">
-                  Олон улс
+                <RadioGroupItem value="IDD" id="card-international" />
+                <Label htmlFor="card-international" className="text-[16px]">
+                  {isEnglish ? "International" : "Олон улс"}
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="MIP" id="r3" />
-                <Label htmlFor="r3" className="text-[16px]">
+                <RadioGroupItem value="MIP" id="card-mip" />
+                <Label htmlFor="card-mip" className="text-[16px]">
                   MIP70
                 </Label>
               </div>
             </RadioGroup>
             <Table>
-              <TableCaption>Боломжит картны жагсаалт</TableCaption>
+              <TableCaption>
+                {isEnglish ? "Available service cards" : "Боломжит картны жагсаалт"}
+              </TableCaption>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[140px]">Төрөл</TableHead>
-                  <TableHead className="w-[100px]">Үнэ</TableHead>
-                  <TableHead className="w-[100px]">Хоног</TableHead>
-                  <TableHead className="w-[200px]">Тайлбар</TableHead>
+                  <TableHead className="w-[140px]">
+                    {isEnglish ? "Type" : "Төрөл"}
+                  </TableHead>
+                  <TableHead className="w-[100px]">
+                    {isEnglish ? "Price" : "Үнэ"}
+                  </TableHead>
+                  <TableHead className="w-[100px]">
+                    {isEnglish ? "Days" : "Хоног"}
+                  </TableHead>
+                  <TableHead className="w-[200px]">
+                    {isEnglish ? "Description" : "Тайлбар"}
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {Object.keys(cards).length > 0 &&
-                  cardType &&
-                  cards[cardType as keyof typeof cards].map(
-                    (d: any, index: number) => (
-                      <TableRow
-                        key={index}
-                        onClick={(e) => selectCard(d)}
-                        className="cursor-pointer hover:bg-brand-2/20"
-                      >
-                        <TableCell>{typeName(d["TYPE"])}</TableCell>
-                        <TableCell className="font-medium">
-                          {d["PRICE"] + "₮"}
-                        </TableCell>
-                        <TableCell>{d["DAYS"]}</TableCell>
-                        <TableCell>{d["CARD_TYPE"]}</TableCell>
-                      </TableRow>
-                    )
-                  )}
+                {(cards[cardType] ?? []).map((card, index) => (
+                  <TableRow
+                    key={`${card.PREFIX ?? cardType}-${index}`}
+                    onClick={() => setSelectedCard(card)}
+                    className="cursor-pointer hover:bg-brand-2/20"
+                  >
+                    <TableCell>{typeName(card.TYPE)}</TableCell>
+                    <TableCell className="font-medium">{card.PRICE}₮</TableCell>
+                    <TableCell>{card.DAYS}</TableCell>
+                    <TableCell>{translateCardText(card.CARD_TYPE, locale)}</TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </DialogContent>

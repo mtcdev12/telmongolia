@@ -4,6 +4,7 @@ import { getEachNews } from "@/api/rest";
 import { format_date } from "@/lib/helper";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import parse from 'html-react-parser';
+import { useParams } from "next/navigation";
 
 async function getData(url:string) {
   try {
@@ -19,16 +20,17 @@ async function getData(url:string) {
 }
 
 const breadcrumb = ["Урамшуулал"];
-const Page = ({ params }: { params: { each: number } }) => {
+const Page = () => {
+  const { each } = useParams<{ each: string }>();
   const [news, setNews] = useState();
     useEffect(() => {
       const fetchData = async () => {
-        const url = process.env.API2 + '/' + 'news' + '?id=' + params.each;
+        const url = process.env.API2 + '/' + 'news' + '?id=' + each;
         const posts = await getData(url);
         setNews(posts);
       };
-      const news = fetchData();
-    }, []);
+      void fetchData();
+    }, [each]);
 
   return (
     <div>

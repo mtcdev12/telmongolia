@@ -1,13 +1,10 @@
 import Breadcrumb from "@/components/ui/breadcrumb";
-import Link from "next/link";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useNavigate } from 'react-router-dom';
-import { Router } from "lucide-react";
 const breadcrumb = ["Хувьцаа эзэмшигчдийн хурал"];
 {/* <details className="w-full">
 <summary className="my-1">VOUCHER</summary>

@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
@@ -52,7 +53,8 @@ const formSchema = z.object({
   tax_id: z.string()
 });
 
-const Page = () => {
+const OrderForm = ({ locale = "mn" }: { locale?: "mn" | "en" }) => {
+  const isEnglish = locale === "en";
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [addresses, setAddresses] = useState({});
@@ -110,6 +112,7 @@ const Page = () => {
     }
   };
   function handleLang(e: any) {
+    if (isEnglish) return;
     if (e.key == "Backspace") {
       return;
     }
@@ -130,7 +133,7 @@ const Page = () => {
     const res = await newOrder(values);
     setLoading(false);
     toast({
-      title: "Шинэ захиалга",
+      title: isEnglish ? "New service order" : "Шинэ захиалга",
       description: res["message"],
     });
     if (res["result"] === "ok") {
@@ -141,7 +144,7 @@ const Page = () => {
   return (
     <div>
       {loading && <Loader />}
-      <Breadcrumb data={breadcrumb} />
+      <Breadcrumb data={isEnglish ? ["Place an order"] : breadcrumb} locale={locale} />
       <div className="flex justify-around flex-wrap">
         <Form {...form}>
           <form
@@ -150,13 +153,13 @@ const Page = () => {
             className="p-4 order-2 md:order-1 flex flex-wrap justify-center"
           >
             <div className="w-[380px] px-4 space-y-2 border-r border-slate-50">
-            <h5 className="text-brand-1 text-center">Ерөнхий мэдээлэл</h5>
+            <h5 className="text-brand-1 text-center">{isEnglish ? "General information" : "Ерөнхий мэдээлэл"}</h5>
             <FormField
               control={form.control}
               name="lastname"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Овог</FormLabel>
+                  <FormLabel>{isEnglish ? "Last name" : "Овог"}</FormLabel>
                   <FormControl>
                     <Input {...field} required onKeyDown={handleLang} />
                   </FormControl>
@@ -169,7 +172,7 @@ const Page = () => {
               name="firstname"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Нэр</FormLabel>
+                  <FormLabel>{isEnglish ? "First name" : "Нэр"}</FormLabel>
                   <FormControl>
                     <Input {...field} required onKeyDown={handleLang} />
                   </FormControl>
@@ -182,7 +185,7 @@ const Page = () => {
               name="registernum"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Регистерын дугаар</FormLabel>
+                  <FormLabel>{isEnglish ? "Registration number" : "Регистерын дугаар"}</FormLabel>
                   <FormControl>
                     <Input {...field} required onKeyDown={handleLang} />
                   </FormControl>
@@ -195,7 +198,7 @@ const Page = () => {
               name="cust_type"
               render={({ field }) => (
                 <FormItem className="space-y-3">
-                  <FormLabel>Хэрэглэгчийн төрөл</FormLabel>
+                  <FormLabel>{isEnglish ? "Customer type" : "Хэрэглэгчийн төрөл"}</FormLabel>
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
@@ -209,21 +212,21 @@ const Page = () => {
                           <RadioGroupItem value="PSN" />
                         </FormControl>
                         <FormLabel className="font-normal">
-                          Хувь хэрэглэгч
+                          {isEnglish ? "Individual" : "Хувь хэрэглэгч"}
                         </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="BUS" />
                         </FormControl>
-                        <FormLabel className="font-normal">Бизнес</FormLabel>
+                        <FormLabel className="font-normal">{isEnglish ? "Business" : "Бизнес"}</FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="GOV" />
                         </FormControl>
                         <FormLabel className="font-normal">
-                          Албан байгууллага
+                          {isEnglish ? "Government organization" : "Албан байгууллага"}
                         </FormLabel>
                       </FormItem>
                     </RadioGroup>
@@ -240,7 +243,7 @@ const Page = () => {
               name="cust_name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Байгууллагын нэр</FormLabel>
+                  <FormLabel>{isEnglish ? "Organization name" : "Байгууллагын нэр"}</FormLabel>
                   <FormControl>
                     <Input {...field} required={(customer_type == 'GOV' || customer_type == 'BUS') ? true : false} />
                   </FormControl>
@@ -254,7 +257,7 @@ const Page = () => {
               name="tax_id"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Байгууллагын ТТД /регистер/</FormLabel>
+                  <FormLabel>{isEnglish ? "Organization tax or registration ID" : "Байгууллагын ТТД /регистер/"}</FormLabel>
                   <FormControl>
                     <Input {...field} required={(customer_type == 'GOV' || customer_type == 'BUS') ? true : false} type="number"/>
                   </FormControl>
@@ -270,7 +273,7 @@ const Page = () => {
               name="mobile"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Утасны дугаар</FormLabel>
+                  <FormLabel>{isEnglish ? "Telephone number" : "Утасны дугаар"}</FormLabel>
                   <FormControl>
                     <Input {...field} type="tel" required />
                   </FormControl>
@@ -283,7 +286,7 @@ const Page = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>И-майл хаяг</FormLabel>
+                  <FormLabel>{isEnglish ? "Email address" : "И-майл хаяг"}</FormLabel>
                   <FormControl>
                     <Input {...field} type="email" required />
                   </FormControl>
@@ -296,7 +299,7 @@ const Page = () => {
               name="services"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Хүсэж буй үйлчилгээ</FormLabel>
+                  <FormLabel>{isEnglish ? "Requested services" : "Хүсэж буй үйлчилгээ"}</FormLabel>
                   <FormField
                     control={form.control}
                     name="services"
@@ -321,7 +324,7 @@ const Page = () => {
                             />
                           </FormControl>
                           <FormLabel className="text-sm font-normal">
-                            Суурин утас
+                            {isEnglish ? "Fixed-line telephone" : "Суурин утас"}
                           </FormLabel>
                         </FormItem>
                       );
@@ -348,7 +351,7 @@ const Page = () => {
                             />
                           </FormControl>
                           <FormLabel className="text-sm font-normal">
-                            Интернет
+                            {isEnglish ? "Internet" : "Интернет"}
                           </FormLabel>
                         </FormItem>
                       );
@@ -375,7 +378,7 @@ const Page = () => {
                             />
                           </FormControl>
                           <FormLabel className="text-sm font-normal">
-                            National КаТв
+                            {isEnglish ? "National Cable TV" : "National КаТв"}
                           </FormLabel>
                         </FormItem>
                       );
@@ -386,13 +389,13 @@ const Page = () => {
             />
             </div>
                   <div className="w-[380px] px-4 space-y-2">
-                  <h5 className="text-brand-1 text-center mt-4 md:mt-0">Захиалга өгөх хаяг</h5>
+                  <h5 className="text-brand-1 text-center mt-4 md:mt-0">{isEnglish ? "Service installation address" : "Захиалга өгөх хаяг"}</h5>
             <FormField
               control={form.control}
               name="city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Хот</FormLabel>
+                  <FormLabel>{isEnglish ? "City or province" : "Хот"}</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -400,7 +403,7 @@ const Page = () => {
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Хот сонгох" />
+                        <SelectValue placeholder={isEnglish ? "Select a city or province" : "Хот сонгох"} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="h-[300px]">
@@ -429,7 +432,7 @@ const Page = () => {
               name="district"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Дүүрэг</FormLabel>
+                  <FormLabel>{isEnglish ? "District or soum" : "Дүүрэг"}</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -437,7 +440,7 @@ const Page = () => {
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Дүүрэг сонгох" />
+                        <SelectValue placeholder={isEnglish ? "Select a district or soum" : "Дүүрэг сонгох"} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="h-[300px]">
@@ -466,7 +469,7 @@ const Page = () => {
               name="khoroo"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Хороо</FormLabel>
+                  <FormLabel>{isEnglish ? "Khoroo or bagh" : "Хороо"}</FormLabel>
 
                   <Select
                     onValueChange={field.onChange}
@@ -475,7 +478,7 @@ const Page = () => {
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Хороо сонгох" />
+                        <SelectValue placeholder={isEnglish ? "Select a khoroo or bagh" : "Хороо сонгох"} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="h-[300px]">
@@ -504,7 +507,7 @@ const Page = () => {
               name="apartment"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Байр</FormLabel>
+                  <FormLabel>{isEnglish ? "Building" : "Байр"}</FormLabel>
                   <FormControl>
                     <Input {...field} required onKeyDown={handleLang} />
                   </FormControl>
@@ -517,7 +520,7 @@ const Page = () => {
               name="entrance"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Орц</FormLabel>
+                  <FormLabel>{isEnglish ? "Entrance" : "Орц"}</FormLabel>
                   <FormControl>
                     <Input {...field} required onKeyDown={handleLang} />
                   </FormControl>
@@ -530,7 +533,7 @@ const Page = () => {
               name="door"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Тоот</FormLabel>
+                  <FormLabel>{isEnglish ? "Apartment or unit" : "Тоот"}</FormLabel>
                   <FormControl>
                     <Input {...field} required onKeyDown={handleLang} />
                   </FormControl>
@@ -543,7 +546,7 @@ const Page = () => {
               name="additional"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Нэмэлт тайлбар</FormLabel>
+                  <FormLabel>{isEnglish ? "Additional details" : "Нэмэлт тайлбар"}</FormLabel>
                   <FormControl>
                     <Input {...field} required onKeyDown={handleLang} />
                   </FormControl>
@@ -552,7 +555,7 @@ const Page = () => {
               )}
             />
             <div className="text-right">
-            <Button type="submit" className="mt-4">Захиалга өгөх</Button>
+            <Button type="submit" className="mt-4">{isEnglish ? "Submit order" : "Захиалга өгөх"}</Button>
             </div>
                        
                   </div>
@@ -564,15 +567,13 @@ const Page = () => {
           <Alert className="bg-yellow-100/80">
             <BsFillExclamationTriangleFill className="h-4 w-4" />
             <AlertDescription>
-              Та энэхүү формыг зөвхөн Монгол хэлээр бөглөнө үү!
+              {isEnglish ? "Enter your information accurately. Official address selections remain in Mongolian to match the service database." : "Та энэхүү формыг зөвхөн Монгол хэлээр бөглөнө үү!"}
             </AlertDescription>
           </Alert>
 
           <Alert className="bg-cyan-100/80 mt-4">
             <AlertDescription>
-              Бид таны хүсэлтийн хариуг таны цахим шуудангаар илгээх тул та
-              өөрийн ашигладаг цахим шуудангийн хаягаа хаягаа бичнэ үү! Хариуг
-              ажлын өдрийн 4-8 цагийн дотор мэдэгдэнэ.
+              {isEnglish ? "We will send the response to the email address you provide. A response is normally issued within 4–8 business hours." : "Бид таны хүсэлтийн хариуг таны цахим шуудангаар илгээх тул та өөрийн ашигладаг цахим шуудангийн хаягаа хаягаа бичнэ үү! Хариуг ажлын өдрийн 4-8 цагийн дотор мэдэгдэнэ."}
             </AlertDescription>
           </Alert>
         </div>
@@ -581,4 +582,7 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default function Page() {
+  const locale = usePathname().startsWith("/en") ? "en" : "mn";
+  return <OrderForm locale={locale} />;
+}

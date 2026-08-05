@@ -56,7 +56,12 @@ const countryside = {
 };
 
 
+const provinceNames: Record<string, string> = {
+  Архангай: "Arkhangai", БаянӨлгий: "Bayan-Ölgii", Баянхонгор: "Bayankhongor", Булган: "Bulgan", ГовьАлтай: "Govi-Altai", Дорноговь: "Dornogovi", Дорнод: "Dornod", Дундговь: "Dundgovi", Завхан: "Zavkhan", Өвөрхангай: "Övörkhangai", Өмнөговь: "Ömnögovi", Сүхбаатар: "Sükhbaatar", Сэлэнгэ: "Selenge", Төв: "Töv", Увс: "Uvs", Ховд: "Khovd", Хөвсгөл: "Khövsgöl", Хэнтий: "Khentii", ДарханУул: "Darkhan-Uul", Налайх: "Nalaikh", Орхон: "Orkhon", Орхон2: "Orkhon 2", Багануур: "Baganuur", Говьсүмбэр: "Govisümber", MIP70: "MIP70",
+};
+
 const Prefix = (props: any) => {
+  const isEnglish = props.locale === "en";
   const [division, setDivision] = useState("Улаанбаатар");
   const [prefix, setPrefix] = useState("7070");
 
@@ -73,10 +78,10 @@ const Prefix = (props: any) => {
   return (
     <div className="w-[340px]">
       <select value={division} onChange={handleDivision} className="border w-full border-brand-1/60 p-2 rounded-md">
-        <option value="Улаанбаатар">Улаанбаатар</option>
-        <option value="Орон нутаг">Орон нутаг</option>
+        <option value="Улаанбаатар">{isEnglish ? "Ulaanbaatar" : "Улаанбаатар"}</option>
+        <option value="Орон нутаг">{isEnglish ? "Regional areas" : "Орон нутаг"}</option>
       </select>
-      <p className="text-center my-2 tracking-tight text-brand-1 font-semibold">Боломжит угтварууд</p>
+      <p className="text-center my-2 tracking-tight text-brand-1 font-semibold">{isEnglish ? "Available prefixes" : "Боломжит угтварууд"}</p>
       <div className="grid grid-cols-3 gap-2 text-center tracking-tight text-slate-800">
         {division === "Улаанбаатар"
           ? ub.map((option) => (
@@ -86,7 +91,7 @@ const Prefix = (props: any) => {
             ))
           : Object.entries(countryside).map((row, index) => (
               <div key={index} onClick={() => handlePrefix(row[1])} className={`border border-slate-300 rounded-md py-1 cursor-pointer hover:bg-brand-2 hover:text-white transition-colors ${prefix==row[1] && 'bg-brand-2 text-white' }`}>
-                {row[0] !== "7008" ? row[0] : "MIP70"}
+                {isEnglish ? provinceNames[row[0]] ?? row[0] : row[0]}
               </div>
             ))}
       </div>

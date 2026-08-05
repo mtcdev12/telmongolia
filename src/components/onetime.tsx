@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,60 +20,79 @@ import {
 } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 import Loader from "./ui/loader";
-
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { onetime } from "@/api/rest";
+import type { SiteLocale } from "@/lib/i18n/ui";
 
+type OnetimeValues = {
+  onetime: string;
+  password: string;
+  user_id: string;
+};
 
-const formSchema = z.object({
-  onetime: z.string().min(1, {
-    message: "Хүлээн авсан кодоо бичнэ үү!",
-  }),
-  password: z.string().min(1, {
-    message: "Та шинэ нууц үгээ оруулна уу!",
-  }),
-  user_id: z.string()
-});
+type OnetimeProps = {
+  user_id: string;
+  handleOpenOnetimeChange: (open: boolean) => void;
+  locale?: SiteLocale;
+};
 
-const Onetime = ({user_id, handleOpenOnetimeChange}:{user_id:string, handleOpenOnetimeChange:any}) => {
+const Onetime = ({
+  user_id,
+  handleOpenOnetimeChange,
+  locale = "mn",
+}: OnetimeProps) => {
+  const isEnglish = locale === "en";
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(true);
-
-  useEffect(()=>{
-    setOpen(true);
-  },[])
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      onetime: "",
-      password: "",
-      user_id: user_id
-    },
+  const formSchema = z.object({
+    onetime: z.string().min(1, {
+      message: isEnglish ? "Enter the one-time code you received." : "Хүлээн авсан кодоо бичнэ үү!",
+    }),
+    password: z.string().min(1, {
+      message: isEnglish ? "Enter a new password." : "Та шинэ нууц үгээ оруулна уу!",
+    }),
+    user_id: z.string(),
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setLoading(true);
-    const res = await onetime(values);
-    setLoading(false);
-    toast({
-      title: "Login",
-      description: res["message"],
-    });
-    if (res["result"] === "ok") {
-      handleOpenChange();
-    }
-  }
+  useEffect(() => setOpen(true), []);
+
+  const form = useForm<OnetimeValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: { onetime: "", password: "", user_id },
+  });
+
   const handleOpenChange = () => {
     handleOpenOnetimeChange(false);
     setOpen(false);
+  };
+
+  async function onSubmit(values: OnetimeValues) {
+    setLoading(true);
+    try {
+      const response = await onetime(values);
+      toast({
+        title: isEnglish ? "Password" : "Нууц үг",
+        description: isEnglish
+          ? response?.result === "ok"
+            ? "Your password has been created successfully."
+            : "The password could not be created. Check the code and try again."
+          : response?.message || "Шинэ нууц үг үүсгэж чадсангүй.",
+      });
+      if (response?.result === "ok") handleOpenChange();
+    } finally {
+      setLoading(false);
+    }
   }
+
   return (
-    <Dialog open={open} onOpenChange={()=>handleOpenChange()}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[525px]">
         {loading && <Loader />}
         <DialogHeader>
-          <DialogTitle>Шинэ нууц үг үүсгэх</DialogTitle>
+          <DialogTitle>
+            {isEnglish ? "Create a new password" : "Шинэ нууц үг үүсгэх"}
+          </DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -82,7 +103,10 @@ const Onetime = ({user_id, handleOpenOnetimeChange}:{user_id:string, handleOpenO
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="Нэг удаагийн код" {...field} />
+                    <Input
+                      placeholder={isEnglish ? "One-time code" : "Нэг удаагийн код"}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -94,7 +118,11 @@ const Onetime = ({user_id, handleOpenOnetimeChange}:{user_id:string, handleOpenO
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="Шинэ нууц үг" {...field} />
+                    <Input
+                      placeholder={isEnglish ? "New password" : "Шинэ нууц үг"}
+                      type="password"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -105,14 +133,12 @@ const Onetime = ({user_id, handleOpenOnetimeChange}:{user_id:string, handleOpenO
               name="user_id"
               render={({ field }) => (
                 <FormItem>
-                  <FormControl>
-                    <Input {...field} type="hidden"/>
-                  </FormControl>
+                  <FormControl><Input {...field} type="hidden" /></FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit">Үргэлжлүүлэх</Button>
+            <Button type="submit">{isEnglish ? "Continue" : "Үргэлжлүүлэх"}</Button>
           </form>
         </Form>
       </DialogContent>

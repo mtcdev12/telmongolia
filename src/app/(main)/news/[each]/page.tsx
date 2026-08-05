@@ -4,17 +4,19 @@ import { getEachNews } from "@/api/rest";
 import { format_date } from "@/lib/helper";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import parse from 'html-react-parser';
+import { useParams } from "next/navigation";
 
 const breadcrumb = ["Мэдээлэл"];
-const Page = ({ params }: { params: { each: number } }) => {
+const Page = () => {
+  const { each } = useParams<{ each: string }>();
   const [news, setNews] = useState();
   useEffect(() => {
     const fetchData = async () => {
-      const res = await getEachNews(params.each, "news");
+      const res = await getEachNews(each, "news");
       setNews(res);
     };
-    const news = fetchData();
-  }, []);
+    void fetchData();
+  }, [each]);
 
   return (
     <div>
