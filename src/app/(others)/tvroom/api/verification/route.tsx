@@ -78,36 +78,89 @@ function validateMobile(number: any) {
   var re = /^[0-9]{8}$/;
   return re.test(number);
 }
-async function limitChecker(username: any){
-  let currentDate = new Date().toJSON().slice(0, 10);
-  let query = `SELECT COUNT(*) as total FROM email_log where email = '${username}' and created_at like '${currentDate}%'`;
+async function limitChecker(username: any) {
+  const currentDate = new Date().toJSON().slice(0, 10);
+
+  const query = `
+    SELECT COUNT(*) AS total
+    FROM email_log
+    WHERE email = '${username}'
+      AND created_at LIKE '${currentDate}%'
+  `;
+
   const count = await excuteQuery({
-    query: query
+    query,
   });
-  if(count[0]['total'] > 6){
+
+  console.log("LIMIT CHECK:", count);
+
+  if (!count || !count[0]) {
+    return true;
+  }
+
+  if (Number(count[0].total) > 6) {
     return false;
   }
+
   return true;
 }
 async function sendSms(to: string, code: number) {
-  var myHeaders = new Headers();
+  const myHeaders = new Headers();
   myHeaders.append("x-api-key", "24171ef659aa956cb63e538929212f17");
-  const requestOptions = {
-    method: "GET",
-    headers: myHeaders,
-  };
 
-  const text = encodeURI("Таны баталгаажуулах код - " + code);
+  const text = encodeURIComponent(`Таны баталгаажуулах код - ${code}`);
+
   const url =
-    "https://api.messagepro.mn/send?from=72704470&to=" + to + "&text=" + text;
+    `https://api-text.callpro.mn/v1/sms/send?from=72704470&to=${to}&text=${text}`;
+
   try {
-    const res = await fetch(url, requestOptions);
+    const res = await fetch(url, {
+      method: "GET",
+      headers: myHeaders,
+    });
+
     const data = await res.text();
+
+    console.log("SMS STATUS:", res.status);
+    console.log("SMS RESPONSE:", data);
+
     logToTable(to, data, 2);
-    return data;
+
+    if (!res.ok) {
+      return {
+        success: false,
+        data,
+      };
+    }
+
+    // API 200 буцаасан ч дотор нь error байгаа эсэхийг шалгах
+    try {
+      const json = JSON.parse(data);
+
+      if (json.reason) {
+        return {
+          success: false,
+          data: json,
+        };
+      }
+
+      return {
+        success: true,
+        data: json,
+      };
+    } catch {
+      return {
+        success: true,
+        data,
+      };
+    }
   } catch (err) {
-    console.log("There was an error", err);
-    return err;
+    console.error("SMS ERROR:", err);
+
+    return {
+      success: false,
+      data: err instanceof Error ? err.message : String(err),
+    };
   }
 }
 async function logToTable(username: string, description: any, type: any) {
