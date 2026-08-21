@@ -102,7 +102,7 @@ const Page = () => {
               </h2>
 
               <p className="mt-3 max-w-[760px] text-sm leading-6 text-slate-500 md:text-base">
-                Физик кабел болон шилэн кабелийн Call center багцуудаас
+                Физик кабель болон шилэн кабелийн Call center багцуудаас
                 байгууллагынхаа дуудлагын хэрэгцээнд тохируулан сонгоорой.
               </p>
             </div>
@@ -170,7 +170,7 @@ const Page = () => {
             <div className="mb-6 text-center">
               <p className="mx-auto mb-2 inline-flex items-center gap-2 rounded-full bg-[#061f57] px-5 py-2 text-sm font-bold text-white shadow-[0_10px_25px_rgba(6,31,87,0.18)]">
                 {/* <Cable size={17} /> */}
-                Физик кабел Call center
+                Физик кабель Call center
               </p>
 
               <p className="text-sm font-medium text-slate-500">
@@ -215,7 +215,7 @@ const Page = () => {
             <div className="mb-6 text-center">
               <p className="mx-auto mb-2 inline-flex items-center gap-2 rounded-full bg-blue-50 px-5 py-2 text-sm font-bold text-blue-700">
                 <Network size={17} />
-                Шилэн кабел Call center
+                Шилэн кабель Call center
               </p>
 
               <p className="text-sm font-medium text-slate-500">
