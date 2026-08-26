@@ -66,30 +66,43 @@ async function getToken() {
   }
 }
 async function create_user(username: string, password: string) {
-  const token = await getToken();
-  const url = "https://ms.tvroom.mn/customer/create";
-  const data = {
-    password: password,
-    bundle_type: 362,
-    email: validateEmail(username) ? username : 'test@mtcone.net',
-    username: username,
-  };
-  const requestOptions = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  };
   try {
-    const res = await fetch(url, requestOptions);
-    const data = await res.text();
-    return data;
-    //then
+    const token = await getToken();
+    const url = "https://ms.tvroom.mn/customer/create";
+
+    const payload = {
+      password,
+      bundle_type: 362,
+      email: validateEmail(username) ? username : "test@mtcone.net",
+      username,
+    };
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const responseText = await response.text();
+
+    if (!response.ok) {
+      console.error("API error:", {
+        status: response.status,
+        statusText: response.statusText,
+        body: responseText,
+      });
+    }
+
+    return responseText;
   } catch (err) {
-    console.log("There was an error", err);
-    return 'Try catch error!';
+    console.error("Fetch error:", err);
+
+    return err instanceof Error
+      ? `${err.name}: ${err.message}`
+      : String(err);
   }
 }
 function validateEmail(email: any) {
