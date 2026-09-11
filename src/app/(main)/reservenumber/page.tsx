@@ -16,12 +16,16 @@ const Page = () => {
     const [prefixState, setPrefixState] = useState('');
     const [list, setList] = useState();
     const [grade, setGrade] = useState('A');
+    const isSimpleOnly = prefixState === '7077';
 
     const handlePrefixChange = (d:string)=>{
         setPrefixState(d);
+        if(d === '7077'){
+            setGrade('N');
+        }
     }
     const handleGradeChange = (d:string) => {
-        setGrade(d);
+        setGrade(isSimpleOnly ? 'N' : d);
     }
     const handlePadChange = async (number:any) =>{
         let temp = '';
@@ -42,7 +46,8 @@ const Page = () => {
         console.log(number)
         if(currentNumber){
             console.log(currentNumber)
-            let data = await getNumbers(currentNumber, grade, page);
+            const requestedGrade = currentNumber.startsWith('7077') ? 'N' : grade;
+            let data = await getNumbers(currentNumber, requestedGrade, page);
 console.log(data)
             setList(data);
         }
@@ -61,7 +66,7 @@ console.log(list, "listtt")
                 </div>
                 <div className="mx-auto">
                     <div className="my-2">
-                        <Grade onGradeChange={handleGradeChange} grade={grade}/>
+                        <Grade onGradeChange={handleGradeChange} grade={grade} simpleOnly={isSimpleOnly}/>
                     </div>
                     <List list={list} onPageChange={getData}/>
                 </div>

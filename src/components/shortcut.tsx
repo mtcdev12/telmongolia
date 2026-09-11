@@ -115,7 +115,7 @@ const getShortcutDescription = (title: string, desc: string) => {
   }
 
   if (text.includes("Дугаар")) {
-    return "Дугаарын мэдээлэл, солих, түржих, нүүлгэх";
+    return "Дугаарын мэдээлэл харах, захиалах";
   }
 
   return desc;
