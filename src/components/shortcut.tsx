@@ -77,7 +77,7 @@ const Shortcut = ({
 
       {/* Text */}
       <div className="min-w-0">
-        <p className="text-[23px] font-black uppercase leading-[1.15] tracking-[-0.5px] text-[#061f57]">
+        <p className="text-[23px] font-black uppercase leading-[1.15] tracking-[-0.5px] text-brand-night">
           {title}
           <br />
           {desc}

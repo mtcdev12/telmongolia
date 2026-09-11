@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   Facebook,
   Youtube,
@@ -11,15 +12,22 @@ import {
 
 const Footer = () => {
   return (
-    <footer className="bg-gradient-to-r from-[#001b4f] via-[#002b78] to-[#001b4f] text-white">
+    <footer className="bg-brand-night text-white">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 gap-8 py-8 md:grid-cols-5">
           {/* Logo + social */}
           <div className="md:col-span-1">
-            <Link href="/" className="inline-block">
-              <div className="text-lg font-bold tracking-wide">
-                TELECOM<span className="ml-1 text-white/80">MONGOLIA</span>
-              </div>
+            <Link
+              href="/"
+              className="relative block h-[86px] w-40 overflow-hidden"
+            >
+              <Image
+                src="/assets/images/logo-new-white.webp"
+                fill
+                alt="Telecom Mongolia logo"
+                className="scale-[1.85] object-contain"
+                sizes="160px"
+              />
             </Link>
 
             <p className="mt-3 text-xs text-white/70">

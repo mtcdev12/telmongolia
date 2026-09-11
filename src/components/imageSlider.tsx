@@ -28,7 +28,7 @@ const ImageSlider = ({ data }: { data: any }) => {
   }
 
   return (
-    <div className="relative overflow-hidden rounded-[24px] bg-gradient-to-r from-[#00318a] via-[#1234d8] to-[#5e16c9] shadow-[0_22px_55px_rgba(0,35,100,0.28)]">
+    <div className="relative overflow-hidden rounded-[24px] bg-brand-night shadow-[0_22px_55px_rgba(0,35,100,0.28)]">
   <div className="relative h-[300px] w-full md:h-[360px] lg:h-[420px]">
     {data.map((d: any, index: number) => (
       <div
@@ -47,7 +47,7 @@ const ImageSlider = ({ data }: { data: any }) => {
       </div>
     ))}
 
-    <div className="absolute inset-0 bg-gradient-to-r from-[#002366]/95 via-[#073be0]/65 to-transparent" />
+    <div className="absolute inset-0 bg-gradient-to-r from-brand-night/95 via-brand-night/65 to-transparent" />
 
    <div className="absolute inset-0 flex items-center px-6 md:px-10 lg:px-14">
   <div className="max-w-[620px] text-white">
@@ -99,4 +99,4 @@ const ImageSlider = ({ data }: { data: any }) => {
   );
 };
 
-export default ImageSlider; 
+export default ImageSlider;

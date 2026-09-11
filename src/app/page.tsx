@@ -57,7 +57,7 @@ const Home = () => {
           </div>
 
           <div className="mb-5 flex items-center justify-between">
-            <h2 className="mt-1 text-2xl font-black tracking-[-0.5px] text-[#061f57]">
+            <h2 className="mt-1 text-2xl font-black tracking-[-0.5px] text-brand-night">
               Түргэн үйлчилгээ
             </h2>
           </div>

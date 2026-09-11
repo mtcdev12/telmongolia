@@ -3,7 +3,7 @@ import { BiGlobe } from "react-icons/bi";
 
 const Topbar = () => {
   return (
-    <div className="hidden border-b border-white/10 bg-[#001b55] md:block">
+    <div className="hidden border-b border-white/10 bg-brand-night md:block">
       <div className="mx-auto flex h-9 max-w-[1280px] items-center justify-between px-4 text-white">
         <div className="flex items-center gap-7 text-[12px] tracking-tight text-white/85">
           <Link

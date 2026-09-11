@@ -51,18 +51,21 @@ const Navbar = () => {
   };
 
   return (
-    <header className="relative z-50 w-full bg-[#001f63] text-white">
+    <header className="relative z-50 w-full bg-brand-night text-white">
       {/* Main navbar */}
-      <div className="rounded-b-[28px] bg-gradient-to-r from-[#001b55] via-[#002a78] to-[#002064] shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
+      <div className="rounded-b-[28px] bg-brand-night shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
         <nav className="mx-auto flex h-[70px] max-w-[1280px] items-center justify-between px-4">
           {/* Logo */}
-          <Link href="/" className="relative h-[50px] w-[190px]">
+          <Link
+            href="/"
+            className="relative h-[58px] w-[108px] overflow-hidden"
+          >
             <Image
-              src="/assets/images/logo_white.png"
+              src="/assets/images/logo-new-white.webp"
               fill
               alt="Telecom Mongolia logo"
-              className="object-contain"
-              sizes="190px"
+              className="scale-[1.85] object-contain"
+              sizes="108px"
               priority
             />
           </Link>
@@ -121,19 +124,23 @@ const Navbar = () => {
         <div className="absolute inset-0 bg-black/50" />
 
         <div
-          className={`absolute right-0 top-0 h-full w-[82%] max-w-[360px] bg-gradient-to-b from-[#001b55] to-[#00358d] p-6 text-white shadow-2xl transition-transform duration-300 ${
+          className={`absolute right-0 top-0 h-full w-[82%] max-w-[360px] bg-brand-night p-6 text-white shadow-2xl transition-transform duration-300 ${
             isOpen ? "translate-x-0" : "translate-x-full"
           }`}
           onClick={(e) => e.stopPropagation()}
         >
           <div className="mb-8 flex items-center justify-between">
-            <Link href="/" className="relative h-14 w-36" onClick={handleClose}>
+            <Link
+              href="/"
+              className="relative h-14 w-[104px] overflow-hidden"
+              onClick={handleClose}
+            >
               <Image
-                src="/assets/images/logo_white.png"
+                src="/assets/images/logo-new-white.webp"
                 fill
-                alt="logo"
-                className="object-contain"
-                sizes="144px"
+                alt="Telecom Mongolia logo"
+                className="scale-[1.85] object-contain"
+                sizes="104px"
               />
             </Link>
 
