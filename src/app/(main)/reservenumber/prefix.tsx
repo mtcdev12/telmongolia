@@ -59,7 +59,7 @@ const countryside = {
 
 const Prefix = (props: any) => {
   const [division, setDivision] = useState("Улаанбаатар");
-  const [prefix, setPrefix] = useState("7070");
+  const [prefix, setPrefix] = useState("7077");
 
   function handleDivision(e: any) {
     setDivision(e.target.value);
