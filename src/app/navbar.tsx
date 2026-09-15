@@ -58,7 +58,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link
             href="/"
-            className="relative h-[58px] w-[108px] overflow-hidden"
+            className="relative h-[48px] w-[108px] overflow-hidden"
           >
             <Image
               src="/assets/images/logo-new-white.webp"

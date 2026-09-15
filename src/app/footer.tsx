@@ -19,19 +19,19 @@ const Footer = () => {
           <div className="md:col-span-1">
             <Link
               href="/"
-              className="relative block h-[86px] w-40 overflow-hidden"
+              className="relative block h-[60px] w-40 overflow-hidden"
             >
               <Image
                 src="/assets/images/logo-new-white.webp"
                 fill
                 alt="Telecom Mongolia logo"
                 className="scale-[1.85] object-contain"
-                sizes="160px"
+                sizes="40px"
               />
             </Link>
 
             <p className="mt-3 text-xs text-white/70">
-              Харилцааг өрхийн холбоо.
+              Харилцаа бүрийг холбоно.
             </p>
 
             <div className="mt-5 flex items-center gap-3">
