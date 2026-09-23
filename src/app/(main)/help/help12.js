@@ -5,7 +5,7 @@ const certificates = [
   {
     title: "Итгэлтэй утас оюуны өмч",
     desc: "Оюуны өмчийн гэрчилгээ PDF файл",
-    href: "/assets/help/oyuniiumch/Итгэлтэй_утас_оюуны_өмч.pdf",
+    href: "/assets/help/oyuniiumch/Итгэлтэй утас оюуны өмч.pdf",
   },
 ];
 
