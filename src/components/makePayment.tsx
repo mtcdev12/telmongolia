@@ -16,6 +16,7 @@ const Payment = (props: any) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(true);
+  const isDigiPay = props.paymentdata['payment_method'] === 'digipay';
 
   const handleOpenChange = () => {
     setOpen(false);
@@ -23,12 +24,15 @@ const Payment = (props: any) => {
   };
   const checkPaymentStatus = async ()=>{
     setLoading(true);
-    var values = {invoice_id: props.paymentdata['invoice_id']};
+    var values = {
+      invoice_id: props.paymentdata['invoice_id'],
+      ...(isDigiPay ? { payment: 'digipay' } : {}),
+    };
     const res = await checkPayment(values);
     setLoading(false);
     toast({
         title: "Payment status",
-        description: res["message"],
+        description: res?.["message"] || "Төлбөрийн төлөв шалгаж чадсангүй.",
       });
   }
   const copier = (text:string)=>{
@@ -50,7 +54,19 @@ const Payment = (props: any) => {
           <DialogTitle className="text-brand-1">Төлбөр төлөлт</DialogTitle>
         </DialogHeader>
         {
-            props.paymentdata['qr_image'] ?
+            isDigiPay ?
+            <div className="space-y-4 text-center">
+              <p>Digi Pay апп суусан утсан дээр доорх товчийг дарж төлбөрөө баталгаажуулна уу.</p>
+              <a
+                href={props.paymentdata['deeplink']}
+                className="inline-flex items-center justify-center rounded-md bg-brand-1 px-4 py-2 text-white hover:bg-brand-1/90"
+              >
+                Digi Pay апп нээх
+              </a>
+              <p className="text-sm text-gray-600 break-all">Нэхэмжлэхийн дугаар: {props.paymentdata['invoice_id']}</p>
+              <Button onClick={checkPaymentStatus}>Төлбөр шалгах</Button>
+            </div>
+            : props.paymentdata['qr_image'] ?
             <div className="text-center mx-auto">
               <img
                   src={`data:image/jpeg;base64,${props.paymentdata["qr_image"]}`}

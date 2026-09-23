@@ -272,7 +272,6 @@ export const paymentPay = async (values:any) => {
         body: JSON.stringify(values),
       };
     let url = process.env.API + "/payment/pay";
-    console.log(url, "ddddd")
     try{
         const res = await fetch(url, requestOptions);
         const data = await res.json();
@@ -587,5 +586,15 @@ export const pstGetDetailedData =  async (user_id:any ,token:string) =>  {
         return data;
     }catch(err){
         console.log('There was an error', err);
+    }
+}
+export const getPaymentMethods = async (): Promise<{ digipay: boolean }> => {
+    try {
+        const res = await fetch(process.env.API + "/payment/methods");
+        if (!res.ok) return { digipay: false };
+        const data = await res.json();
+        return { digipay: data?.result === "ok" && data?.data?.digipay === true };
+    } catch {
+        return { digipay: false };
     }
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { paymentPay } from "@/api/rest";
+import { getPaymentMethods, paymentPay } from "@/api/rest";
 import Payment from "./makePayment";
 
 const formSchema = z.object({
@@ -34,6 +34,15 @@ const PayBill = (props:any) => {
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(true);
     const [paymentData, setPaymentData] = useState({});
+    const [digipayAvailable, setDigipayAvailable] = useState(false);
+
+    useEffect(() => {
+      let mounted = true;
+      getPaymentMethods().then((methods) => {
+        if (mounted) setDigipayAvailable(methods.digipay);
+      });
+      return () => { mounted = false; };
+    }, []);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -54,12 +63,12 @@ const PayBill = (props:any) => {
         setLoading(true);
         const res = await paymentPay(values);
         setLoading(false);
-        if (res["result"] === "ok") {
+        if (res?.["result"] === "ok") {
           setPaymentData(res['data']);
         }else{
           toast({
             title: "Payment",
-            description: res["message"],
+            description: res?.["message"] || "Төлбөрийн нэхэмжлэх үүсгэж чадсангүй.",
           });
         }
       }
@@ -99,7 +108,7 @@ const PayBill = (props:any) => {
                             <RadioGroup
                               onValueChange={field.onChange}
                               defaultValue={field.value}
-                              className="flex flex-row gap-2 justify-center"
+                              className="flex flex-row flex-wrap gap-2 justify-center"
                               required
                             >
                               <FormItem className="w-[140px] h-[120px] p-2 rounded-2xl radiopay">
@@ -126,8 +135,33 @@ const PayBill = (props:any) => {
                                   <span>Банк шилжүүлэг</span>
                                 </FormLabel>
                               </FormItem>
+                              <FormItem className="w-[140px] h-[120px] p-2 rounded-2xl radiopay">
+                                <FormControl>
+                                  <RadioGroupItem value="digipay" disabled={!digipayAvailable} />
+                                </FormControl>
+                                <FormLabel className="font-normal flex justify-center flex-col items-center gap-1 text-center">
+                                  <img
+                                    src="/assets/images/digipay.png"
+                                    alt="Digi Pay"
+                                    className="h-[60px] w-[60px] rounded-xl object-contain"
+                                  />
+                                  <span>{digipayAvailable ? "ХААН Банкны Digi Pay" : "Digi Pay · Идэвхжээгүй"}</span>
+                                </FormLabel>
+                              </FormItem>
                             </RadioGroup>
                           </FormControl>
+                          {!digipayAvailable && (
+                            <div className="text-center text-sm text-gray-600 space-y-2">
+                              <p>Утаснаасаа апп нээгдэх эсэхийг шалгаж болно. Энэ нь төлбөр хийхгүй.</p>
+                              <a
+                                href="digipay://payment/TEST"
+                                className="inline-flex items-center justify-center rounded-md border border-emerald-600 px-3 py-2 font-medium text-emerald-700"
+                              >
+                                Digi Pay апп нээж турших
+                              </a>
+                              <p className="text-xs">Апп нээгдсэний дараа туршилтын нэхэмжлэх олдохгүй гэсэн алдаа гарч болно.</p>
+                            </div>
+                          )}
                           <FormMessage />
                         </FormItem>
                       )}
