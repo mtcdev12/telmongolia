@@ -11,17 +11,26 @@ import Breadcrumb from "@/components/ui/breadcrumb";
 import { getWorkPlace } from "@/api/rest";
 import { format_date } from "@/lib/helper";
 
+// Кэш хийхгүй, үргэлж шинэ өгөгдөл татах тохиргоо
+export const revalidate = 0;
+
 const breadcrumb = ["Хүний нөөц"];
 
 const Page = async () => {
-  let works = [];
+  let works: any[] = [];
 
   try {
     const response = await getWorkPlace();
-    // API-аас ирсэн өгөгдлийг шүүлтүүргүйгээр шууд авна
-    works = response?.data || response || [];
+
+    if (Array.isArray(response)) {
+      works = response;
+    } else if (Array.isArray(response?.data)) {
+      works = response.data;
+    } else if (Array.isArray(response?.data?.data)) {
+      works = response.data.data;
+    }
   } catch (error) {
-    console.error("API Error:", error);
+    console.error("API GET ERROR:", error);
   }
 
   return (
@@ -39,7 +48,7 @@ const Page = async () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {Array.isArray(works) && works.length > 0 ? (
+          {works.length > 0 ? (
             works.map((d: any) => (
               <TableRow key={d.workplace_id}>
                 <TableCell className="font-medium">{d.workplace_id}</TableCell>
@@ -52,7 +61,7 @@ const Page = async () => {
           ) : (
             <TableRow>
               <TableCell colSpan={5} className="text-center py-4 text-muted-foreground">
-                Ажлын байрны мэдээлэл олдсонгүй.
+                Өгөгдөл олдсонгүй.
               </TableCell>
             </TableRow>
           )}
