@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -11,27 +14,30 @@ import Breadcrumb from "@/components/ui/breadcrumb";
 import { getWorkPlace } from "@/api/rest";
 import { format_date } from "@/lib/helper";
 
-// Кэш хийхгүй, үргэлж шинэ өгөгдөл татах тохиргоо
-export const revalidate = 0;
-
 const breadcrumb = ["Хүний нөөц"];
 
-const Page = async () => {
-  let works: any[] = [];
+export default function Page() {
+  const [works, setWorks] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  try {
-    const response = await getWorkPlace();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getWorkPlace();
+        console.log("CLIENT RESPONSE:", response);
+        const data = response?.data || response || [];
+        setWorks(Array.isArray(data) ? data : []);
+      } catch (err: any) {
+        console.error("Fetch Error:", err);
+        setErrorMsg(err.message || "Алдаа гарлаа");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    if (Array.isArray(response)) {
-      works = response;
-    } else if (Array.isArray(response?.data)) {
-      works = response.data;
-    } else if (Array.isArray(response?.data?.data)) {
-      works = response.data.data;
-    }
-  } catch (error) {
-    console.error("API GET ERROR:", error);
-  }
+    fetchData();
+  }, []);
 
   return (
     <div>
@@ -48,7 +54,17 @@ const Page = async () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {works.length > 0 ? (
+          {loading ? (
+            <TableRow>
+              <TableCell colSpan={5} className="text-center py-4">Ачаалж байна...</TableCell>
+            </TableRow>
+          ) : errorMsg ? (
+            <TableRow>
+              <TableCell colSpan={5} className="text-center py-4 text-red-500">
+                Алдаа гарлаа: {errorMsg}
+              </TableCell>
+            </TableRow>
+          ) : works.length > 0 ? (
             works.map((d: any) => (
               <TableRow key={d.workplace_id}>
                 <TableCell className="font-medium">{d.workplace_id}</TableCell>
@@ -61,7 +77,7 @@ const Page = async () => {
           ) : (
             <TableRow>
               <TableCell colSpan={5} className="text-center py-4 text-muted-foreground">
-                Өгөгдөл олдсонгүй.
+                Мэдээлэл олдсонгүй.
               </TableCell>
             </TableRow>
           )}
@@ -69,6 +85,4 @@ const Page = async () => {
       </Table>
     </div>
   );
-};
-
-export default Page;
+} 
