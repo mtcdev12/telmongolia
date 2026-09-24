@@ -1,4 +1,5 @@
 import Breadcrumb from "@/components/ui/breadcrumb";
+import SourceContact from "@/components/source-contact";
 const breadcrumb = ["Компанийн засаглал", "Гүйцэтгэх удирдлагын баг"];
 import Image from "next/image";
 
@@ -71,6 +72,7 @@ const Page = () => {
           pic="Б.Батсайхан.png"
         />
       </div>
+      <SourceContact person="ariungerel" />
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import Breadcrumb from "@/components/ui/breadcrumb";
+import SourceContact from "@/components/source-contact";
 const breadcrumb = ["Компанийн засаглал", "ТӨЛӨӨЛӨН УДИРДАХ ЗӨВЛӨЛ"];
 import Image from "next/image";
 
@@ -87,6 +88,7 @@ const Page = () => {
             pic="Danzandagva.jpg"
             />
         </div>
+      <SourceContact person="tsetsgee" />
     </div>
   );
 };

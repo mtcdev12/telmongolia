@@ -1,4 +1,5 @@
 import Breadcrumb from "@/components/ui/breadcrumb";
+import SourceContact from "@/components/source-contact";
 import PdfTable from "../pdfTable";
 
 const breadcrumb = ["Компанийн засаглал", "Эрх зүйн акт"];
@@ -37,6 +38,7 @@ const Page = () => {
             <div>
                 <PdfTable list={duties} />
             </div>
+            <SourceContact person="dagvadorj" />
         </div>
     );
 }

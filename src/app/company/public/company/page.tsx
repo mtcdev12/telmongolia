@@ -16,7 +16,7 @@ const Page = () => {
             <div>
                 <PdfTable list={duties} />
             </div>
-            <SourceContact />
+            <SourceContact person="tsetsgee" />
         </div>
     );
 }

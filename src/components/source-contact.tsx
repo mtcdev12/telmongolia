@@ -1,48 +1,96 @@
 import { Building2, Mail, MapPin, Phone, User } from "lucide-react";
 
-const sourceDetails = [
-  {
-    icon: Building2,
-    label: "",
-    content: "Монголын цахилгаан холбоо ХК",
-  },
-  {
-    icon: User,
-    label: "Хариуцсан ажилтан",
-    content: "ТУЗ-ийн Нарийн бичгийн дарга Х.Цэцэгмаа",
-  },
-  {
-    icon: Mail,
-    label: "И-мэйл",
-    content: (
-      <a
-        className="break-all text-brand-1 underline decoration-brand-2/50 underline-offset-4 transition-colors hover:text-brand-2"
-        href="mailto:tsesegmaa@mtcone.net"
-      >
-        tsesegmaa@mtcone.net
-      </a>
-    ),
-  },
-  {
-    icon: Phone,
-    label: "Утас",
-    content: (
-      <a
-        className="text-brand-1 underline decoration-brand-2/50 underline-offset-4 transition-colors hover:text-brand-2"
-        href="tel:70102210"
-      >
-        70102210
-      </a>
-    ),
-  },
-  {
-    icon: MapPin,
-    label: "Өрөө",
-    content: "Компанийн төв байрны 408 тоот",
-  },
-];
+type SourcePerson =
+  | "tsetsgee"
+  | "ariungerel"
+  | "dagvadorj"
+  | "byambasuren"
+  | "khaliunaa";
 
-export default function SourceContact() {
+const sourcePeople: Record<
+  SourcePerson,
+  { employee: string; email: string; phone: string; room: string }
+> = {
+  tsetsgee: {
+    employee: "ТУЗ-ийн Нарийн бичгийн дарга Х.Цэцэгмаа",
+    email: "tsesegmaa@mtcone.net",
+    phone: "70102210",
+    room: "Компанийн төв байрны 408 тоот",
+  },
+  ariungerel: {
+    employee: "Удирдлага, хүний нөөцийн газрын ахлах менежер Б.Ариунгэрэл",
+    email: "ariuka_hr@mtcone.net",
+    phone: "70102250",
+    room: "Компанийн төв байрны 428 тоот",
+  },
+  dagvadorj: {
+    employee: "Хуулийн мэргэжилтэн Б.Дагвадорж",
+    email: "dagvadorj@mtcone.net",
+    phone: "70102305",
+    room: "Компанийн төв байрны 410 тоот",
+  },
+  byambasuren: {
+    employee: "Бодлого төлөвлөлтийн албаны ерөнхий менежер Т.Бямбасүрэн",
+    email: "planning@mtcone.net",
+    phone: "70102211",
+    room: "Компанийн төв байрны 402 тоот",
+  },
+  khaliunaa: {
+    employee: "Санхүү бүртгэл, аж ахуйн газрын ерөнхий менежер Т.Халиунаа",
+    email: "khaliunaa@mtcone.net",
+    phone: "70102242",
+    room: "Компанийн төв байрны 406 тоот",
+  },
+};
+
+export default function SourceContact({
+  person = "tsetsgee",
+}: {
+  person?: SourcePerson;
+}) {
+  const source = sourcePeople[person];
+  const sourceDetails = [
+    {
+      icon: Building2,
+      label: "",
+      content: "Монголын цахилгаан холбоо ХК",
+    },
+    {
+      icon: User,
+      label: "Хариуцсан ажилтан",
+      content: source.employee,
+    },
+    {
+      icon: Mail,
+      label: "И-мэйл",
+      content: (
+        <a
+          className="break-all text-brand-1 underline decoration-brand-2/50 underline-offset-4 transition-colors hover:text-brand-2"
+          href={`mailto:${source.email}`}
+        >
+          {source.email}
+        </a>
+      ),
+    },
+    {
+      icon: Phone,
+      label: "Утас",
+      content: (
+        <a
+          className="text-brand-1 underline decoration-brand-2/50 underline-offset-4 transition-colors hover:text-brand-2"
+          href={`tel:${source.phone}`}
+        >
+          {source.phone}
+        </a>
+      ),
+    },
+    {
+      icon: MapPin,
+      label: "Өрөө",
+      content: source.room,
+    },
+  ];
+
   return (
     <aside
       aria-labelledby="source-contact-title"

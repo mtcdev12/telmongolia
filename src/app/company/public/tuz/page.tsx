@@ -39,7 +39,7 @@ const Page = () => {
       <div>
         <PdfTable list={mergedList} />
       </div>
-      <SourceContact />
+      <SourceContact person="tsetsgee" />
     </div>
   );
 };

@@ -23,7 +23,7 @@ const Sidebar = () => {
                         <Link href="/company/public/company">Компанийн засаглалын тайлан</Link>
                         <Link href="/company/public/yearly">Жилийн тайлан</Link>
                         <Link href="/company/public/seasonly">Улирлын тайлан</Link>
-                        <Link href="/company/public/audited">Аудитлагдсан тайлан</Link>
+                        <Link href="/company/public/audited">Аудитын тайлан</Link>
                         <Link href="/company/public/financial">Санхүүгийн тайлан</Link>
                         <Link href="/company/public/economic">Эдийн засгийн ил тод байдал</Link>
                         <Link href="/company/public/tuz">ТУЗ-ийн тайлан</Link>

@@ -1,4 +1,5 @@
 import Breadcrumb from "@/components/ui/breadcrumb";
+import SourceContact from "@/components/source-contact";
 import PdfTable from "../../pdfTable";
 
 const breadcrumb = ["Ил тод байдал", "Жилийн тайлан"];
@@ -19,6 +20,7 @@ const Page = () => {
             <div>
                 <PdfTable list={duties} />
             </div>
+            <SourceContact person="byambasuren" />
         </div>
     );
 }

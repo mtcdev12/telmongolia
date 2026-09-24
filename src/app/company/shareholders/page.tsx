@@ -1,5 +1,6 @@
 "use client";
 import Breadcrumb from "@/components/ui/breadcrumb";
+import SourceContact from "@/components/source-contact";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { Pie } from "react-chartjs-2";
@@ -161,6 +162,7 @@ const Page = () => {
         <b>1,370,989</b> ширхэг хувьцааг Монгол Улсын болон гадаадын иргэн,
         хуулийн этгээд тус тус эзэмшиж байна.
       </div>
+      <SourceContact person="tsetsgee" />
     </div>
   );
 };

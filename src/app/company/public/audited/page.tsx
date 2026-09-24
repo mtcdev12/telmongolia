@@ -1,7 +1,8 @@
 import Breadcrumb from "@/components/ui/breadcrumb";
+import SourceContact from "@/components/source-contact";
 import PdfTable from "../../pdfTable";
 
-const breadcrumb = ["Ил тод байдал", "Аудитлагдсан тайлан"];
+const breadcrumb = ["Ил тод байдал", "Аудитын тайлан"];
 const duties = [
     ['2025 оны санхүүгийн аудитын тайлан', 'iltodbaidal/1. Profile 1.2. Audited balance 2026.pdf'],
     ['2024 оны санхүүгийн аудитын тайлан', 'iltodbaidal/audited balance 2025.pdf'],
@@ -18,6 +19,7 @@ const Page = () => {
             <div>
                 <PdfTable list={duties} />
             </div>
+            <SourceContact person="khaliunaa" />
         </div>
     );
 }

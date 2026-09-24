@@ -1,14 +1,17 @@
 import Breadcrumb from "@/components/ui/breadcrumb";
 import Image from "next/image";
 import { FaUsers, FaGlassCheers, FaGlassMartini, FaStamp } from "react-icons/fa";
+import AboutSidebar from "./about-sidebar";
 
 const breadcrumb = ["Бидний тухай"];
 
 const Page = () => {
   return (
-    <div>
+    <div className="flex flex-col gap-4 lg:flex-row">
+      <AboutSidebar />
+      <div className="min-w-0 flex-1">
       <Breadcrumb data={breadcrumb} />
-      <div className="border border-slate-300 p-6 rounded-2xl">
+      <div id="director-greeting" className="scroll-mt-6 border border-slate-300 p-6 rounded-2xl">
         <h5 className="text-brand-1 text-xl font-semibold tracking-tight text-right my-2">
           Захирлын мэндчилгээ
         </h5>
@@ -59,7 +62,7 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <div className="border border-slate-300 p-6 rounded-2xl mt-8 bg-indigo-50 bg-[url('/assets/images/overlay.png')] bg-right bg-contain bg-no-repeat">
+      <div id="introduction" className="scroll-mt-6 border border-slate-300 p-6 rounded-2xl mt-8 bg-indigo-50 bg-[url('/assets/images/overlay.png')] bg-right bg-contain bg-no-repeat">
         <h5 className="text-brand-1 text-xl font-semibold tracking-tight text-right my-2">
           Танилцуулга
         </h5>
@@ -92,7 +95,7 @@ const Page = () => {
           явуулж байна.
         </div>
       </div>
-      <div className="border border-slate-300 p-6 rounded-2xl mt-8">
+      <div id="vision" className="scroll-mt-6 border border-slate-300 p-6 rounded-2xl mt-8">
         <h5 className="text-brand-1 text-xl font-semibold tracking-tight text-right my-2">
           Алсын хараа
         </h5>
@@ -101,7 +104,7 @@ const Page = () => {
           үзүүлэгч, өрсөлдөх чадвараар салбартаа тэргүүлэгч компани байна.
         </div>
       </div>
-      <div className="border border-slate-300 p-6 rounded-2xl mt-8 bg-indigo-50 bg-[url('/assets/images/overlay3.png')] bg-right bg-contain bg-no-repeat">
+      <div id="mission" className="scroll-mt-6 border border-slate-300 p-6 rounded-2xl mt-8 bg-indigo-50 bg-[url('/assets/images/overlay3.png')] bg-right bg-contain bg-no-repeat">
         <h5 className="text-brand-1 text-xl font-semibold tracking-tight text-right my-2">
           Эрхэм зорилго
         </h5>
@@ -109,7 +112,7 @@ const Page = () => {
           Харилцаа бүрийг холбоно.
         </div>
       </div>
-      <div className="border border-slate-300 p-6 rounded-2xl mt-8">
+      <div id="motto" className="scroll-mt-6 border border-slate-300 p-6 rounded-2xl mt-8">
         <h5 className="text-brand-1 text-xl font-semibold tracking-tight text-right my-2">
           Уриа үг
         </h5>
@@ -117,7 +120,7 @@ const Page = () => {
           “Холбоо хөгжлийн төлөө хамтдаа”
         </div>
       </div>
-      <div className="border border-slate-300 p-6 rounded-2xl mt-8 bg-indigo-50 md:bg-[url('/assets/images/overlay2.png')] bg-right bg-contain bg-no-repeat bg-opacity-5">
+      <div id="values" className="scroll-mt-6 border border-slate-300 p-6 rounded-2xl mt-8 bg-indigo-50 md:bg-[url('/assets/images/overlay2.png')] bg-right bg-contain bg-no-repeat bg-opacity-5">
         <h5 className="text-brand-1 text-xl font-semibold tracking-tight text-right my-2">
             Бидний үнэт зүйлс
         </h5>
@@ -140,7 +143,7 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <div className="border border-slate-300 p-6 rounded-2xl mt-8">
+      <div id="organization" className="scroll-mt-6 border border-slate-300 p-6 rounded-2xl mt-8">
         <h5 className="text-brand-1 text-xl font-semibold tracking-tight text-right my-2">
           Бүтэц зохион байгуулалт
         </h5>
@@ -153,7 +156,7 @@ const Page = () => {
           />
         </div>
       </div>
-      <div className="border border-slate-300 p-6 rounded-2xl mt-8 bg-[url('/assets/images/overlay4.png')] bg-right bg-no-repeat bg-indigo-50 mb-2">
+      <div id="achievements" className="scroll-mt-6 border border-slate-300 p-6 rounded-2xl mt-8 bg-[url('/assets/images/overlay4.png')] bg-right bg-no-repeat bg-indigo-50 mb-2">
         <h5 className="text-brand-1 text-xl font-semibold tracking-tight text-right my-2">
           Бидний амжилт
         </h5>
@@ -368,6 +371,7 @@ const Page = () => {
             </ul>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
