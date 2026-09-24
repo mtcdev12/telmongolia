@@ -34,9 +34,7 @@ export default function RootLayout({
           }
         </main>
         <Feedback />
-        <div className='fixed right-20 bottom-20'>
-          <Chatbot />
-        </div>
+        <Chatbot />
         <Footer />
         <Toaster />
       </body>

@@ -39,6 +39,7 @@
     "next": "13.4.9",
     "nextjs-progressbar": "^0.0.16",
     "nodemailer": "^6.9.6",
+    "openai": "^6.48.0",
     "postcss": "8.4.25",
     "react": "18.2.0",
     "react-chartjs-2": "^5.2.0",
@@ -55,7 +56,7 @@
     "typescript": "5.1.6",
     "undici": "^5.23.0",
     "universal-cookie": "^4.0.4",
-    "zod": "^3.21.4"
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@tailwindcss/line-clamp": "^0.4.4"

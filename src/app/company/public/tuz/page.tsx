@@ -1,4 +1,5 @@
 import Breadcrumb from "@/components/ui/breadcrumb";
+import SourceContact from "@/components/source-contact";
 import PdfTable, { Row } from "../../pdfTable";
 
 const breadcrumb = ["Ил тод байдал", "ТУЗ-ИЙН ТАЙЛАН"];
@@ -38,6 +39,7 @@ const Page = () => {
       <div>
         <PdfTable list={mergedList} />
       </div>
+      <SourceContact />
     </div>
   );
 };
