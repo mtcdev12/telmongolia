@@ -171,7 +171,7 @@ const Footer = () => {
 
               <li className="flex items-center gap-2">
                 <Mail size={14} />
-                <span>bill_info@telecommongolia.mn</span>
+                <span>telecommongolia@mtcone.net</span>
               </li>
 
               <li className="flex items-center gap-2">
