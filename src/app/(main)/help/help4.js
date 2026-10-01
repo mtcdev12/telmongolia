@@ -5,7 +5,9 @@ const steps = [
   {
     number: "01",
     title: "MENU товч дарах",
+    titleEn: "Press the MENU button",
     desc: "Хэрэглэгчийн хүлээн авагчийн MENU товчийг дарна.",
+    descEn: "Press the MENU button on the receiver remote control.",
     image: "/assets/help/suvaghaih1.jpg",
     alt: "suvaghaih1",
     icon: Menu,
@@ -13,7 +15,9 @@ const steps = [
   {
     number: "02",
     title: "Сувгийн хайлт сонгох",
+    titleEn: "Select Channel Search",
     desc: "Сувгийн хайлт функц дээр OK товчийг дарна.",
+    descEn: "Highlight Channel Search and press OK.",
     image: "/assets/help/suvaghaih2.jpg",
     alt: "suvaghaih2",
     icon: Search,
@@ -21,14 +25,16 @@ const steps = [
   {
     number: "03",
     title: "Автомат хайлт эхлүүлэх",
+    titleEn: "Start automatic search",
     desc: "Автомат хайлт функц дээр OK товчийг дарж сувгийг хайлгана. Суваг хайж дуустал түр хүлээнэ.",
+    descEn: "Press OK on Automatic Search and wait until the channel scan is complete.",
     image: "/assets/help/suvaghaih3.jpg",
     alt: "suvaghaih3",
     icon: Play,
   },
 ];
 
-function StepCard({ step }) {
+function StepCard({ step, isEnglish }) {
   const Icon = step.icon || MousePointerClick;
 
   return (
@@ -40,15 +46,15 @@ function StepCard({ step }) {
 
         <div>
           <p className="mb-1 text-xs font-black tracking-[0.18em] text-blue-500">
-            АЛХАМ {step.number}
+            {isEnglish ? "STEP" : "АЛХАМ"} {step.number}
           </p>
 
           <h3 className="text-lg font-black text-[#061f57]">
-            {step.title}
+            {isEnglish ? step.titleEn : step.title}
           </h3>
 
           <p className="mt-2 text-sm font-medium leading-6 text-slate-600">
-            {step.desc}
+            {isEnglish ? step.descEn : step.desc}
           </p>
         </div>
       </div>
@@ -64,22 +70,24 @@ function StepCard({ step }) {
   );
 }
 
-function Help4() {
+function Help4({ locale = "mn" }) {
+  const isEnglish = locale === "en";
   return (
     <div className="space-y-6">
       <div className="rounded-[24px] bg-gradient-to-r from-[#062b78] via-[#0b5fe8] to-[#1a9cff] p-6 text-white shadow-[0_18px_45px_rgba(37,99,235,0.22)]">
         <p className="mb-2 inline-flex rounded-full bg-white/15 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] backdrop-blur">
-          КаТВ заавар
+          {isEnglish ? "Cable TV guide" : "КаТВ заавар"}
         </p>
 
         <h2 className="flex items-center gap-3 text-2xl font-black tracking-[-0.4px] md:text-3xl">
           <Search size={28} />
-          КаТВ сувгийн хайлт хийх заавар
+          {isEnglish ? "Cable TV channel-search instructions" : "КаТВ сувгийн хайлт хийх заавар"}
         </h2>
 
         <p className="mt-3 max-w-[680px] text-sm leading-6 text-white/85 md:text-base">
-          Хүлээн авагч төхөөрөмж дээр сувгийн автомат хайлт хийх дарааллыг
-          алхам бүрээр үзүүлэв.
+          {isEnglish
+            ? "Follow these steps to run an automatic channel search on the receiver."
+            : "Хүлээн авагч төхөөрөмж дээр сувгийн автомат хайлт хийх дарааллыг алхам бүрээр үзүүлэв."}
         </p>
       </div>
 
@@ -87,15 +95,16 @@ function Help4() {
         <div className="flex items-start gap-3">
           <CheckCircle className="mt-0.5 shrink-0" size={20} />
           <p>
-            Зааврыг дарааллаар нь гүйцэтгэнэ. Суваг хайж байх үед төхөөрөмжөө
-            унтраахгүй түр хүлээнэ үү.
+            {isEnglish
+              ? "Complete the steps in order. Do not turn off the receiver while it is searching for channels."
+              : "Зааврыг дарааллаар нь гүйцэтгэнэ. Суваг хайж байх үед төхөөрөмжөө унтраахгүй түр хүлээнэ үү."}
           </p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-5">
         {steps.map((step) => (
-          <StepCard key={step.number} step={step} />
+          <StepCard key={step.number} step={step} isEnglish={isEnglish} />
         ))}
       </div>
     </div>

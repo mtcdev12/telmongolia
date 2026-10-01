@@ -27,6 +27,30 @@
   box-shadow: 0 18px 42px rgba(0, 55, 130, 0.42);
 }
 
+/* Separate class prevents stale browser styles from masking the launcher. */
+.launcher.launcherOriginal {
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  color: #fff;
+  background-color: #078bdc;
+  background-image: linear-gradient(135deg, #005fca 0%, #00a9e9 100%);
+  box-shadow: 0 14px 36px rgba(0, 55, 130, 0.35);
+  opacity: 1;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.launcher.launcherOriginal:hover {
+  background-color: #057cc8;
+  background-image: linear-gradient(135deg, #004fae 0%, #009bd8 100%);
+  box-shadow: 0 18px 42px rgba(0, 55, 130, 0.42);
+}
+
+.launcher.launcherOriginal svg {
+  fill: none;
+  stroke: #fff;
+  opacity: 1;
+}
+
 .launcher:focus-visible,
 .iconButton:focus-visible,
 .poweredInfoButton:focus-visible,
@@ -109,20 +133,20 @@
 
 .avatar {
   display: flex;
-  width: 43px;
-  height: 43px;
+  width: 46px;
+  height: 46px;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.78);
   border-radius: 15px;
-  color: white;
-  background: rgba(255, 255, 255, 0.14);
+  background: #fff;
+  box-shadow: 0 8px 22px rgba(0, 35, 100, 0.2);
   backdrop-filter: blur(8px);
 }
 
 .brandLogo {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   object-fit: contain;
 }
 
@@ -257,13 +281,15 @@
   align-items: center;
   justify-content: center;
   border-radius: 9px;
-  color: #0567bc;
-  background: #e5f4ff;
+  overflow: hidden;
+  border: 1px solid #d5e6f7;
+  background: #fff;
+  box-shadow: 0 3px 10px rgba(5, 71, 138, 0.1);
 }
 
 .messageBrandLogo {
-  width: 21px;
-  height: 21px;
+  width: 23px;
+  height: 23px;
   object-fit: contain;
 }
 
@@ -878,13 +904,13 @@
 .composer {
   display: flex;
   margin: 12px 12px 5px;
-  padding: 5px 5px 5px 13px;
-  align-items: flex-end;
-  gap: 8px;
-  border: 1px solid #dde5ef;
-  border-radius: 18px;
-  background: #fff;
-  box-shadow: 0 5px 20px rgba(8, 36, 79, 0.06);
+  padding: 7px 7px 7px 18px;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #eef1f5;
+  border-radius: 999px;
+  background: #f7f7f8;
+  box-shadow: none;
 }
 
 .composerMaintenance {
@@ -904,13 +930,13 @@
 
 .composerToolButton {
   display: flex;
-  width: 31px;
-  height: 38px;
+  width: 36px;
+  height: 42px;
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
-  color: #5e7590;
+  border-radius: 50%;
+  color: #6f7c90;
   background: transparent;
   transition: color 150ms ease, background 150ms ease;
 }
@@ -921,9 +947,9 @@
   flex: 0 0 auto;
 }
 
-.fileToolWrap { order: 1; }
-.voiceToolWrap { order: 2; }
-.composer textarea { order: 3; }
+.composer textarea { order: 1; }
+.fileToolWrap { order: 2; }
+.voiceToolWrap { order: 3; }
 .sendButton { order: 4; }
 
 .composerRecording .recordingState { order: 1; }
@@ -982,7 +1008,7 @@
 
 .audioWaveIcon i {
   display: block;
-  width: 2px;
+  width: 3px;
   border-radius: 999px;
   background: currentColor;
 }
@@ -1125,7 +1151,7 @@
 
 .composer:focus-within {
   border-color: #67b8ea;
-  box-shadow: 0 0 0 3px rgba(0, 145, 220, 0.1);
+  box-shadow: 0 0 0 3px rgba(0, 145, 220, 0.08);
 }
 
 .composer textarea {
@@ -1156,19 +1182,45 @@
 
 .sendButton {
   display: flex;
-  width: 38px;
-  height: 38px;
+  width: 46px;
+  height: 46px;
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  border-radius: 13px;
+  border-radius: 50%;
   color: #fff;
   background: linear-gradient(135deg, #0864be, #00a4e6);
-  transition: opacity 160ms ease, transform 160ms ease;
+  box-shadow: 0 7px 16px rgba(0, 116, 205, 0.28);
+  transition: background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
 }
 
-.sendButton:not(:disabled):hover { transform: translateY(-1px); }
-.sendButton:disabled { cursor: not-allowed; opacity: 0.38; }
+.sendButton:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 9px 20px rgba(0, 116, 205, 0.36);
+}
+
+.sendButton:disabled {
+  cursor: not-allowed;
+  color: rgba(255, 255, 255, 0.92);
+  background: linear-gradient(135deg, #5b9fd3, #83c8e8);
+  box-shadow: 0 5px 12px rgba(0, 116, 205, 0.18);
+  opacity: 1;
+}
+
+/* Keep Safari from replacing the submit button with its pale disabled style. */
+.sendButton.sendButtonVisible {
+  color: #fff !important;
+  background: linear-gradient(135deg, #0864be, #00a4e6) !important;
+  opacity: 1 !important;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.sendButton.sendButtonVisible:disabled {
+  color: rgba(255, 255, 255, 0.94) !important;
+  background: linear-gradient(135deg, #397fbd, #65b9df) !important;
+  opacity: 1 !important;
+}
 
 .disclaimer {
   margin: 0 0 5px;

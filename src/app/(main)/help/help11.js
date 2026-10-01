@@ -4,22 +4,30 @@ import { Wifi, FileText, Router, ExternalLink } from "lucide-react";
 const modemGuides = [
   {
     title: "Алдааны заавар",
+    titleEn: "Troubleshooting guide",
     desc: "Модем болон интернэтийн нийтлэг алдааны заавар",
+    descEn: "Guide to common modem and internet issues",
     href: "/assets/help/modem/Алдааны заавар.pdf",
   },
   {
     title: "TP-Link",
+    titleEn: "TP-Link",
     desc: "TP-Link modem/router тохиргооны заавар",
+    descEn: "TP-Link modem/router setup guide",
     href: "/assets/help/modem/TP-Link.pdf",
   },
   {
     title: "Netis",
+    titleEn: "Netis",
     desc: "Netis modem/router тохиргооны заавар",
+    descEn: "Netis modem/router setup guide",
     href: "/assets/help/modem/Netis.pdf",
   },
   {
     title: "KASDA WIFI ADSL ROUTER",
+    titleEn: "KASDA WIFI ADSL ROUTER",
     desc: "KASDA WIFI ADSL router тохиргооны заавар",
+    descEn: "KASDA WIFI ADSL router setup guide",
     href: "/assets/help/modem/KASDA WIFI ADSL ROUTER.pdf",
   },
   // {
@@ -60,22 +68,22 @@ function GuideCard({ title, desc, href }) {
   );
 }
 
-function Help11() {
+function Help11({ locale = "mn" }) {
+  const isEnglish = locale === "en";
   return (
     <div className="space-y-6">
       <div className="rounded-[24px] bg-gradient-to-r from-[#062b78] via-[#0b5fe8] to-[#1a9cff] p-6 text-white shadow-[0_18px_45px_rgba(37,99,235,0.22)]">
         <p className="mb-2 inline-flex rounded-full bg-white/15 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] backdrop-blur">
-          Тохиргооны заавар
+          {isEnglish ? "Setup guides" : "Тохиргооны заавар"}
         </p>
 
         <h2 className="flex items-center gap-3 text-2xl font-black tracking-[-0.4px] md:text-3xl">
           <Router size={28} />
-          Модем тохиргоо
+          {isEnglish ? "Modem settings" : "Модем тохиргоо"}
         </h2>
 
         <p className="mt-3 max-w-[680px] text-sm leading-6 text-white/85 md:text-base">
-          TP-Link, Netis, KASDA, Grandstream болон нийтлэг алдааны PDF
-          заавруудыг эндээс үзнэ үү.
+          {isEnglish ? "View PDF setup and troubleshooting guides for TP-Link, Netis, KASDA and other supported devices." : "TP-Link, Netis, KASDA, Grandstream болон нийтлэг алдааны PDF заавруудыг эндээс үзнэ үү."}
         </p>
       </div>
 
@@ -83,8 +91,7 @@ function Help11() {
         <div className="flex items-start gap-3">
           <Wifi className="mt-0.5 shrink-0" size={20} />
           <p>
-            PDF файлыг шинэ цонхонд нээж үзнэ. Төхөөрөмжийн загвараа сонгоод
-            тохиргооны зааврыг дагана уу.
+            {isEnglish ? "The PDF opens in a new window. Select your device model and follow the setup guide." : "PDF файлыг шинэ цонхонд нээж үзнэ. Төхөөрөмжийн загвараа сонгоод тохиргооны зааврыг дагана уу."}
           </p>
         </div>
       </div>
@@ -92,10 +99,10 @@ function Help11() {
       <div>
         <div className="mb-4">
           <h3 className="text-lg font-black text-[#061f57]">
-            PDF зааврууд
+            {isEnglish ? "PDF guides" : "PDF зааврууд"}
           </h3>
           <p className="mt-1 text-sm text-slate-500">
-            Доорх жагсаалтаас тохирох заавраа сонгоно уу.
+            {isEnglish ? "Choose the appropriate guide from the list below." : "Доорх жагсаалтаас тохирох заавраа сонгоно уу."}
           </p>
         </div>
 
@@ -103,8 +110,8 @@ function Help11() {
           {modemGuides.map((item) => (
             <GuideCard
               key={item.title}
-              title={item.title}
-              desc={item.desc}
+              title={isEnglish ? item.titleEn : item.title}
+              desc={isEnglish ? item.descEn : item.desc}
               href={item.href}
             />
           ))}

@@ -1,22 +1,23 @@
 import React from "react";
 import { Clapperboard, ExternalLink, QrCode, Clock, CheckCircle } from "lucide-react";
 
-function Help10() {
+function Help10({ locale = "mn" }) {
+  const isEnglish = locale === "en";
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="rounded-[24px] bg-gradient-to-r from-[#062b78] via-[#0b5fe8] to-[#1a9cff] p-6 text-white shadow-[0_18px_45px_rgba(37,99,235,0.22)]">
         <p className="mb-2 inline-flex rounded-full bg-white/15 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] backdrop-blur">
-          TVROOM үйлчилгээ
+          {isEnglish ? "TVROOM service" : "TVROOM үйлчилгээ"}
         </p>
 
         <h2 className="flex items-center gap-3 text-2xl font-black tracking-[-0.4px] md:text-3xl">
           <Clapperboard size={28} />
-          TVROOM ашиглах заавар
+          {isEnglish ? "TVROOM instructions" : "TVROOM ашиглах заавар"}
         </h2>
 
         <p className="mt-3 max-w-[720px] text-sm leading-6 text-white/85 md:text-base">
-          Кино түрээслэн үзэх, QR төлбөр төлөх болон идэвхжих хугацааны мэдээлэл.
+          {isEnglish ? "Information about renting a movie, paying by QR and activation time." : "Кино түрээслэн үзэх, QR төлбөр төлөх болон идэвхжих хугацааны мэдээлэл."}
         </p>
       </div>
 
@@ -28,7 +29,7 @@ function Help10() {
         className="group flex items-center justify-between gap-4 rounded-[22px] border border-slate-200 bg-white p-5 shadow-[0_14px_35px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-[0_18px_45px_rgba(37,99,235,0.14)]"
       >
         <div>
-          <p className="text-sm font-bold text-slate-500">Вэб сайт</p>
+          <p className="text-sm font-bold text-slate-500">{isEnglish ? "Website" : "Вэб сайт"}</p>
           <p className="mt-1 text-xl font-black text-[#061f57]">
             www.tvroom.mn
           </p>
@@ -47,15 +48,15 @@ function Help10() {
           </div>
 
           <p className="mb-1 text-xs font-black tracking-[0.18em] text-blue-500">
-            АЛХАМ 01
+            {isEnglish ? "STEP" : "АЛХАМ"} 01
           </p>
 
           <h3 className="text-lg font-black text-[#061f57]">
-            Киногоо сонгох
+            {isEnglish ? "Choose a movie" : "Киногоо сонгох"}
           </h3>
 
           <p className="mt-2 text-sm font-medium leading-6 text-slate-600">
-            Түрээслэн үзэх гэж байгаа киногоо сонгон орно.
+            {isEnglish ? "Select the movie that you want to rent." : "Түрээслэн үзэх гэж байгаа киногоо сонгон орно."}
           </p>
         </div>
 
@@ -65,15 +66,15 @@ function Help10() {
           </div>
 
           <p className="mb-1 text-xs font-black tracking-[0.18em] text-blue-500">
-            АЛХАМ 02
+            {isEnglish ? "STEP" : "АЛХАМ"} 02
           </p>
 
           <h3 className="text-lg font-black text-[#061f57]">
-            QR төлбөр төлөх
+            {isEnglish ? "Pay by QR" : "QR төлбөр төлөх"}
           </h3>
 
           <p className="mt-2 text-sm font-medium leading-6 text-slate-600">
-            Үзэх эсвэл түрээслэх хэсгийг сонгоход QR төлбөр гарч ирнэ.
+            {isEnglish ? "A payment QR code appears after you select Watch or Rent." : "Үзэх эсвэл түрээслэх хэсгийг сонгоход QR төлбөр гарч ирнэ."}
           </p>
         </div>
 
@@ -83,15 +84,15 @@ function Help10() {
           </div>
 
           <p className="mb-1 text-xs font-black tracking-[0.18em] text-blue-500">
-            АЛХАМ 03
+            {isEnglish ? "STEP" : "АЛХАМ"} 03
           </p>
 
           <h3 className="text-lg font-black text-[#061f57]">
-            Идэвхжихийг хүлээх
+            {isEnglish ? "Wait for activation" : "Идэвхжихийг хүлээх"}
           </h3>
 
           <p className="mt-2 text-sm font-medium leading-6 text-slate-600">
-            Банкны гүйлгээнээс хамааран 10-15 минутын дараа түрээслэгдэнэ.
+            {isEnglish ? "Depending on bank processing, the rental is activated within 10–15 minutes." : "Банкны гүйлгээнээс хамааран 10-15 минутын дараа түрээслэгдэнэ."}
           </p>
         </div>
       </div>
@@ -101,8 +102,7 @@ function Help10() {
         <div className="flex items-start gap-3">
           <CheckCircle className="mt-0.5 shrink-0" size={20} />
           <p>
-            QR-г уншуулан төлбөрөө амжилттай төлсний дараа кино түрээс автоматаар
-            идэвхжинэ.
+            {isEnglish ? "The movie rental is activated automatically after the QR payment succeeds." : "QR-г уншуулан төлбөрөө амжилттай төлсний дараа кино түрээс автоматаар идэвхжинэ."}
           </p>
         </div>
       </div>

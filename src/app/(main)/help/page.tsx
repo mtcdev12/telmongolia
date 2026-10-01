@@ -11,15 +11,17 @@ import {
 import { ChevronRight, FileText } from "lucide-react";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import Modal from "./modal";
 
 const breadcrumb = ["Тусламж"];
-const Page = () => {
+const HelpPage = ({ locale = "mn" }: { locale?: "mn" | "en" }) => {
+  const isEnglish = locale === "en";
   const [isOpen, setIsOpen] = useState(false);
   const [help, setHelp] = useState<number>(0);
   const openModal = (num: number) => {
     if (num === 3) {
-      window.location.href = "/products/catv";
+      window.location.href = isEnglish ? "/en/services/national-catv" : "/products/catv";
     } else if (num === 12) {
       window.location.href = "/assets/help/Stats-Handbook-for MTC.pdf";
     } else if (num === 13) {
@@ -54,27 +56,45 @@ const Page = () => {
   { id: 15, title: "Сүлжээ хоорондын харилцан холболтын гэрээ" },
   { id: 16, title: "Оюуны өмчийн гэрчилгээ" },
 ];
+  const englishHelpItems = [
+    { id: 1, title: "Package service tariffs /business and residential/" },
+    { id: 2, title: "List of channels available on Cable TV" },
+    { id: 3, title: "Cable TV tariffs" },
+    { id: 4, title: "Cable TV channel-search instructions" },
+    { id: 5, title: "Internet basic charges and tariffs /business and residential/" },
+    { id: 6, title: "Documents required to enter into an agreement" },
+    { id: 7, title: "Connection and basic charges" },
+    { id: 8, title: "International calling-card instructions" },
+    { id: 9, title: "MTC70 SIP instructions" },
+    { id: 10, title: "TVROOM instructions /how to order a movie/" },
+    { id: 11, title: "Modem settings" },
+    { id: 12, title: "Call Center guide" },
+    { id: 13, title: "International calling-service tariffs" },
+    { id: 14, title: "Multichannel transmission service connection agreement" },
+    { id: 15, title: "Inter-network connection agreement" },
+    { id: 16, title: "Intellectual property certificate" },
+  ];
+  const localizedItems = isEnglish ? englishHelpItems : helpItems;
   return (
   <div className="min-h-screen bg-gradient-to-b from-[#f4f8ff] via-white to-white">
-    <Breadcrumb data={breadcrumb} />
+    <div className="container"><Breadcrumb data={isEnglish ? ["Help"] : breadcrumb} locale={locale} /></div>
 
-    {isOpen && <Modal help={help} closeHelp={handleCloseHelp} />}
+    {isOpen && <Modal help={help} closeHelp={handleCloseHelp} locale={locale} />}
 
     <section className="mx-auto max-w-[1180px] px-4 py-8 md:py-12">
       {/* Header */}
       <div className="mb-8 overflow-hidden rounded-[28px] bg-gradient-to-r from-[#062b78] via-[#0b5fe8] to-[#1a9cff] p-7 text-white shadow-[0_20px_55px_rgba(37,99,235,0.25)] md:p-10">
         <div className="max-w-[680px]">
           <p className="mb-3 inline-flex rounded-full bg-white/15 px-4 py-1.5 text-sm font-semibold backdrop-blur">
-            Тусламжийн төв
+            {isEnglish ? "Help center" : "Тусламжийн төв"}
           </p>
 
           <h1 className="text-3xl font-black tracking-[-0.7px] md:text-5xl">
-            Түгээмэл асуултууд
+            {isEnglish ? "Frequently asked questions" : "Түгээмэл асуултууд"}
           </h1>
 
           <p className="mt-4 text-base leading-7 text-white/85 md:text-lg">
-            Үйлчилгээ, тариф, гэрээ, тохиргоо болон ашиглах заавруудыг нэг
-            дороос үзээрэй.
+            {isEnglish ? "Find service, tariff, agreement, setup and usage guidance in one place." : "Үйлчилгээ, тариф, гэрээ, тохиргоо болон ашиглах заавруудыг нэг дороос үзээрэй."}
           </p>
         </div>
       </div>
@@ -84,16 +104,16 @@ const Page = () => {
         <div className="mb-4 flex items-center justify-between px-2 md:px-3">
           <div>
             <h2 className="text-xl font-black text-[#061f57] md:text-2xl">
-              Асуултын жагсаалт
+              {isEnglish ? "Question list" : "Асуултын жагсаалт"}
             </h2>
             <p className="mt-1 text-sm text-slate-500">
-              Нийт {helpItems.length} тусламжийн мэдээлэл байна
+              {isEnglish ? `${localizedItems.length} help items in total` : `Нийт ${localizedItems.length} тусламжийн мэдээлэл байна`}
             </p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          {helpItems.map((item, index) => (
+          {localizedItems.map((item, index) => (
             <button
               key={item.id}
               type="button"
@@ -128,4 +148,7 @@ const Page = () => {
 );
 };
 
-export default Page;
+export default function Page() {
+  const locale = usePathname().startsWith("/en") ? "en" : "mn";
+  return <HelpPage locale={locale} />;
+}

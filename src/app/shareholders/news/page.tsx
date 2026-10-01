@@ -11,8 +11,7 @@ import Loader from "@/components/ui/loader";
 import SourceContact from "@/components/source-contact";
 import { BsFolder2Open } from "react-icons/bs";
 import { CalendarDays, ArrowRight, FileText } from "lucide-react";
-
-const breadcrumb = ["Хувьцаа эзэмшигчдэд", "Мэдээлэл"];
+import { usePathname } from "next/navigation";
 
 interface NewsItem {
   id: number;
@@ -30,6 +29,8 @@ interface NewsType {
 }
 
 const Page = () => {
+  const isEnglish = usePathname().startsWith("/en/");
+  const locale = isEnglish ? "en" : "mn";
   const [news, setNews] = useState<NewsType>();
   const [loading, setLoading] = useState(false);
 
@@ -54,23 +55,24 @@ const Page = () => {
     <div className="min-h-screen bg-gradient-to-b from-[#f4f8ff] via-white to-white">
       {loading && <Loader />}
 
-      <Breadcrumb data={breadcrumb} />
+      <Breadcrumb locale={locale} data={isEnglish ? ["Shareholders", "Information"] : ["Хувьцаа эзэмшигчдэд", "Мэдээлэл"]} />
 
       <section className="mx-auto max-w-[1280px] px-4 py-8 md:py-12">
         {/* Header */}
         <div className="mb-8 overflow-hidden rounded-[28px] bg-gradient-to-r from-[#062b78] via-[#0b5fe8] to-[#1a9cff] p-7 text-white shadow-[0_20px_55px_rgba(37,99,235,0.25)] md:p-10">
           <p className="mb-3 inline-flex rounded-full bg-white/15 px-4 py-1.5 text-sm font-semibold backdrop-blur">
-            Хувьцаа эзэмшигчдэд
+            {isEnglish ? "For shareholders" : "Хувьцаа эзэмшигчдэд"}
           </p>
 
           <h1 className="flex items-center gap-3 text-3xl font-black tracking-[-0.7px] md:text-5xl">
             <FileText className="hidden md:block" size={42} />
-            Мэдээлэл
+            {isEnglish ? "Information" : "Мэдээлэл"}
           </h1>
 
           <p className="mt-4 max-w-[720px] text-base leading-7 text-white/85 md:text-lg">
-            Хувьцаа эзэмшигчдэд зориулсан мэдээ, зар, тайлан болон холбогдох
-            мэдээллүүд.
+            {isEnglish
+              ? "News, notices, reports and related information for shareholders."
+              : "Хувьцаа эзэмшигчдэд зориулсан мэдээ, зар, тайлан болон холбогдох мэдээллүүд."}
           </p>
         </div>
 
@@ -79,11 +81,11 @@ const Page = () => {
             <div className="mb-5 flex items-center justify-between">
               <div>
                 <h2 className="text-xl font-black text-[#061f57] md:text-2xl">
-                  Мэдээллийн жагсаалт
+                  {isEnglish ? "Information list" : "Мэдээллийн жагсаалт"}
                 </h2>
 
                 <p className="mt-1 text-sm text-slate-500">
-                  Нийт {news.totalDatas} мэдээлэл байна
+                  {isEnglish ? `${news.totalDatas} items` : `Нийт ${news.totalDatas} мэдээлэл байна`}
                 </p>
               </div>
             </div>
@@ -92,7 +94,7 @@ const Page = () => {
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {news.data.map((d) => (
                 <Link
-                  href={`/shareholders/news/${d.id}`}
+                  href={`${isEnglish ? "/en" : ""}/shareholders/news/${d.id}`}
                   key={d.id}
                   className="group overflow-hidden rounded-[26px] border border-slate-200/80 bg-white shadow-[0_16px_40px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_24px_60px_rgba(37,99,235,0.16)]"
                 >
@@ -110,13 +112,13 @@ const Page = () => {
 
                     <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full bg-white/90 px-3 py-1.5 text-xs font-bold text-blue-700 shadow-md backdrop-blur">
                       <FileText size={15} />
-                      Мэдээлэл
+                      {isEnglish ? "Information" : "Мэдээлэл"}
                     </div>
 
                     <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#063b91]/70 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
                       <span className="flex items-center gap-2 rounded-2xl border border-white/60 bg-white/15 px-5 py-3 text-sm font-bold text-white shadow-lg">
                         <BsFolder2Open className="text-xl" />
-                        Дэлгэрэнгүй
+                        {isEnglish ? "Read more" : "Дэлгэрэнгүй"}
                       </span>
                     </div>
                   </div>

@@ -10,6 +10,7 @@ import {
   Globe2,
 } from "lucide-react";
 import Login from "@/components/login";
+import LanguageSwitchLink from "@/components/language-switch-link";
 
 const personal = [
   ["Суурин утас", "/products/single"],
@@ -166,6 +167,13 @@ const Navbar = () => {
             <MobileLink href="/help" onClose={handleClose}>
               Тусламж
             </MobileLink>
+
+            <LanguageSwitchLink
+              locale="en"
+              className="flex items-center gap-2 rounded-xl border border-white/20 px-4 py-3"
+            >
+              <Globe2 size={17} /> English
+            </LanguageSwitchLink>
 
             <div className="pt-4">
               <div className="rounded-2xl border border-white/15 bg-white/10 px-5 py-4">

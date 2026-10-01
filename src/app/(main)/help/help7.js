@@ -4,12 +4,16 @@ import { PlugZap, CalendarDays, Info } from "lucide-react";
 const feeItems = [
   {
     title: "Холболтын хураамж",
+    titleEn: "Connection charge",
     desc: "Үйлчилгээг идэвхжүүлсний төлбөрийг хэлнэ.",
+    descEn: "A one-time charge for activating the service.",
     icon: PlugZap,
   },
   {
     title: "Сарын суурь хураамж",
+    titleEn: "Monthly basic charge",
     desc: "Хэрэглэгчийн сонгосон үйлчилгээний сарын суурь хураамж болон бусад нэмэлт үйлчилгээний хураамжаас бүрдэх сар тутам тогтмол төлөх төлбөрийг хэлнэ.",
+    descEn: "The recurring monthly amount made up of the selected service's basic charge and any additional-service charges.",
     icon: CalendarDays,
   },
 ];
@@ -34,21 +38,22 @@ function FeeCard({ title, desc, Icon }) {
   );
 }
 
-function Help7() {
+function Help7({ locale = "mn" }) {
+  const isEnglish = locale === "en";
   return (
     <div className="space-y-6">
       <div className="rounded-[24px] bg-gradient-to-r from-[#062b78] via-[#0b5fe8] to-[#1a9cff] p-6 text-white shadow-[0_18px_45px_rgba(37,99,235,0.22)]">
         <p className="mb-2 inline-flex rounded-full bg-white/15 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] backdrop-blur">
-          Төлбөрийн мэдээлэл
+          {isEnglish ? "Charge information" : "Төлбөрийн мэдээлэл"}
         </p>
 
         <h2 className="flex items-center gap-3 text-2xl font-black tracking-[-0.4px] md:text-3xl">
           <Info size={28} />
-          Холболтын болон суурь хураамж
+          {isEnglish ? "Connection and basic charges" : "Холболтын болон суурь хураамж"}
         </h2>
 
         <p className="mt-3 max-w-[680px] text-sm leading-6 text-white/85 md:text-base">
-          Үйлчилгээ идэвхжүүлэх болон сар тутам төлөх хураамжийн тайлбар.
+          {isEnglish ? "An explanation of service activation and recurring monthly charges." : "Үйлчилгээ идэвхжүүлэх болон сар тутам төлөх хураамжийн тайлбар."}
         </p>
       </div>
 
@@ -56,17 +61,18 @@ function Help7() {
         {feeItems.map((item) => (
           <FeeCard
             key={item.title}
-            title={item.title}
-            desc={item.desc}
+            title={isEnglish ? item.titleEn : item.title}
+            desc={isEnglish ? item.descEn : item.desc}
             Icon={item.icon}
           />
         ))}
       </div>
 
       <div className="rounded-2xl border border-blue-100 bg-blue-50 p-4 text-sm font-medium leading-6 text-blue-800">
-        <strong>Тайлбар:</strong> Сарын суурь хураамж нь тухайн хэрэглэгчийн
-        сонгосон үйлчилгээ болон нэмэлт үйлчилгээтэй холбоотойгоор өөр байж
-        болно.
+        <strong>{isEnglish ? "Note:" : "Тайлбар:"}</strong>{" "}
+        {isEnglish
+          ? "The monthly basic charge may vary depending on the selected service and any additional services."
+          : "Сарын суурь хураамж нь тухайн хэрэглэгчийн сонгосон үйлчилгээ болон нэмэлт үйлчилгээтэй холбоотойгоор өөр байж болно."}
       </div>
     </div>
   );

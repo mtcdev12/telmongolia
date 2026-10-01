@@ -4,20 +4,29 @@ import { Home, Layers, Network, PackageCheck, ChevronRight } from "lucide-react"
 const homePackages = [
   {
     title: "Дан багц",
+    titleEn: "Single-service package",
     desc: "Өрхийн дан үйлчилгээний багцууд",
+    descEn: "Single-service packages for residential customers",
     href: "/products/single",
+    hrefEn: "/en/services/fixed-line",
     icon: PackageCheck,
   },
   {
     title: "Хосолсон багц",
+    titleEn: "Double-play package",
     desc: "Хоёр үйлчилгээ хосолсон багцууд",
+    descEn: "Packages combining two services",
     href: "/products/double",
+    hrefEn: "/en/services/double-play",
     icon: Layers,
   },
   {
     title: "Гуравласан багц",
+    titleEn: "Triple-play package",
     desc: "Интернэт, суурин утас, КаТВ хосолсон багцууд",
+    descEn: "Internet, fixed-line and Cable TV in one package",
     href: "/products/triple",
+    hrefEn: "/en/services/triple-play",
     icon: Network,
   },
 ];
@@ -46,32 +55,34 @@ function PackageCard({ title, desc, href, Icon }) {
   );
 }
 
-function Help1() {
+function Help1({ locale = "mn" }) {
+  const isEnglish = locale === "en";
   return (
     <div className="space-y-6">
       <div className="rounded-[24px] bg-gradient-to-r from-[#062b78] via-[#0b5fe8] to-[#1a9cff] p-6 text-white shadow-[0_18px_45px_rgba(37,99,235,0.22)]">
         <p className="mb-2 inline-flex rounded-full bg-white/15 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] backdrop-blur">
-          Багцын үйлчилгээ
+          {isEnglish ? "Package services" : "Багцын үйлчилгээ"}
         </p>
 
         <h2 className="flex items-center gap-3 text-2xl font-black tracking-[-0.4px] md:text-3xl">
           <Home size={28} />
-          Өрхийн багцууд
+          {isEnglish ? "Residential packages" : "Өрхийн багцууд"}
         </h2>
 
         <p className="mt-3 max-w-[680px] text-sm leading-6 text-white/85 md:text-base">
-          Та өөрт тохирох дан, хосолсон болон гуравласан багцын мэдээллийг
-          доорх сонголтоос үзээрэй.
+          {isEnglish
+            ? "Choose a single-service, double-play or triple-play package to view its details."
+            : "Та өөрт тохирох дан, хосолсон болон гуравласан багцын мэдээллийг доорх сонголтоос үзээрэй."}
         </p>
       </div>
 
       <div>
         <div className="mb-4">
           <h3 className="text-lg font-black text-[#061f57]">
-            Өрхөд зориулсан багцууд
+            {isEnglish ? "Packages for residential customers" : "Өрхөд зориулсан багцууд"}
           </h3>
           <p className="mt-1 text-sm text-slate-500">
-            Багцын төрөл сонгоод дэлгэрэнгүй мэдээлэл үзнэ үү.
+            {isEnglish ? "Select a package type to view detailed information." : "Багцын төрөл сонгоод дэлгэрэнгүй мэдээлэл үзнэ үү."}
           </p>
         </div>
 
@@ -79,9 +90,9 @@ function Help1() {
           {homePackages.map((item) => (
             <PackageCard
               key={item.title}
-              title={item.title}
-              desc={item.desc}
-              href={item.href}
+              title={isEnglish ? item.titleEn : item.title}
+              desc={isEnglish ? item.descEn : item.desc}
+              href={isEnglish ? item.hrefEn : item.href}
               Icon={item.icon}
             />
           ))}

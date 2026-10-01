@@ -3,16 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { encodeVoiceWav, MAX_VOICE_SECONDS } from "@/lib/chatbot/audio";
 
-type Recognition = {
-  lang: string; interimResults: boolean; continuous: boolean;
-  onresult: ((event: { results: { [index: number]: { [index: number]: { transcript: string } } } }) => void) | null;
-  onend: (() => void) | null; onerror: (() => void) | null;
-  start(): void; stop(): void;
-};
 type VoiceWindow = Window & typeof globalThis & {
   webkitAudioContext?: typeof AudioContext;
-  SpeechRecognition?: new () => Recognition;
-  webkitSpeechRecognition?: new () => Recognition;
 };
 type Capture = { recorder: MediaRecorder; stream: MediaStream; context: AudioContext; timer: number };
 
@@ -25,7 +17,6 @@ export function useChatVoice({ locale, enabled, onTranscript, onError }: {
   const [isProcessing, setProcessing] = useState(false);
   const [speakingId, setSpeakingId] = useState<string | null>(null);
   const capture = useRef<Capture | null>(null);
-  const recognition = useRef<Recognition | null>(null);
   const captureEpoch = useRef(0);
   const captureBusy = useRef(false);
   const upload = useRef<AbortController | null>(null);
@@ -65,13 +56,6 @@ export function useChatVoice({ locale, enabled, onTranscript, onError }: {
     captureEpoch.current++;
     captureBusy.current = false;
     upload.current?.abort();
-    if (recognition.current) {
-      recognition.current.onresult = null;
-      recognition.current.onend = null;
-      recognition.current.onerror = null;
-      recognition.current.stop();
-      recognition.current = null;
-    }
     releaseCapture();
     setListening(false);
     setProcessing(false);
@@ -79,9 +63,11 @@ export function useChatVoice({ locale, enabled, onTranscript, onError }: {
 
   useEffect(() => {
     const browser = window as VoiceWindow;
-    setAvailable(locale === "mn"
-      ? typeof navigator.mediaDevices?.getUserMedia === "function" && typeof window.MediaRecorder === "function" && typeof (browser.AudioContext || browser.webkitAudioContext) === "function"
-      : Boolean(browser.SpeechRecognition || browser.webkitSpeechRecognition));
+    setAvailable(
+      typeof navigator.mediaDevices?.getUserMedia === "function"
+      && typeof window.MediaRecorder === "function"
+      && typeof (browser.AudioContext || browser.webkitAudioContext) === "function"
+    );
     return () => {
       cancelCapture();
       stopSpeech();
@@ -93,33 +79,13 @@ export function useChatVoice({ locale, enabled, onTranscript, onError }: {
   async function toggleRecording() {
     if (!enabled) return;
     if (isListening) {
-      if (locale === "en") recognition.current?.stop();
-      else if (capture.current?.recorder.state === "recording") capture.current.recorder.stop();
+      if (capture.current?.recorder.state === "recording") capture.current.recorder.stop();
       return;
     }
     if (captureBusy.current) return;
     callbacks.current.onError("");
     stopSpeech();
     const browser = window as VoiceWindow;
-
-    if (locale === "en") {
-      const Constructor = browser.SpeechRecognition || browser.webkitSpeechRecognition;
-      if (!Constructor) return;
-      const recognizer = new Constructor();
-      recognizer.lang = "en-US";
-      recognizer.interimResults = false;
-      recognizer.continuous = false;
-      recognizer.onresult = (event) => {
-        const text = event.results[0]?.[0]?.transcript?.trim();
-        if (text) callbacks.current.onTranscript(text);
-      };
-      recognizer.onend = () => { setListening(false); captureBusy.current = false; };
-      recognizer.onerror = () => { setListening(false); captureBusy.current = false; callbacks.current.onError(voiceError()); };
-      recognition.current = recognizer;
-      try { recognizer.start(); captureBusy.current = true; setListening(true); }
-      catch { callbacks.current.onError(voiceError()); }
-      return;
-    }
 
     const epoch = ++captureEpoch.current;
     captureBusy.current = true;
@@ -168,7 +134,10 @@ export function useChatVoice({ locale, enabled, onTranscript, onError }: {
           if (epoch !== captureEpoch.current) return;
           const wav = encodeVoiceWav(Array.from({ length: decoded.numberOfChannels }, (_, i) => decoded.getChannelData(i)), decoded.sampleRate);
           const response = await fetch("/api/assistant/transcribe", {
-            method: "POST", headers: { "Content-Type": "audio/wav" }, body: wav, signal: controller.signal,
+            method: "POST",
+            headers: { "Content-Type": "audio/wav", "X-Voice-Locale": locale },
+            body: wav,
+            signal: controller.signal,
           });
           const data = await response.json();
           if (!response.ok || typeof data.text !== "string") throw new Error("TRANSCRIPTION_FAILED");
@@ -193,7 +162,9 @@ export function useChatVoice({ locale, enabled, onTranscript, onError }: {
       if (epoch === captureEpoch.current) {
         releaseCapture(); captureBusy.current = false; setProcessing(false); setListening(false);
         callbacks.current.onError(error instanceof DOMException && error.name === "NotAllowedError"
-          ? "Микрофон ашиглах зөвшөөрөл өгөөд дахин оролдоно уу."
+          ? locale === "en"
+            ? "Allow microphone access in Safari Settings, then try again."
+            : "Микрофон ашиглах зөвшөөрөл өгөөд дахин оролдоно уу."
           : voiceError());
       }
     }

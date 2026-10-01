@@ -12,8 +12,8 @@ const Paginator = ({totalPages, currentPage, handlePageChange}:{totalPages:numbe
 }
 
 const Page = ({page, isActive, pageChange}:{page:number, isActive:boolean, pageChange:any}) =>{
-    return <div onClick={()=>{pageChange(page)}} className={`border border-slate-200 p-2 cursor-pointer text-slate-50 font-semibold rounded-md px-3 text-center ${isActive ? 'bg-brand-3' : 'bg-brand-1'}`}>
+    return <button type="button" onClick={()=>{pageChange(page)}} aria-current={isActive ? "page" : undefined} className={`border border-slate-200 p-2 cursor-pointer text-slate-50 font-semibold rounded-md px-3 text-center ${isActive ? 'bg-brand-3' : 'bg-brand-1'}`}>
         {page}
-    </div>
+    </button>
 }
 export default Paginator;

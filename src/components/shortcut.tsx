@@ -12,11 +12,15 @@ const Shortcut = ({
   desc,
   icon,
   url,
+  description,
+  locale = "mn",
 }: {
   title: string;
   desc: string;
   icon: string;
   url?: string;
+  description?: string;
+  locale?: "mn" | "en";
 }) => {
   const [cards, setCards] = useState(false);
   const [bill, setBill] = useState(false);
@@ -49,8 +53,12 @@ const Shortcut = ({
 
   return (
     <>
-      {cards && <Cards onCardClose={onCardClose} open={cards} />}
-      {bill && <CheckBill onModalClose={onModalClose} open={bill} />}
+      {cards && (
+        <Cards onCardClose={onCardClose} open={cards} locale={locale} />
+      )}
+      {bill && (
+        <CheckBill onModalClose={onModalClose} open={bill} locale={locale} />
+      )}
 
  <button
   type="button"
@@ -77,14 +85,14 @@ const Shortcut = ({
 
       {/* Text */}
       <div className="min-w-0">
-        <p className="text-[23px] font-black uppercase leading-[1.15] tracking-[-0.5px] text-brand-night">
+        <p className="text-[23px] font-black uppercase leading-[1.15] tracking-[-0.5px] text-[#061f57]">
           {title}
           <br />
           {desc}
         </p>
 
         <p className="mt-3 line-clamp-2 max-w-[170px] text-[14px] font-medium leading-6 text-slate-500">
-          {getShortcutDescription(title, desc)}
+          {description ?? getShortcutDescription(title, desc)}
         </p>
       </div>
     </div>
@@ -115,7 +123,7 @@ const getShortcutDescription = (title: string, desc: string) => {
   }
 
   if (text.includes("Дугаар")) {
-    return "Дугаарын мэдээлэл харах, захиалах";
+    return "Сул дугаар хайж, сонгон захиалах";
   }
 
   return desc;

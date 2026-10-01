@@ -12,16 +12,14 @@ import {
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import {
-  Bot,
   CheckCircle2,
   Clock3,
-  ImagePlus,
   Info,
   Loader2,
   Mail,
   MapPin,
   MessageCircle,
-  Mic,
+  Paperclip,
   Phone,
   RefreshCw,
   Send,
@@ -49,8 +47,11 @@ type ChatMessage = {
 };
 
 const CHATBOT_MAINTENANCE = false;
+// Keep the speech-to-text control available unless it is explicitly disabled.
+// Browser microphone access is checked separately so an insecure origin does
+// not silently remove the control from the composer.
 const CHIMEGE_STT_ENABLED =
-  process.env.NEXT_PUBLIC_CHIMEGE_STT_ENABLED === "true";
+  process.env.NEXT_PUBLIC_CHIMEGE_STT_ENABLED !== "false";
 const CHIMEGE_TTS_ENABLED =
   process.env.NEXT_PUBLIC_CHIMEGE_TTS_ENABLED === "true";
 
@@ -82,6 +83,7 @@ const chatbotCopy = {
     addImage: "Төхөөрөмжийн зураг нэмэх",
     fileTooltip: "Файл нэмэх",
     voiceTooltip: "Ярианаас бичвэр рүү",
+    voiceUnavailable: "Микрофон ашиглахын тулд сайтыг HTTPS холболтоор нээнэ үү.",
     speak: "Монгол хэлээр ярих",
     stopSpeak: "Яриаг зогсоох",
     close: "Чатыг хаах",
@@ -120,6 +122,7 @@ const chatbotCopy = {
     addImage: "Attach a device photo",
     fileTooltip: "Add file",
     voiceTooltip: "Speech to text",
+    voiceUnavailable: "Open the site over HTTPS to use the microphone.",
     speak: "Speak in English",
     stopSpeak: "Stop listening",
     close: "Close assistant",
@@ -836,7 +839,13 @@ export default function Chatbot({ locale = "mn" }: { locale?: ChatLocale }) {
           <header className={styles.header}>
             <div className={styles.identity}>
               <span className={styles.avatar} aria-hidden="true">
-                <Bot size={23} />
+                <Image
+                  src="/assets/images/logo-new-blue.webp"
+                  alt=""
+                  width={38}
+                  height={38}
+                  className={styles.brandLogo}
+                />
               </span>
               <div>
                 <div className={styles.titleRow}>
@@ -883,7 +892,13 @@ export default function Chatbot({ locale = "mn" }: { locale?: ChatLocale }) {
               >
                 {message.role === "assistant" && (
                   <span className={styles.messageAvatar} aria-hidden="true">
-                    <Bot size={15} />
+                    <Image
+                      src="/assets/images/logo-new-blue.webp"
+                      alt=""
+                      width={23}
+                      height={23}
+                      className={styles.messageBrandLogo}
+                    />
                   </span>
                 )}
                 {message.role === "assistant" ? (
@@ -950,7 +965,13 @@ export default function Chatbot({ locale = "mn" }: { locale?: ChatLocale }) {
             {isLoading && (
               <div className={`${styles.messageRow} ${styles.assistantRow}`}>
                 <span className={styles.messageAvatar} aria-hidden="true">
-                  <Bot size={15} />
+                  <Image
+                    src="/assets/images/logo-new-blue.webp"
+                    alt=""
+                    width={23}
+                    height={23}
+                    className={styles.messageBrandLogo}
+                  />
                 </span>
                 <div className={styles.typing} aria-label={copy.typing}>
                   <span />
@@ -1037,7 +1058,7 @@ export default function Chatbot({ locale = "mn" }: { locale?: ChatLocale }) {
                 aria-label={copy.addImage}
                 aria-describedby="chat-file-tooltip"
               >
-                <ImagePlus size={21} />
+                <Paperclip size={22} />
               </button>
               <span id="chat-file-tooltip" className={styles.composerTooltip} role="tooltip">
                 {copy.fileTooltip}
@@ -1057,14 +1078,20 @@ export default function Chatbot({ locale = "mn" }: { locale?: ChatLocale }) {
                 </span>
               </div>
             )}
-            {CHIMEGE_STT_ENABLED && voice.available && (
+            {CHIMEGE_STT_ENABLED && (
               <span className={`${styles.composerToolWrap} ${styles.voiceToolWrap}`}>
                 <button
                   type="button"
                   className={`${styles.composerToolButton} ${
                     voice.isListening ? styles.composerToolButtonActive : ""
                   }`}
-                  onClick={() => void voice.toggleRecording()}
+                  onClick={() => {
+                    if (!voice.available) {
+                      setAttachmentError(copy.voiceUnavailable);
+                      return;
+                    }
+                    void voice.toggleRecording();
+                  }}
                   disabled={CHATBOT_MAINTENANCE || isLoading || voice.isProcessing}
                   aria-pressed={voice.isListening}
                   aria-label={voice.isListening ? copy.stopSpeak : copy.speak}
@@ -1075,7 +1102,13 @@ export default function Chatbot({ locale = "mn" }: { locale?: ChatLocale }) {
                   ) : voice.isListening ? (
                     <span className={styles.recordingStopIcon} aria-hidden="true" />
                   ) : (
-                    <Mic size={21} />
+                    <span className={styles.audioWaveIcon} aria-hidden="true">
+                      <i />
+                      <i />
+                      <i />
+                      <i />
+                      <i />
+                    </span>
                   )}
                 </button>
                 <span id="chat-voice-tooltip" className={styles.composerTooltip} role="tooltip">
@@ -1085,7 +1118,7 @@ export default function Chatbot({ locale = "mn" }: { locale?: ChatLocale }) {
             )}
             <button
               type="submit"
-              className={styles.sendButton}
+              className={`${styles.sendButton} ${styles.sendButtonVisible}`}
               disabled={CHATBOT_MAINTENANCE || (!input.trim() && !imagePreview) || isLoading || voice.isListening || voice.isProcessing}
               aria-label={copy.send}
             >
@@ -1126,7 +1159,7 @@ export default function Chatbot({ locale = "mn" }: { locale?: ChatLocale }) {
 
       <button
         type="button"
-        className={styles.launcher}
+        className={`${styles.launcher} ${styles.launcherOriginal}`}
         onClick={() => setIsOpen((current) => !current)}
         aria-label={isOpen ? copy.close : copy.open}
         aria-expanded={isOpen}

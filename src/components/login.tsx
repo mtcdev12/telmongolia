@@ -32,9 +32,22 @@ import { useToast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import Loader from "./ui/loader";
 import Onetime from "./onetime";
-import { useRouter } from "next/navigation";
-
 import { useState, useEffect } from "react";
+
+type AuthSession = {
+  data: {
+    userId: string;
+  };
+  expireAt?: number;
+  message?: string;
+};
+
+function isAuthSession(value: unknown): value is AuthSession {
+  if (!value || typeof value !== "object") return false;
+  const data = (value as { data?: unknown }).data;
+  if (!data || typeof data !== "object") return false;
+  return typeof (data as { userId?: unknown }).userId === "string";
+}
 
 const formSchema = z.object({
   user_id: z.string().min(6, {
@@ -44,17 +57,44 @@ const formSchema = z.object({
   user_pass: z.string(),
 });
 
-const Login = () => {
+const Login = ({ locale = "mn" }: { locale?: "mn" | "en" }) => {
+  const copy = locale === "en"
+    ? {
+        signIn: "Sign in",
+        dialogTitle: "Sign in",
+        serviceId: "Service ID",
+        password: "Password",
+        example: "For example: 70008000, ddn-1234567",
+        oneTimeCode: "One-time code",
+        account: "Account",
+        signOut: "Sign out",
+      }
+    : {
+        signIn: "Нэвтрэх",
+        dialogTitle: "Нэвтрэх цонх",
+        serviceId: "Үйлчилгээний ID",
+        password: "Нууц үг",
+        example: "Жишээ нь: 70008000, ddn-1234567",
+        oneTimeCode: "Нэг удаагийн код",
+        account: "Хэрэглэгчийн булан",
+        signOut: "Гарах",
+      };
   const { toast } = useToast();
-  const [auth, setAuth] = useState();
+  const [auth, setAuth] = useState<AuthSession | null>(null);
   const [onetime, setOnetime] = useState(false);
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
   // console.log('bnu2');
   useEffect(() => {
     const temp = getCookie();
-    // console.log(temp, 'triggierin auth in here  right  now');
-    setAuth(temp);
+    if (isAuthSession(temp)) {
+      setAuth(temp);
+      return;
+    }
+
+    if (temp) {
+      const cookies = new Cookies();
+      cookies.remove("user", { path: "/" });
+    }
   }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -70,28 +110,31 @@ const Login = () => {
     setLoading(true);
     const res = await login(values);
     setLoading(false);
+    const message = typeof res?.message === "string" ? res.message : "Нэвтрэх хүсэлт амжилтгүй боллоо.";
     toast({
       title: "Login",
-      description: res["message"],
+      description: message,
     });
-    if (res["message"].includes("Successful")) {
+    if (message.includes("Successful") && isAuthSession(res)) {
       const cookies = new Cookies();
       cookies.set("user", JSON.stringify(res), {
         path: "/",
-        expires: new Date(res["expireAt"] * 1000),
+        ...(typeof res.expireAt === "number"
+          ? { expires: new Date(res.expireAt * 1000) }
+          : {}),
       });
       setAuth(res);
       // setTimeout(()=>router.push("/user"), 400);
       // router.push("/user");
       location.href = "/user";
-    } else if (res["message"].includes("Нэг удаа")) {
+    } else if (message.includes("Нэг удаа")) {
       setOnetime(true);
     }
   }
   function logOut() {
     const cookies = new Cookies();
-    cookies.remove("user");
-    setAuth(undefined);
+    cookies.remove("user", { path: "/" });
+    setAuth(null);
     // router.push("/");
     location.href="/";
   }
@@ -110,17 +153,17 @@ const Login = () => {
       {auth ? (
         <div className="h-full flex group cursor-pointer text-slate-50 items-center gap-1 font-medium relative after:absolute after:content-[''] md:after:border-b-4 after:border-brand-3 after:top-full after:w-full after:-mt-2 after:scale-x-0 hover:after:scale-x-100 after:transition-all">
           <BiUser className="text-lg" />
-          {auth["data"]["userId"]}
+          {auth.data.userId}
           <ul className="absolute top-full md:right-0 bg-slate-50 text-slate-950 rounded-2xl shadow-md py-4 px-8 -ml-8 w-52 text-sm font-normal hidden group-hover:block">
             <Link href="/user">
               <li className="py-2 hover:translate-x-4 hover:list-disc hover:text-brand-2 transition-transform">
-                Хэрэглэгчийн булан
+                {copy.account}
               </li>
             </Link>
             <button onClick={() => logOut()} className="w-full">
               <li className="py-2 hover:translate-x-4 hover:list-disc hover:text-brand-2 transition-transform flex gap-1 items-center">
                 <BiExit className="text-lg" />
-                Гарах
+                {copy.signOut}
               </li>
             </button>
           </ul>
@@ -129,12 +172,12 @@ const Login = () => {
         <Dialog>
           <DialogTrigger className="h-full flex items-center gap-1 font-medium text-slate-50 relative after:absolute after:content-[''] after:border-b-4 after:border-brand-3 after:top-full after:w-full after:-mt-2 after:scale-x-0 hover:after:scale-x-100 after:transition-all">
             <BiUser className="text-lg" />
-            Нэвтрэх
+            {copy.signIn}
           </DialogTrigger>
           <DialogContent className="sm:max-w-[525px]">
             {loading && <Loader />}
             <DialogHeader>
-              <DialogTitle>Нэвтрэх цонх</DialogTitle>
+              <DialogTitle>{copy.dialogTitle}</DialogTitle>
             </DialogHeader>
 
             <Form {...form}>
@@ -149,10 +192,10 @@ const Login = () => {
                     <FormItem>
                       {/* <FormLabel>Username</FormLabel> */}
                       <FormControl>
-                        <Input placeholder="Үйлчилгээний ID" {...field} required/>
+                        <Input placeholder={copy.serviceId} {...field} required/>
                       </FormControl>
                       <FormDescription>
-                        Жишээ нь: 70008000, ddn-1234567
+                        {copy.example}
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -166,7 +209,7 @@ const Login = () => {
                     <FormItem>
                       <FormControl>
                         <Input
-                          placeholder="Нууц үг"
+                          placeholder={copy.password}
                           {...field}
                           type={`${
                             form.getValues("user_pass_login")
@@ -191,7 +234,7 @@ const Login = () => {
                           htmlFor="user_pass_login"
                           className="text-gray-500"
                         >
-                          Нэг удаагийн код
+                          {copy.oneTimeCode}
                         </Label>
                         <FormControl>
                           <Switch
@@ -201,13 +244,13 @@ const Login = () => {
                             onCheckedChange={field.onChange}
                           />
                         </FormControl>
-                        <Label htmlFor="user_pass_login">Нууц үг</Label>
+                        <Label htmlFor="user_pass_login">{copy.password}</Label>
                       </div>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <Button type="submit">Нэвтрэх</Button>
+                <Button type="submit">{copy.signIn}</Button>
               </form>
             </Form>
           </DialogContent>

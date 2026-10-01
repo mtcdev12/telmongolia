@@ -33,6 +33,29 @@ const contractMaterials = [
   },
 ];
 
+const contractMaterialsEn = [
+  {
+    title: "Business customer",
+    icon: Building2,
+    items: [
+      "Place an order by calling 7000-8000",
+      "Company registration certificate",
+      "Company seal",
+      "Digital ID card of the director",
+      "For rented premises, the lease agreement and the property owner's permission",
+    ],
+  },
+  {
+    title: "Residential customer",
+    icon: User,
+    items: [
+      "Place an order by calling 7000-8000",
+      "National ID card",
+      "The address on the ID must match the installation address",
+    ],
+  },
+];
+
 const cancelServices = [
   {
     title: "Утас",
@@ -63,6 +86,28 @@ const cancelServices = [
   },
 ];
 
+const cancelServicesEn = [
+  {
+    title: "Fixed-line telephone",
+    icon: Phone,
+    personal: ["Service agreement booklet", "National ID card", "Pay the final bill calculated through the cancellation date"],
+    company: ["Service agreement booklet", "Official request letter", "Pay the final bill calculated through the cancellation date"],
+  },
+  {
+    title: "Internet",
+    icon: Wifi,
+    personal: ["Visit a service branch with your identification"],
+    company: ["Visit a service branch with an official request letter"],
+    note: "If the internet agreement term has not ended, submit a written request to receive a refund or transfer the balance to the fixed-line account.",
+  },
+  {
+    title: "Cable TV",
+    icon: MonitorPlay,
+    personal: ["Visit a service branch with your identification"],
+    company: ["Visit a service branch with an official request letter"],
+  },
+];
+
 function MaterialCard({ title, items, Icon }) {
   return (
     <div className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-[0_14px_35px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-200 hover:bg-blue-50/40 hover:shadow-[0_18px_45px_rgba(37,99,235,0.14)]">
@@ -86,7 +131,7 @@ function MaterialCard({ title, items, Icon }) {
   );
 }
 
-function CancelServiceCard({ service }) {
+function CancelServiceCard({ service, isEnglish }) {
   const Icon = service.icon;
 
   return (
@@ -98,7 +143,7 @@ function CancelServiceCard({ service }) {
 
         <div>
           <p className="text-xs font-black uppercase tracking-[0.18em] text-blue-500">
-            Гэрээ цуцлах
+            {isEnglish ? "Agreement cancellation" : "Гэрээ цуцлах"}
           </p>
           <h3 className="text-xl font-black text-[#061f57]">{service.title}</h3>
         </div>
@@ -108,7 +153,7 @@ function CancelServiceCard({ service }) {
         <div className="rounded-2xl border border-slate-200 bg-white p-4">
           <h4 className="mb-3 flex items-center gap-2 font-black text-[#061f57]">
             <User size={18} className="text-blue-600" />
-            Хувь хэрэглэгч
+            {isEnglish ? "Residential customer" : "Хувь хэрэглэгч"}
           </h4>
 
           <ul className="space-y-2">
@@ -124,7 +169,7 @@ function CancelServiceCard({ service }) {
         <div className="rounded-2xl border border-slate-200 bg-white p-4">
           <h4 className="mb-3 flex items-center gap-2 font-black text-[#061f57]">
             <Building2 size={18} className="text-blue-600" />
-            Алба хэрэглэгч
+            {isEnglish ? "Business customer" : "Алба хэрэглэгч"}
           </h4>
 
           <ul className="space-y-2">
@@ -150,37 +195,41 @@ function CancelServiceCard({ service }) {
   );
 }
 
-function Help6() {
+function Help6({ locale = "mn" }) {
+  const isEnglish = locale === "en";
+  const materials = isEnglish ? contractMaterialsEn : contractMaterials;
+  const services = isEnglish ? cancelServicesEn : cancelServices;
   return (
     <div className="space-y-7">
       <div className="rounded-[24px] bg-gradient-to-r from-[#062b78] via-[#0b5fe8] to-[#1a9cff] p-6 text-white shadow-[0_18px_45px_rgba(37,99,235,0.22)]">
         <p className="mb-2 inline-flex rounded-full bg-white/15 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] backdrop-blur">
-          Гэрээний мэдээлэл
+          {isEnglish ? "Agreement information" : "Гэрээний мэдээлэл"}
         </p>
 
         <h2 className="flex items-center gap-3 text-2xl font-black tracking-[-0.4px] md:text-3xl">
           <FileText size={28} />
-          Гэрээ хийх болон цуцлах материал
+          {isEnglish ? "Documents for entering into or cancelling an agreement" : "Гэрээ хийх болон цуцлах материал"}
         </h2>
 
         <p className="mt-3 max-w-[720px] text-sm leading-6 text-white/85 md:text-base">
-          Алба болон хувь хэрэглэгчийн гэрээ байгуулах, гэрээ цуцлахад
-          бүрдүүлэх материалын мэдээлэл.
+          {isEnglish
+            ? "Documents required for business and residential customers to enter into or cancel a service agreement."
+            : "Алба болон хувь хэрэглэгчийн гэрээ байгуулах, гэрээ цуцлахад бүрдүүлэх материалын мэдээлэл."}
         </p>
       </div>
 
       <section>
         <div className="mb-4">
           <h3 className="text-lg font-black text-[#061f57]">
-            Гэрээ хийхэд бүрдүүлэх материал
+            {isEnglish ? "Documents required to enter into an agreement" : "Гэрээ хийхэд бүрдүүлэх материал"}
           </h3>
           <p className="mt-1 text-sm text-slate-500">
-            Захиалга өгөх болон бүрдүүлэх бичиг баримтын жагсаалт.
+            {isEnglish ? "Documents needed when placing a service order." : "Захиалга өгөх болон бүрдүүлэх бичиг баримтын жагсаалт."}
           </p>
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {contractMaterials.map((item) => (
+          {materials.map((item) => (
             <MaterialCard
               key={item.title}
               title={item.title}
@@ -194,16 +243,16 @@ function Help6() {
       <section>
         <div className="mb-4">
           <h3 className="text-lg font-black text-[#061f57]">
-            Гэрээ цуцлах
+            {isEnglish ? "Agreement cancellation" : "Гэрээ цуцлах"}
           </h3>
           <p className="mt-1 text-sm text-slate-500">
-            Үйлчилгээний төрлөөр шаардлагатай материал.
+            {isEnglish ? "Required documents by service type." : "Үйлчилгээний төрлөөр шаардлагатай материал."}
           </p>
         </div>
 
         <div className="space-y-4">
-          {cancelServices.map((service) => (
-            <CancelServiceCard key={service.title} service={service} />
+          {services.map((service) => (
+            <CancelServiceCard key={service.title} service={service} isEnglish={isEnglish} />
           ))}
         </div>
       </section>

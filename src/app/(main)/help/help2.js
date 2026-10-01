@@ -1,23 +1,78 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { MonitorPlay, ListVideo } from "lucide-react";
 
-function Help2() {
+const channelTableTranslations = {
+  "Премиум багц": "Premium package",
+  "Стандарт багц": "Standard package",
+  "Сувгийн дараалал": "Channel number",
+  "Телевизийн нэр": "Channel name",
+  "Харъяа улс": "Country",
+  "Төрөл, жанр": "Type and genre",
+  Монгол: "Mongolia",
+  ОХУ: "Russia",
+  Орос: "Russia",
+  АНУ: "United States",
+  ану: "United States",
+  Хятад: "China",
+  Япон: "Japan",
+  Франц: "France",
+  Герман: "Germany",
+  Сингапур: "Singapore",
+  сингапур: "Singapore",
+  "Их Британи": "United Kingdom",
+  "их британи": "United Kingdom",
+  Өвөрмонгол: "Inner Mongolia",
+  "Телевизийн өргөн нэвтрүүлэг": "Television broadcasting",
+  "Нийгэм, эдийн засаг": "Society and economy",
+  "Нийгэм эдийн засаг": "Society and economy",
+  Цэнгээнт: "Entertainment",
+  "Кино суваг": "Movies",
+  "Хүүхэд, боловсрол": "Children and education",
+  Спорт: "Sports",
+  "Олон нийтийн": "Public service",
+  "Байгаль экологи": "Nature and environment",
+  "Байгаль, экологи": "Nature and environment",
+  "Эрүүл мэнд": "Health",
+  "Танин мэдэхүй": "Knowledge",
+  "Шинжлэх ухаан, танин мэдэхүй": "Science and knowledge",
+  "Соён гэгээрүүлэгч": "Education",
+  "Мэдээ, мэдээлэл": "News and information",
+};
+
+function Help2({ locale = "mn" }) {
+  const isEnglish = locale === "en";
+  const tableRef = useRef(null);
+
+  useEffect(() => {
+    if (!isEnglish || !tableRef.current) return;
+
+    const walker = document.createTreeWalker(tableRef.current, NodeFilter.SHOW_TEXT);
+    let node = walker.nextNode();
+    while (node) {
+      const value = node.nodeValue?.trim();
+      if (value && channelTableTranslations[value]) {
+        node.nodeValue = node.nodeValue.replace(value, channelTableTranslations[value]);
+      }
+      node = walker.nextNode();
+    }
+  }, [isEnglish]);
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="rounded-[24px] bg-gradient-to-r from-[#062b78] via-[#0b5fe8] to-[#1a9cff] p-6 text-white shadow-[0_18px_45px_rgba(37,99,235,0.22)]">
         <p className="mb-2 inline-flex rounded-full bg-white/15 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] backdrop-blur">
-          КаТВ үйлчилгээ
+          {isEnglish ? "Cable TV service" : "КаТВ үйлчилгээ"}
         </p>
 
         <h2 className="flex items-center gap-3 text-2xl font-black tracking-[-0.4px] md:text-3xl">
           <MonitorPlay  size={28} />
-          КаТВ сувгийн жагсаалт
+          {isEnglish ? "Cable TV channel list" : "КаТВ сувгийн жагсаалт"}
         </h2>
 
         <p className="mt-3 max-w-[680px] text-sm leading-6 text-white/85 md:text-base">
-          Премиум болон стандарт багцын сувгийн дараалал, нэр, харьяа улс, төрөл
-          жанрын мэдээлэл.
+          {isEnglish
+            ? "Channel number, name, country and genre information for the Premium and Standard packages."
+            : "Премиум болон стандарт багцын сувгийн дараалал, нэр, харьяа улс, төрөл жанрын мэдээлэл."}
         </p>
       </div>
 
@@ -39,15 +94,16 @@ function Help2() {
 
           <div>
             <h3 className="text-lg font-black text-[#061f57]">
-              Сувгийн дэлгэрэнгүй жагсаалт
+              {isEnglish ? "Detailed channel list" : "Сувгийн дэлгэрэнгүй жагсаалт"}
             </h3>
             <p className="text-sm text-slate-500">
-              Хүснэгтийг баруун, зүүн тийш гүйлгэж үзнэ үү.
+              {isEnglish ? "Scroll the table left or right to see all columns." : "Хүснэгтийг баруун, зүүн тийш гүйлгэж үзнэ үү."}
             </p>
           </div>
         </div>
 
         <div
+          ref={tableRef}
           className="
             max-h-[650px] overflow-auto rounded-2xl border border-slate-200
 

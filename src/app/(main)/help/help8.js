@@ -4,17 +4,23 @@ import { PhoneCall, Smartphone, CreditCard, Globe2 } from "lucide-react";
 const callGuides = [
   {
     title: "Суурин утаснаас суурин утас руу залгах",
+    titleEn: "Calling a fixed-line number from a fixed-line phone",
     formula: "001 + Улсын код + Хотын код + Утасны дугаар",
+    formulaEn: "001 + country code + area code + telephone number",
     icon: PhoneCall,
   },
   {
     title: "Суурин утаснаас гар утас руу залгах",
+    titleEn: "Calling a mobile number from a fixed-line phone",
     formula: "001 + Улсын код + Утасны дугаар",
+    formulaEn: "001 + country code + mobile number",
     icon: Smartphone,
   },
   {
     title: "3000, 5000 Easy карт ашиглах",
+    titleEn: "Using a 3000 or 5000 Easy card",
     formula: "1636-004-картын дугаар-нууц дугаар-утасны дугаар",
+    formulaEn: "1636-004-card number-PIN-telephone number",
     icon: CreditCard,
   },
 ];
@@ -41,23 +47,23 @@ function CallGuideCard({ title, formula, Icon }) {
   );
 }
 
-function Help8() {
+function Help8({ locale = "mn" }) {
+  const isEnglish = locale === "en";
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="rounded-[24px] bg-gradient-to-r from-[#062b78] via-[#0b5fe8] to-[#1a9cff] p-6 text-white shadow-[0_18px_45px_rgba(37,99,235,0.22)]">
         <p className="mb-2 inline-flex rounded-full bg-white/15 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] backdrop-blur">
-          Олон улсын яриа
+          {isEnglish ? "International calling" : "Олон улсын яриа"}
         </p>
 
         <h2 className="flex items-center gap-3 text-2xl font-black tracking-[-0.4px] md:text-3xl">
           <Globe2 size={28} />
-          Улс хоорондын яриа
+          {isEnglish ? "International calls" : "Улс хоорондын яриа"}
         </h2>
 
         <p className="mt-3 max-w-[680px] text-sm leading-6 text-white/85 md:text-base">
-          Суурин утаснаас олон улс руу залгах дараалал болон Easy карт ашиглах
-          заавар.
+          {isEnglish ? "Dialing sequences for international calls from a fixed-line phone and instructions for using an Easy card." : "Суурин утаснаас олон улс руу залгах дараалал болон Easy карт ашиглах заавар."}
         </p>
       </div>
 
@@ -66,8 +72,8 @@ function Help8() {
         {callGuides.map((item) => (
           <CallGuideCard
             key={item.title}
-            title={item.title}
-            formula={item.formula}
+            title={isEnglish ? item.titleEn : item.title}
+            formula={isEnglish ? item.formulaEn : item.formula}
             Icon={item.icon}
           />
         ))}
@@ -75,8 +81,8 @@ function Help8() {
 
       {/* Small note */}
       <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-medium leading-6 text-amber-800">
-        <strong>Санамж:</strong> Улсын код болон хотын кодыг зөв оруулсан
-        эсэхээ шалгаарай.
+        <strong>{isEnglish ? "Note:" : "Санамж:"}</strong>{" "}
+        {isEnglish ? "Check that the country and area codes are correct." : "Улсын код болон хотын кодыг зөв оруулсан эсэхээ шалгаарай."}
       </div>
     </div>
   );

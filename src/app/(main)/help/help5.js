@@ -5,6 +5,7 @@ const tariffs = [
   {
     no: 1,
     type: "Хувь хэрэглэгч",
+    typeEn: "Residential customer",
     icon: Home,
     connect: "10,000₮",
     speeds: {
@@ -21,6 +22,7 @@ const tariffs = [
   {
     no: 2,
     type: "Алба хэрэглэгч",
+    typeEn: "Business customer",
     icon: Building2,
     connect: "10,000₮",
     speeds: {
@@ -47,23 +49,25 @@ const speedColumns = [
   "15mbps",
 ];
 
-function Help5() {
+function Help5({ locale = "mn" }) {
+  const isEnglish = locale === "en";
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="rounded-[24px] bg-gradient-to-r from-[#062b78] via-[#0b5fe8] to-[#1a9cff] p-6 text-white shadow-[0_18px_45px_rgba(37,99,235,0.22)]">
         <p className="mb-2 inline-flex rounded-full bg-white/15 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] backdrop-blur">
-          Интернэт үйлчилгээ
+          {isEnglish ? "Internet service" : "Интернэт үйлчилгээ"}
         </p>
 
         <h2 className="flex items-center gap-3 text-2xl font-black tracking-[-0.4px] md:text-3xl">
           <Wifi size={28} />
-          Интернэтийн суурь хураамж болон тариф
+          {isEnglish ? "Internet basic charges and tariffs" : "Интернэтийн суурь хураамж болон тариф"}
         </h2>
 
         <p className="mt-3 max-w-[720px] text-sm leading-6 text-white/85 md:text-base">
-          Улаанбаатар, Дархан-Уул, Орхон аймгийн төвийн shared интернэтийн
-          үйлчилгээний сарын хураамж.
+          {isEnglish
+            ? "Monthly charges for shared internet service in Ulaanbaatar and the centers of Darkhan-Uul and Orkhon provinces."
+            : "Улаанбаатар, Дархан-Уул, Орхон аймгийн төвийн shared интернэтийн үйлчилгээний сарын хураамж."}
         </p>
       </div>
 
@@ -72,8 +76,8 @@ function Help5() {
         <div className="flex items-start gap-3">
           <Info className="mt-0.5 shrink-0" size={20} />
           <p>
-            Доорх тариф нь хурдны ангиллаар сарын хураамжийг харуулна.
-            Технологийн холболтын төрөл: <strong>шилэн кабель</strong>.
+            {isEnglish ? "The tariffs below show monthly charges by speed. Connection technology: " : "Доорх тариф нь хурдны ангиллаар сарын хураамжийг харуулна. Технологийн холболтын төрөл: "}
+            <strong>{isEnglish ? "fiber-optic cable" : "шилэн кабель"}</strong>.
           </p>
         </div>
       </div>
@@ -98,14 +102,14 @@ function Help5() {
                     #{String(item.no).padStart(2, "0")}
                   </p>
                   <h3 className="text-lg font-black text-[#061f57]">
-                    {item.type}
+                    {isEnglish ? item.typeEn : item.type}
                   </h3>
                 </div>
               </div>
 
               <div className="mb-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
                 <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">
-                  Анхны холболт
+                  {isEnglish ? "Initial connection" : "Анхны холболт"}
                 </p>
                 <p className="mt-1 text-2xl font-black text-[#061f57]">
                   {item.connect}
@@ -136,10 +140,10 @@ function Help5() {
       <div className="rounded-[24px] border border-slate-200 bg-white p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
         <div className="mb-4">
           <h3 className="text-lg font-black text-[#061f57]">
-            Тарифын хүснэгт
+            {isEnglish ? "Tariff table" : "Тарифын хүснэгт"}
           </h3>
           <p className="mt-1 text-sm text-slate-500">
-            Хүснэгтийг баруун, зүүн тийш гүйлгэж үзнэ үү.
+            {isEnglish ? "Scroll the table left or right to see all columns." : "Хүснэгтийг баруун, зүүн тийш гүйлгэж үзнэ үү."}
           </p>
         </div>
 
@@ -151,10 +155,10 @@ function Help5() {
                   №
                 </th>
                 <th className="border border-slate-200 px-4 py-3 text-left font-black">
-                  Хэрэглэгчийн төрөл
+                  {isEnglish ? "Customer type" : "Хэрэглэгчийн төрөл"}
                 </th>
                 <th className="border border-slate-200 px-4 py-3 text-left font-black">
-                  Анхны холболт
+                  {isEnglish ? "Initial connection" : "Анхны холболт"}
                 </th>
                 {speedColumns.map((speed) => (
                   <th
@@ -177,7 +181,7 @@ function Help5() {
                     {item.no}
                   </td>
                   <td className="border border-slate-200 px-4 py-3 font-black text-[#061f57]">
-                    {item.type}
+                    {isEnglish ? item.typeEn : item.type}
                   </td>
                   <td className="border border-slate-200 px-4 py-3 font-bold text-blue-700">
                     {item.connect}
@@ -199,7 +203,8 @@ function Help5() {
 
       {/* Note */}
       <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-medium leading-6 text-amber-800">
-        <strong>Санамж:</strong> Дээрх үнэд НӨАТ ороогүй.
+        <strong>{isEnglish ? "Note:" : "Санамж:"}</strong>{" "}
+        {isEnglish ? "VAT is not included in the prices above." : "Дээрх үнэд НӨАТ ороогүй."}
       </div>
     </div>
   );

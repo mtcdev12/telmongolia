@@ -4,16 +4,19 @@ import { Download, FileText, Smartphone, Monitor } from "lucide-react";
 const mobileGuides = [
   {
     title: "GSWave дугаар тохируулах заавар",
+    titleEn: "GSWave number setup guide",
     href: "/assets/help/mtc70/GSWave-дугаар-тохируулах-заавар.pdf",
     type: "pdf",
   },
   {
     title: "GSWave Android APK татах",
+    titleEn: "Download GSWave for Android",
     href: "/assets/help/Grandstream-Wave-Lite-Video_1.0.3.34_Apkpure.apk",
     type: "download",
   },
   {
     title: "Onetouchsipphone заавар",
+    titleEn: "Onetouchsipphone guide",
     href: "/assets/help/mtc70/IOS.pdf",
     type: "pdf",
   },
@@ -22,35 +25,42 @@ const mobileGuides = [
 const deviceGuides = [
   {
     title: "GXS16xx тохируулга заавар",
+    titleEn: "GXS16xx setup guide",
     href: "/assets/help/mtc70/GXS16xx.pdf",
   },
   {
     title: "HTEK тохиргоо хийх заавар",
+    titleEn: "HTEK setup guide",
     href: "/assets/help/mtc70/HTEK ТОХИРГОО ХИЙХ ЗААВАР.pdf",
   },
   {
     title: "IP BOX тохиргоо хийх заавар",
+    titleEn: "IP BOX setup guide",
     href: "/assets/help/mtc70/IP BOX ТОХИРГОО ХИЙХ ЗААВАР.pdf",
   },
   {
     title: "Microsip заавар",
+    titleEn: "Microsip guide",
     href: "/assets/help/mtc70/Microsip заавар.pdf",
   },
   {
     title: "SIP дугаар тохируулах заавар",
+    titleEn: "SIP number setup guide",
     href: "/assets/help/mtc70/SIP-дугаар-тохируулах-заавар.pdf",
   },
   {
     title: "Sofeno тохиргоо",
+    titleEn: "Sofeno setup",
     href: "/assets/help/mtc70/Sofenosettings.pdf",
   },
   {
     title:"Fanvil заавар",
+    titleEn: "Fanvil guide",
     href: "/assets/help/mtc70/Fanvil zaavar.pdf",
   },
 ];
 
-function GuideCard({ title, href, download = false }) {
+function GuideCard({ title, href, download = false, isEnglish = false }) {
   return (
     <a
       href={href}
@@ -70,7 +80,7 @@ function GuideCard({ title, href, download = false }) {
           </p>
 
           <p className="mt-1 text-xs font-medium text-slate-500">
-            {download ? "Файл татах" : "PDF заавар үзэх"}
+            {download ? (isEnglish ? "Download file" : "Файл татах") : (isEnglish ? "View PDF guide" : "PDF заавар үзэх")}
           </p>
         </div>
       </div>
@@ -82,21 +92,21 @@ function GuideCard({ title, href, download = false }) {
   );
 }
 
-function Help9() {
+function Help9({ locale = "mn" }) {
+  const isEnglish = locale === "en";
   return (
     <div className="space-y-7">
       <div className="rounded-[24px] bg-gradient-to-r from-[#062b78] via-[#0b5fe8] to-[#1a9cff] p-6 text-white shadow-[0_18px_45px_rgba(37,99,235,0.22)]">
         <p className="mb-2 inline-flex rounded-full bg-white/15 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] backdrop-blur">
-          MIP70 үйлчилгээ
+          {isEnglish ? "MTC70 service" : "MIP70 үйлчилгээ"}
         </p>
 
         <h2 className="text-2xl font-black tracking-[-0.4px] md:text-3xl">
-          Интернэт ярианы MIP70 үйлчилгээ
+          {isEnglish ? "MTC70 internet calling service" : "Интернэт ярианы MIP70 үйлчилгээ"}
         </h2>
 
         <p className="mt-3 max-w-[680px] text-sm leading-6 text-white/85 md:text-base">
-          Гар утас, таблет, SIP төхөөрөмж болон softphone програм дээр MIP70
-          үйлчилгээг тохируулах зааврууд.
+          {isEnglish ? "Setup guides for using MTC70 on mobile phones, tablets, SIP devices and softphone applications." : "Гар утас, таблет, SIP төхөөрөмж болон softphone програм дээр MIP70 үйлчилгээг тохируулах зааврууд."}
         </p>
       </div>
 
@@ -108,11 +118,11 @@ function Help9() {
 
           <div>
             <h3 className="text-lg font-black text-[#061f57]">
-              Гар утас болон таблет ашиглан холбогдох
+              {isEnglish ? "Connect using a mobile phone or tablet" : "Гар утас болон таблет ашиглан холбогдох"}
             </h3>
 
             <p className="text-sm text-slate-500">
-              Android, iOS програмын тохиргооны заавар
+              {isEnglish ? "Setup guides for Android and iOS applications" : "Android, iOS програмын тохиргооны заавар"}
             </p>
           </div>
         </div>
@@ -121,9 +131,10 @@ function Help9() {
           {mobileGuides.map((item) => (
             <GuideCard
               key={item.title}
-              title={item.title}
+              title={isEnglish ? item.titleEn : item.title}
               href={item.href}
               download={item.type === "download"}
+              isEnglish={isEnglish}
             />
           ))}
         </div>
@@ -137,18 +148,18 @@ function Help9() {
 
           <div>
             <h3 className="text-lg font-black text-[#061f57]">
-              SIP төхөөрөмж болон програмын тохиргоо
+              {isEnglish ? "SIP device and application setup" : "SIP төхөөрөмж болон програмын тохиргоо"}
             </h3>
 
             <p className="text-sm text-slate-500">
-              IP phone, IP box, Microsip болон бусад төхөөрөмжийн заавар
+              {isEnglish ? "Guides for IP phones, IP boxes, Microsip and other devices" : "IP phone, IP box, Microsip болон бусад төхөөрөмжийн заавар"}
             </p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           {deviceGuides.map((item) => (
-            <GuideCard key={item.title} title={item.title} href={item.href} />
+            <GuideCard key={item.title} title={isEnglish ? item.titleEn : item.title} href={item.href} isEnglish={isEnglish} />
           ))}
         </div>
       </section>

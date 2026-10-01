@@ -17,7 +17,13 @@ const List = (props: any) => {
   console.log(props, "aaaaaaaa")
   return (
     <div>
-      {isOpen && <Reserver selected={selected} onModalClose={handleModalClose}/>}
+      {isOpen && (
+        <Reserver
+          selected={selected}
+          onModalClose={handleModalClose}
+          locale={props.locale}
+        />
+      )}
       <div className="grid grid-cols-3 xl:grid-cols-6 gap-2">
         {props.list && props.list.data ? (
           props.list.data.objects.map((num: any, index: number) => (
@@ -30,7 +36,7 @@ const List = (props: any) => {
             </div>
           ))
         ) : (
-          <div className="text-rose-600">Дугаар олдсонгүй</div>
+          <div className="text-rose-600">{props.locale === "en" ? "No numbers found" : "Дугаар олдсонгүй"}</div>
         )}
       </div>
       {props.list && props.list.data && (
@@ -46,7 +52,7 @@ const List = (props: any) => {
             />
           </div>
           <p className="text-right text-sm tracking-tight text-brand-1">
-            Боломжит дугаар - {props.list.data.pagination.total}
+            {props.locale === "en" ? "Available numbers" : "Боломжит дугаар"} - {props.list.data.pagination.total}
           </p>
         </div>
       )}
