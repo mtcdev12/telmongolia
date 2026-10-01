@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import Breadcrumb from "@/components/ui/breadcrumb";
+import SourceContact from "@/components/source-contact";
 
 const departments = [
   "Management and Human Resources Department",
@@ -23,6 +24,7 @@ export default function StructurePage() {
       <div className="mt-6 grid gap-3 pb-10 sm:grid-cols-2">
         {departments.map((department) => <div key={department} className="rounded-2xl border border-brand-1/15 bg-white px-5 py-4 text-sm font-semibold text-brand-1">{department}</div>)}
       </div>
+      <SourceContact locale="en" />
     </div>
   );
 }

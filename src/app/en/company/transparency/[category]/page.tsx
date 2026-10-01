@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import PdfTable from "@/app/company/pdfTable";
 import Breadcrumb from "@/components/ui/breadcrumb";
+import SourceContact from "@/components/source-contact";
 import { ENGLISH_TRANSPARENCY } from "@/lib/i18n/company";
 
 export function generateStaticParams() {
@@ -19,6 +20,11 @@ export default async function TransparencyPage({ params }: { params: { category:
   const { category } = params;
   const page = ENGLISH_TRANSPARENCY[category];
   if (!page) notFound();
+  const sourcePerson = category === "audited" || category === "financial"
+    ? "khaliunaa"
+    : category === "governance" || category === "board"
+      ? "tsetsgee"
+      : "byambasuren";
 
   return (
     <div>
@@ -26,6 +32,7 @@ export default async function TransparencyPage({ params }: { params: { category:
       <h1 className="mb-5 text-2xl font-black text-brand-1">{page.title}</h1>
       <p className="mb-5 text-sm leading-6 text-slate-600">Document titles are translated for navigation. The linked files remain the official source documents published by Telecom Mongolia JSC.</p>
       <PdfTable locale="en" list={page.documents} />
+      <SourceContact locale="en" person={sourcePerson} />
     </div>
   );
 }

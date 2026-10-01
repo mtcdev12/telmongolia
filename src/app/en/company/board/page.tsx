@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import Breadcrumb from "@/components/ui/breadcrumb";
+import SourceContact from "@/components/source-contact";
 import { ENGLISH_BOARD_INDEPENDENT, ENGLISH_BOARD_STATE, type CompanyPerson } from "@/lib/i18n/company";
 
 function PersonCard({ person }: { person: CompanyPerson }) {
@@ -25,6 +26,7 @@ export default function BoardPage() {
       <div className="flex flex-wrap gap-4">{ENGLISH_BOARD_STATE.map((person) => <PersonCard key={person.name} person={person} />)}</div>
       <h2 className="my-6 text-center text-xl font-medium tracking-tight text-brand-1">Independent members</h2>
       <div className="flex flex-wrap gap-4 pb-10">{ENGLISH_BOARD_INDEPENDENT.map((person) => <PersonCard key={person.name} person={person} />)}</div>
+      <SourceContact locale="en" person="tsetsgee" />
     </div>
   );
 }

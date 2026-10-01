@@ -1,4 +1,5 @@
 import Breadcrumb from "@/components/ui/breadcrumb";
+import SourceContact from "@/components/source-contact";
 
 export default function EnglishShareholdersPage() {
   return (
@@ -13,6 +14,7 @@ export default function EnglishShareholdersPage() {
           <dt className="font-bold text-brand-1">Meeting materials</dt><dd>Available from 10 April 2026</dd>
         </dl>
       </section>
+      <SourceContact locale="en" person="tsetsgee" />
       <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 text-sm leading-7 shadow-sm">
         <h2 className="text-lg font-bold text-brand-1">Agenda</h2>
         <ol className="mt-4 list-inside list-decimal space-y-2">

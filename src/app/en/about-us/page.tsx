@@ -2,6 +2,7 @@ import Image from "next/image";
 import { FaGlassCheers, FaGlassMartini, FaStamp, FaUsers } from "react-icons/fa";
 
 import Breadcrumb from "@/components/ui/breadcrumb";
+import SourceContact from "@/components/source-contact";
 
 const values = [
   [FaUsers, "CUSTOMER"],
@@ -80,6 +81,7 @@ export default function AboutUsPage() {
           ))}
         </div>
       </section>
+      <SourceContact locale="en" person="ariungerel" />
     </div>
   );
 }

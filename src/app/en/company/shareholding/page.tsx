@@ -4,6 +4,7 @@ import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import { Doughnut, Pie } from "react-chartjs-2";
 
 import Breadcrumb from "@/components/ui/breadcrumb";
+import SourceContact from "@/components/source-contact";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -39,6 +40,7 @@ export default function ShareholdingPage() {
         <p>Under the agreement between the Government of Mongolia and Korea Telecom Corporation, the Government purchased 40% of Telecom Mongolia JSC, equal to 10,348,111 shares, on 18 April 2018.</p>
         <p className="mt-3">The Government subsequently made a tender offer and acquired a further 7,572 shares. The Government of Mongolia now holds 94.7%, or 24,499,287 shares. Mongolian and foreign individuals and legal entities hold the remaining 5.3%, or 1,370,989 shares.</p>
       </section>
+      <SourceContact locale="en" person="tsetsgee" />
     </div>
   );
 }

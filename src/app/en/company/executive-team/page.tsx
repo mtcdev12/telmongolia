@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import Breadcrumb from "@/components/ui/breadcrumb";
+import SourceContact from "@/components/source-contact";
 import { ENGLISH_EXECUTIVES } from "@/lib/i18n/company";
 
 export default function ExecutiveTeamPage() {
@@ -22,6 +23,7 @@ export default function ExecutiveTeamPage() {
           </article>
         ))}
       </div>
+      <SourceContact locale="en" person="ariungerel" />
     </div>
   );
 }

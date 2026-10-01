@@ -152,7 +152,7 @@ const Page = () => {
             </div>
           </>
         )}
-        <SourceContact />
+        <SourceContact locale={locale} />
       </section>
     </div>
   );
