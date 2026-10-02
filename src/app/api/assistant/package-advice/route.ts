@@ -4,6 +4,7 @@ import { z } from "zod";
 import { VERIFIED_PRODUCT_PLANS } from "@/lib/chatbot/knowledge";
 import { recordAssistantEvent } from "@/lib/chatbot/analytics";
 import { ENGLISH_PLANS } from "@/lib/i18n/english";
+import { isTrustedBrowserRequest } from "@/lib/trusted-request";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -49,12 +50,7 @@ function preferredServices(
 }
 
 export async function POST(request: NextRequest) {
-  const fetchSite = request.headers.get("sec-fetch-site");
-  const requestOrigin = request.headers.get("origin");
-  if (
-    fetchSite === "cross-site" ||
-    (requestOrigin && requestOrigin !== request.nextUrl.origin)
-  ) {
+  if (!isTrustedBrowserRequest(request)) {
     return json({ error: "Зөвшөөрөгдөөгүй хүсэлт байна." }, 403);
   }
 

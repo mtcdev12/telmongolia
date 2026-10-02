@@ -164,6 +164,7 @@ export function getActionInstructions(
 
 const pageLabels: Array<[RegExp, string]> = [
   [/^\/$/, "Нүүр хуудас"],
+  [/^\/aboutus/, "Бидний тухай"],
   [/^\/products\/double/, "Хосолсон багц"],
   [/^\/products\/triple/, "Гуравласан багц"],
   [/^\/products\/single/, "Суурин утас"],
@@ -177,6 +178,7 @@ const pageLabels: Array<[RegExp, string]> = [
 
 const englishPageLabels: Array<[RegExp, string]> = [
   [/^\/en$/, "English home page"],
+  [/^\/en\/about-us/, "English about-us page"],
   [/^\/en\/services\//, "English service details"],
   [/^\/en\/services/, "English service catalogue"],
   [/^\/en\/locations/, "English service locations"],

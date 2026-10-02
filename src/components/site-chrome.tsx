@@ -14,6 +14,7 @@ import {
 } from "@/components/english-chrome";
 import FacebookMessenger from "@/components/facebookMessenger";
 import Feedback from "@/components/feedback";
+import BackToTop from "@/components/back-to-top";
 
 export default function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -40,6 +41,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
       )}
       <main className="grow">{children}</main>
       <Feedback />
+      <BackToTop locale={isEnglish ? "en" : "mn"} />
       <Chatbot locale={isEnglish ? "en" : "mn"} />
       {isEnglish ? <EnglishFooter /> : <Footer />}
       {process.env.NODE_ENV === "production" && <FacebookMessenger />}

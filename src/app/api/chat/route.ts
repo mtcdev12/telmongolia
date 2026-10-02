@@ -114,6 +114,10 @@ function sanitizeAnswer(value: string) {
       /(^|\s)\/(?:products|help|locations|order|reservenumber)(?:\/[A-Za-z0-9_-]+)*/g,
       "$1"
     )
+    .replace(
+      /^\s*(?:-\s*)?(?:Веб\s*сайт|Вэб\s*сайт|Website|Web\s*site):\s*$/gimu,
+      ""
+    )
     .replace(/[ \t]+\n/g, "\n")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
@@ -452,7 +456,7 @@ export async function POST(request: NextRequest) {
       .filter(Boolean)
       .join("\n\n");
     const eguneInstructions = [
-      buildEguneInstructions(verifiedContext, parsed.data.locale),
+      buildEguneInstructions(knowledgeContext, parsed.data.locale),
       getCurrentPageContext(parsed.data.pathname, parsed.data.locale),
       getActionInstructions(action, parsed.data.locale),
     ]

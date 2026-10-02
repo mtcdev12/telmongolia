@@ -18,6 +18,9 @@ const SUPPORT_PATTERN =
 const COMPANY_PATTERN =
   /(хувьцаа\s*эзэмшигч|төлөөлөн\s+удирдах\s+зөвлөл|\bтүз\b|захирал|компанийн\s+(?:түүх|бүтэц|удирдлага)|санхүүгийн\s+тайлан|жилийн\s+тайлан|улирлын\s+тайлан|баланс|аудит|ил\s+тод\s+байдал|тендер|сонгон\s+шалгаруулалт|ажлын\s+байр|shareholder|board\s+of\s+directors|annual\s+report|audit|company\s+(?:history|structure|management)|career)/iu;
 
+const SITE_OVERVIEW_PATTERN =
+  /(?:сайт|веб|вэб|website|web\s*site).{0,90}(?:юу|ямар|юуны|мэдээлэл|үйлчилгээ|агуул|танилцуул|what|which|information|service|contain|about)|(?:юу|ямар|юуны|мэдээлэл|үйлчилгээ|агуул|танилцуул|what|which|information|service|contain|about).{0,90}(?:сайт|веб|вэб|website|web\s*site)/iu;
+
 const OUT_OF_SCOPE_TASK_PATTERN =
   /(онигоо|шүлэг|үлгэр|өгүүллэг|дууны\s+үг|эсээ|зохио|дүрд\s+тогло|надтай\s+ярилц|чалч|зурхай|код\s+бич|программ\s+бич|имэйл\s+бич|cv\s+бич|орчуул|жор|цаг\s+агаар|нийслэл|математик|тэгшитгэл|гэрийн\s+даалгавар|txt\s*doc|text\s+document|\bjoke\b|\bpoem\b|fairy\s*tale|\bstory\b|song\s+lyrics|\broleplay\b|chat\s+with\s+me|write\s+(?:code|an?\s+email|a\s+poem|a\s+story)|\btranslate\b|\brecipe\b|\bweather\b|\bhomework\b)/iu;
 
@@ -25,7 +28,7 @@ const CONTEXTUAL_FOLLOW_UP_PATTERN =
   /(^|\s)(энэ|тэр|тухайн|дээрх|өмнөх|тэгвэл|харин|бас|өөр|бусад|эдгээр|тэдгээр|аль|ямар|яагаад|яаж|хэрхэн|хаана|хэзээ|хэд|үнэ|хурд|нөхцөл|өрхийнх|байгууллагынх|дэлгэрэнгүй|more|details|then|that|those|which|why|how|where|when|price|speed)(\s|$)/iu;
 
 const COMPANY_PATH_PATTERN =
-  /^\/(?:en\/)?(?:company|shareholders|news|bonus|offers|careers)(?:\/|$)/;
+  /^\/(?:en\/)?(?:aboutus|about-us|company|shareholders|news|bonus|offers|careers)(?:\/|$)/;
 
 function normalize(value: string) {
   return value
@@ -56,6 +59,7 @@ export function isTelecomSupportRequest(
 
   if (!latest || OUT_OF_SCOPE_TASK_PATTERN.test(latest)) return false;
   if (hasDirectTelecomIntent(latest)) return true;
+  if (SITE_OVERVIEW_PATTERN.test(latest)) return true;
 
   if (
     COMPANY_PATTERN.test(latest) &&

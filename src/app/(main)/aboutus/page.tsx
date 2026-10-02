@@ -2,6 +2,7 @@ import Breadcrumb from "@/components/ui/breadcrumb";
 import Image from "next/image";
 import { FaUsers, FaGlassCheers, FaGlassMartini, FaStamp } from "react-icons/fa";
 import AboutSidebar from "./about-sidebar";
+import SourceContact from "@/components/source-contact";
 
 const breadcrumb = ["Бидний тухай"];
 
@@ -372,6 +373,7 @@ const Page = () => {
           </div>
         </div>
       </div>
+      <SourceContact person="ariungerel" />
       </div>
     </div>
   );

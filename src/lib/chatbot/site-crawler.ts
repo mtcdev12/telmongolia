@@ -352,6 +352,23 @@ async function getSiteIndex(origin: string) {
 }
 
 function resolveCrawlOrigin(requestOrigin: string) {
+  try {
+    const requestUrl = new URL(requestOrigin);
+    if (["127.0.0.1", "localhost"].includes(requestUrl.hostname)) {
+      return requestUrl.origin;
+    }
+
+    if (
+      ["telecommongolia.mn", "www.telecommongolia.mn"].includes(
+        requestUrl.hostname
+      )
+    ) {
+      return `https://${requestUrl.hostname}`;
+    }
+  } catch {
+    // Fall back to an explicitly configured crawl origin below.
+  }
+
   const configuredCandidates = [
     process.env.SITE_CRAWL_ORIGIN,
     process.env.BASEURL,
@@ -372,18 +389,6 @@ function resolveCrawlOrigin(requestOrigin: string) {
     }
   }
 
-  try {
-    const local = new URL(requestOrigin);
-    if (
-      local.protocol === "http:" &&
-      ["127.0.0.1", "localhost"].includes(local.hostname)
-    ) {
-      return local.origin;
-    }
-  } catch {
-    return null;
-  }
-
   return null;
 }
 
@@ -396,9 +401,20 @@ function getQuery(messages: ConversationMessage[]) {
 }
 
 function getSearchTerms(query: string) {
-  const terms = normalizeText(query)
+  const normalizedQuery = normalizeText(query);
+  const terms = normalizedQuery
     .split(" ")
     .filter((term) => term.length >= 3 && !STOP_WORDS.has(term));
+
+  if (
+    /(?:сайт|веб|вэб|website)/u.test(normalizedQuery) &&
+    /(?:юу|ямар|юуны|мэдээлэл|агуул|what|information|about)/u.test(
+      normalizedQuery
+    )
+  ) {
+    terms.push("үйлчилгээ", "багц", "тусламж", "салбар", "компани");
+  }
+
   return Array.from(new Set(terms));
 }
 
