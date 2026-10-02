@@ -183,10 +183,11 @@ function formatProductFacts(plans: ProductPlan[]) {
 }
 
 function selectLocationFacts(messages: ConversationMessage[]) {
-  const latest = normalize(
-    [...messages].reverse().find((message) => message.role === "user")
-      ?.content ?? ""
-  );
+  const userMessages = messages
+    .filter((message) => message.role === "user")
+    .map((message) => normalize(message.content))
+    .filter(Boolean);
+  const latest = userMessages.at(-1) ?? "";
   if (!latest) return [];
 
   const exactLocation = VERIFIED_SERVICE_LOCATIONS.find((location) =>
@@ -194,7 +195,13 @@ function selectLocationFacts(messages: ConversationMessage[]) {
   );
   if (exactLocation) return [exactLocation];
 
-  if (/(салбар|байршил|хаана|хаяг|цагийн хуваарь)/.test(latest)) {
+  const locationIntent =
+    /(салбар|байршил|хаана|хаяг|цагийн хуваарь|ойрхон|хамгийн ойр|branch|location|address|nearest)/;
+
+  if (
+    locationIntent.test(latest) ||
+    userMessages.slice(0, -1).some((message) => locationIntent.test(message))
+  ) {
     return VERIFIED_SERVICE_LOCATIONS;
   }
 
