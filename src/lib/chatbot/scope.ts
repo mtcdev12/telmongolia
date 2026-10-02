@@ -28,7 +28,7 @@ const CONTEXTUAL_FOLLOW_UP_PATTERN =
   /(^|\s)(энэ|тэр|тухайн|дээрх|өмнөх|тэгвэл|харин|бас|өөр|бусад|эдгээр|тэдгээр|аль|ямар|яагаад|яаж|хэрхэн|хаана|хэзээ|хэд|үнэ|хурд|нөхцөл|өрхийнх|байгууллагынх|дэлгэрэнгүй|more|details|then|that|those|which|why|how|where|when|price|speed)(\s|$)/iu;
 
 const TELECOM_CLARIFICATION_PATTERN =
-  /(дүүрэг|хороо|хороолол|аймаг|сум|баг|байршил|хаяг|гэрт ойр|хамгийн дөхөм|үйлчилгээний дугаар|утасны дугаар|төсөв|хэрэглээ|district|khoroo|province|location|address|service number|phone number|budget|usage).{0,100}(?:өгөх|хэлэх|тодруулах|боломжтой|уу|вэ|please|provide|which|what|where)/iu;
+  /(дүүрэг|хороо|хороолол|аймаг|сум|баг|байршил|хаяг|гэрт ойр|хамгийн дөхөм|үйлчилгээний дугаар|утасны дугаар|төсөв|хэрэглээ|district|khoroo|province|location|address|service number|phone number|budget|usage).{0,120}(?:өг|хэл|тодруул|боломжтой|уу|вэ|please|provide|which|what|where)/iu;
 
 const COMPANY_PATH_PATTERN =
   /^\/(?:en\/)?(?:aboutus|about-us|company|shareholders|news|bonus|offers|careers)(?:\/|$)/;
