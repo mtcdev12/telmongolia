@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ChevronDown,
   Facebook,
@@ -62,9 +62,19 @@ export function EnglishTopbar() {
 export function EnglishNavbar() {
   const [isOpen, setIsOpen] = useState(false);
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
+
   function close() {
     setIsOpen(false);
-    document.body.style.overflow = "auto";
   }
 
   return (
@@ -95,10 +105,7 @@ export function EnglishNavbar() {
           <button
             type="button"
             className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 md:hidden"
-            onClick={() => {
-              setIsOpen(true);
-              document.body.style.overflow = "hidden";
-            }}
+            onClick={() => setIsOpen(true)}
             aria-label="Open menu"
           >
             <Menu size={24} />
@@ -107,12 +114,12 @@ export function EnglishNavbar() {
       </div>
 
       <div
-        className={`fixed inset-0 z-[999] transition md:hidden ${isOpen ? "visible opacity-100" : "invisible opacity-0"}`}
+        className={`fixed inset-0 z-[999] h-[100dvh] transition md:hidden ${isOpen ? "visible opacity-100" : "invisible opacity-0"}`}
         onClick={close}
       >
         <div className="absolute inset-0 bg-black/50" />
         <div
-          className={`absolute right-0 top-0 h-full w-[82%] max-w-[360px] overflow-y-auto bg-brand-night p-6 shadow-2xl transition-transform duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"}`}
+          className={`absolute right-0 top-0 h-[100dvh] w-[82%] max-w-[360px] overflow-y-auto overscroll-contain bg-brand-night px-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-[calc(1.5rem+env(safe-area-inset-top))] shadow-2xl transition-transform duration-300 [-webkit-overflow-scrolling:touch] [touch-action:pan-y] ${isOpen ? "translate-x-0" : "translate-x-full"}`}
           onClick={(event) => event.stopPropagation()}
         >
           <div className="mb-8 flex items-center justify-between">

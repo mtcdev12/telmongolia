@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Menu,
   X,
@@ -41,14 +41,23 @@ const topLinks = [
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
+
   const handleOpen = () => {
     setIsOpen(true);
-    document.body.style.overflow = "hidden";
   };
 
   const handleClose = () => {
     setIsOpen(false);
-    document.body.style.overflow = "auto";
   };
 
   return (
@@ -117,7 +126,7 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       <div
-        className={`fixed inset-0 z-[999] transition md:hidden ${
+        className={`fixed inset-0 z-[999] h-[100dvh] transition md:hidden ${
           isOpen ? "visible opacity-100" : "invisible opacity-0"
         }`}
         onClick={handleClose}
@@ -125,7 +134,7 @@ const Navbar = () => {
         <div className="absolute inset-0 bg-black/50" />
 
         <div
-          className={`absolute right-0 top-0 h-full w-[82%] max-w-[360px] bg-brand-night p-6 text-white shadow-2xl transition-transform duration-300 ${
+          className={`absolute right-0 top-0 h-[100dvh] w-[82%] max-w-[360px] overflow-y-auto overscroll-contain bg-brand-night px-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-[calc(1.5rem+env(safe-area-inset-top))] text-white shadow-2xl transition-transform duration-300 [-webkit-overflow-scrolling:touch] [touch-action:pan-y] ${
             isOpen ? "translate-x-0" : "translate-x-full"
           }`}
           onClick={(e) => e.stopPropagation()}
