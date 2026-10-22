@@ -5,10 +5,10 @@ import PdfTable from "../../pdfTable";
 const breadcrumb = ["Ил тод байдал", "Санхүүгийн тайлан"];
 const duties = [
     ['2026 оны 2-р улирлын тайлан', 'iltodbaidal/Balance 2026.06 хагас жил.pdf'],
-    ['2025 оны 4-р улирлын тайлан' ,'/iltodbaidal/Netgesen_tailan-2025.pdf'],
-    ['2024 оны 4-р улирлын тайлан', '/iltodbaidal/Balance_2024.pdf'],
-    ['2024 оны 2-р улирлын тайлан', '/iltodbaidal/2024uliral.pdf'],
-    ['2023 оны 4-р улирлын тайлан', '/iltodbaidal/20920234report.pdf'],
+    ['2025 оны 4-р улирлын тайлан', 'iltodbaidal/Netgesen_tailan-2025.pdf'],
+    ['2024 оны 4-р улирлын тайлан', 'iltodbaidal/Balance_2024.pdf'],
+    ['2024 оны 2-р улирлын тайлан', 'iltodbaidal/2024uliral.pdf'],
+    ['2023 оны 4-р улирлын тайлан', 'iltodbaidal/20920234report.pdf'],
     ['2022 оны 2-р улирлын тайлан', 'https://mse.mn/uploads/finance/20920222report.pdf'],
     ['2021 оны 4-р улирлын тайлан', 'https://mse.mn/uploads/finance/20920214report.pdf'],
     ['2021 оны 2-р улирлын тайлан', 'https://mse.mn/uploads/finance/20920212report.pdf'],
