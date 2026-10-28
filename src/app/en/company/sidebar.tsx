@@ -2,7 +2,6 @@ import Link from "next/link";
 import { BiSlideshow, BiSolidBank } from "react-icons/bi";
 
 const governance = [
-  ["Governance overview", "/en/company/governance"],
   ["Organizational structure", "/en/company/structure"],
   ["Shareholding structure", "/en/company/shareholding"],
   ["Board of Directors", "/en/company/board"],

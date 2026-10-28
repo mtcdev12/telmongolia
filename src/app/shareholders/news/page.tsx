@@ -1,6 +1,6 @@
 "use client";
 
-import { getShareHoldersNews } from "@/api/rest";
+import { getNewsItemsByIds, getShareHoldersNews } from "@/api/rest";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Breadcrumb from "@/components/ui/breadcrumb";
@@ -14,10 +14,11 @@ import { CalendarDays, ArrowRight, FileText } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 interface NewsItem {
-  id: number;
+  id: number | string;
   title: string;
   cover_img: string;
   created_at: string;
+  source?: "shareholders" | "news";
 }
 
 interface NewsType {
@@ -27,6 +28,8 @@ interface NewsType {
   totalDatas: number;
   totalPages: number;
 }
+
+const hasValidId = (item: NewsItem) => /^\d+$/.test(String(item.id)) && Number(item.id) > 0;
 
 const Page = () => {
   const isEnglish = usePathname().startsWith("/en/");
@@ -38,8 +41,34 @@ const Page = () => {
     setLoading(true);
 
     try {
-      const res = await getShareHoldersNews("shareholders", page);
-      setNews(res);
+      const [shareholderResult, relatedNews] = await Promise.all([
+        getShareHoldersNews("shareholders", page),
+        // These records are shareholder publications but were saved under
+        // the general-news category in the legacy API.
+        getNewsItemsByIds([32, 34, 37, 52, 53]),
+      ]);
+      const shareholderItems = (shareholderResult?.data || [])
+        .filter(hasValidId)
+        .map((item: NewsItem) => ({
+          ...item,
+          source: "shareholders" as const,
+        }));
+      const extraItems = relatedNews.map((item: NewsItem) => ({
+        ...item,
+        source: "news" as const,
+      }));
+      const data = [...shareholderItems, ...extraItems].sort(
+        (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+
+      setNews({
+        ...shareholderResult,
+        data,
+        currentPage: 1,
+        currentPageSize: data.length,
+        totalDatas: data.length,
+        totalPages: 1,
+      });
     } catch (error) {
       console.error("Shareholders news load error:", error);
     } finally {
@@ -94,7 +123,11 @@ const Page = () => {
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {news.data.map((d) => (
                 <Link
-                  href={`${isEnglish ? "/en" : ""}/shareholders/news/${d.id}`}
+                  href={
+                    d.source === "news"
+                      ? `${isEnglish ? "/en" : ""}/news/${d.id}`
+                      : `${isEnglish ? "/en" : ""}/shareholders/news/${d.id}`
+                  }
                   key={d.id}
                   className="group overflow-hidden rounded-[26px] border border-slate-200/80 bg-white shadow-[0_16px_40px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_24px_60px_rgba(37,99,235,0.16)]"
                 >
@@ -143,13 +176,15 @@ const Page = () => {
               ))}
             </div>
 
-            <div className="mt-10 flex justify-center">
-              <Paginator
-                totalPages={news.totalPages}
-                currentPage={news.currentPage}
-                handlePageChange={getData}
-              />
-            </div>
+            {news.totalPages > 1 && (
+              <div className="mt-10 flex justify-center">
+                <Paginator
+                  totalPages={news.totalPages}
+                  currentPage={news.currentPage}
+                  handlePageChange={getData}
+                />
+              </div>
+            )}
           </>
         )}
         <SourceContact locale={locale} />

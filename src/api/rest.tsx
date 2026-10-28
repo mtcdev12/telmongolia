@@ -145,6 +145,21 @@ export const getShareHoldersNews = async (type:string, page:number) => {
         console.log('There was an error', err);
     }
 }
+export const getNewsItemsByIds = async (ids: number[]) => {
+    const items = await Promise.all(
+        ids.map(async (id) => {
+            try {
+                const res = await fetch(process.env.API2 + '/news?id=' + id);
+                if (!res.ok) return undefined;
+                return await res.json();
+            } catch (err) {
+                console.log('There was an error', err);
+                return undefined;
+            }
+        })
+    );
+    return items.filter(Boolean);
+}
 export const getNumbers = async (number:string, grade:string, page:number) =>{
     var url = process.env.API + "/booknumber?status=T&pattern=" + number + "&nitem=36&total&grade=" + grade + "&page=" + page;
     try{

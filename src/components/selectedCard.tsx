@@ -158,11 +158,11 @@ const SelectedCard = ({ card, onCardClose, locale = "mn" }: SelectedCardProps) =
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {card.TYPE !== "IDD" && (
+                            {/* {card.TYPE !== "IDD" && (
                               <SelectItem value="recharge">
                                 {isEnglish ? "Recharge directly" : "Шууд цэнэглэх"}
                               </SelectItem>
-                            )}
+                            )} */}
                             <SelectItem value="buycard">
                               {isEnglish ? "Receive a card code" : "Картаар авах"}
                             </SelectItem>

@@ -640,10 +640,16 @@ export default function Chatbot({ locale = "mn" }: { locale?: ChatLocale }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const saved = window.sessionStorage.getItem("telecom-chat-session");
-    sessionId.current = saved || makeId();
-    if (!saved) {
-      window.sessionStorage.setItem("telecom-chat-session", sessionId.current);
+    // Safari may throw a SecurityError when browser storage is disabled.
+    // A chat session is optional and must never take down the whole site.
+    try {
+      const saved = window.sessionStorage.getItem("telecom-chat-session");
+      sessionId.current = saved || makeId();
+      if (!saved) {
+        window.sessionStorage.setItem("telecom-chat-session", sessionId.current);
+      }
+    } catch {
+      sessionId.current = makeId();
     }
   }, []);
 
@@ -710,7 +716,11 @@ export default function Chatbot({ locale = "mn" }: { locale?: ChatLocale }) {
 
     if (!sessionId.current) {
       sessionId.current = makeId();
-      window.sessionStorage.setItem("telecom-chat-session", sessionId.current);
+      try {
+        window.sessionStorage.setItem("telecom-chat-session", sessionId.current);
+      } catch {
+        // Continue with an in-memory session when storage is unavailable.
+      }
     }
 
     const controller = new AbortController();
