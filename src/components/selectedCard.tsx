@@ -42,6 +42,13 @@ const formSchema = z.object({
   ebarimt: z.string(),
   card_type: z.string(),
   prefix: z.string(),
+}).superRefine((values, ctx) => {
+  if (values.type === "recharge" && !/^\d{8}$/.test(values.number?.trim() ?? "")) {
+    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["number"], message: "8 оронтой утасны дугаар оруулна уу / Enter an 8-digit number" });
+  }
+  if (values.type === "buycard" && !z.string().email().safeParse(values.email.trim()).success) {
+    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["email"], message: "Цахим шуудангийн хаягаа шалгана уу / Enter a valid email address" });
+  }
 });
 
 type SelectedCardProps = {
@@ -85,8 +92,14 @@ const SelectedCard = ({ card, onCardClose, locale = "mn" }: SelectedCardProps) =
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
     try {
-      const response = await cardBuy(values);
-      if (response?.result === "ok") {
+      const response = await cardBuy({
+        ...values,
+        number: values.number?.trim(),
+        email: values.email.trim(),
+        // Card orders support QPay invoices; bank apps pay the same invoice.
+        payment: values.payment === "bank-app" ? "qpay" : values.payment,
+      });
+      if (response?.result === "ok" && response.data?.invoice_id && response.data?.qr_image) {
         setPaymentData(response.data);
         return;
       }
@@ -95,6 +108,13 @@ const SelectedCard = ({ card, onCardClose, locale = "mn" }: SelectedCardProps) =
         description: isEnglish
           ? "The card order could not be processed. Please try again."
           : response?.message || "Картын захиалгыг боловсруулах боломжгүй байна.",
+      });
+    } catch {
+      toast({
+        title: isEnglish ? "Card order" : "Картын захиалга",
+        description: isEnglish
+          ? "Could not connect to the payment service. Please try again."
+          : "Төлбөрийн үйлчилгээтэй холбогдож чадсангүй. Дахин оролдоно уу.",
       });
     } finally {
       setLoading(false);
@@ -181,7 +201,7 @@ const SelectedCard = ({ card, onCardClose, locale = "mn" }: SelectedCardProps) =
                             {isEnglish ? "Telephone number to recharge" : "Цэнэглэх утасны дугаар"}
                           </FormLabel>
                           <FormControl>
-                            <Input {...field} type="tel" required />
+                            <Input {...field} type="tel" inputMode="numeric" maxLength={8} required />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -201,7 +221,7 @@ const SelectedCard = ({ card, onCardClose, locale = "mn" }: SelectedCardProps) =
                           <RadioGroup
                             onValueChange={field.onChange}
                             defaultValue={field.value}
-                            className="flex flex-row justify-center gap-2"
+                            className="flex flex-row flex-wrap justify-center gap-2"
                             required
                           >
                             <FormItem className="radiopay h-[120px] w-[140px] rounded-2xl p-2">
@@ -215,6 +235,19 @@ const SelectedCard = ({ card, onCardClose, locale = "mn" }: SelectedCardProps) =
                                   className="h-[60px] w-[60px] object-contain"
                                 />
                                 <span>{isEnglish ? "QPay" : "Qpay хялбар төлөлт"}</span>
+                              </FormLabel>
+                            </FormItem>
+                            <FormItem className="radiopay h-[120px] w-[140px] rounded-2xl p-2">
+                              <FormControl>
+                                <RadioGroupItem value="bank-app" />
+                              </FormControl>
+                              <FormLabel className="flex flex-col items-center justify-center gap-1 text-center font-normal">
+                                <img
+                                  src="/assets/images/bank.svg"
+                                  alt="Bank apps"
+                                  className="h-[60px] w-[60px] object-contain"
+                                />
+                                <span>{isEnglish ? "Bank apps" : "Банкны апп"}</span>
                               </FormLabel>
                             </FormItem>
                           </RadioGroup>
@@ -290,7 +323,7 @@ const SelectedCard = ({ card, onCardClose, locale = "mn" }: SelectedCardProps) =
                       )}
                     />
                   )}
-                  <Button type="submit">
+                  <Button type="submit" disabled={loading}>
                     {isEnglish ? "Continue" : "Үргэлжлүүлэх"}
                   </Button>
                 </form>

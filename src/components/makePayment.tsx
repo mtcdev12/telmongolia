@@ -47,6 +47,13 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn" }: PaymentProps) =
             : "The payment has not been confirmed yet."
           : response?.message || "Төлбөрийн төлөвийг шалгаж чадсангүй.",
       });
+    } catch {
+      toast({
+        title: isEnglish ? "Payment status" : "Төлбөрийн төлөв",
+        description: isEnglish
+          ? "Could not check the payment. Please try again."
+          : "Төлбөрийн төлөв шалгаж чадсангүй. Дахин оролдоно уу.",
+      });
     } finally {
       setLoading(false);
     }
@@ -61,6 +68,17 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn" }: PaymentProps) =
   };
 
   const account = paymentdata.account ?? {};
+  const bankApps = Array.isArray(paymentdata.urls)
+    ? paymentdata.urls.filter((app: unknown): app is {
+        name: string; description?: string; logo?: string; link: string;
+      } => {
+        if (!app || typeof app !== "object") return false;
+        const item = app as Record<string, unknown>;
+        return typeof item.name === "string" && typeof item.link === "string"
+          && /^[a-z][a-z0-9+.-]*:\/\//i.test(item.link)
+          && !/^(javascript|data|file|vbscript):/i.test(item.link);
+      })
+    : [];
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange} defaultOpen>
@@ -88,19 +106,49 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn" }: PaymentProps) =
             <p className="break-all text-sm text-gray-600">
               {isEnglish ? "Invoice" : "Нэхэмжлэхийн дугаар"}: {String(paymentdata.invoice_id ?? "")}
             </p>
-            <Button onClick={checkPaymentStatus}>
+            <Button onClick={checkPaymentStatus} disabled={loading}>
               {isEnglish ? "Check payment" : "Төлбөр шалгах"}
             </Button>
           </div>
         ) : paymentdata.qr_image ? (
-          <div className="mx-auto text-center">
+          <div className="space-y-4 text-center">
+            {bankApps.length > 0 && (
+              <div className="space-y-3">
+                <h5 className="font-semibold text-brand-1">
+                  {isEnglish ? "Pay with your bank app" : "Банкны апп-аар төлөх"}
+                </h5>
+                <p className="text-sm text-gray-600">
+                  {isEnglish
+                    ? "On your phone, select an installed app. On a computer, scan the QR code with your bank app."
+                    : "Утсан дээрээ ашигладаг банкны апп-аа сонгоно уу. Компьютероос төлөх бол банкны апп-аараа QR кодыг уншуулна уу."}
+                </p>
+                <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+                  {bankApps.map((app: { name: string; description?: string; logo?: string; link: string }) => (
+                    <a
+                      key={app.link}
+                      href={app.link}
+                      className="flex min-h-[96px] flex-col items-center justify-center gap-2 rounded-xl border p-2 text-xs hover:border-brand-1 hover:bg-brand-2/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-1"
+                    >
+                      {app.logo && /^https:\/\//i.test(app.logo) && (
+                        <img src={app.logo} alt="" className="h-10 w-10 rounded-lg object-contain" />
+                      )}
+                      <span>{app.description || app.name}</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+            <p className="text-sm text-gray-600">
+              {isEnglish ? "Scan with a QPay-enabled bank app" : "QPay дэмждэг банкны апп-аар QR кодыг уншуулна уу"}
+            </p>
             <img
-              src={`data:image/jpeg;base64,${paymentdata.qr_image}`}
+              className="mx-auto h-auto max-w-full"
+              src={`data:image/png;base64,${paymentdata.qr_image}`}
               width={320}
               height={320}
               alt="QPay QR code"
             />
-            <Button onClick={checkPaymentStatus}>
+            <Button onClick={checkPaymentStatus} disabled={loading}>
               {isEnglish ? "Check payment" : "Төлбөр шалгах"}
             </Button>
           </div>

@@ -225,24 +225,19 @@ export const getCards = async () => {
     }
 }
 export const cardBuy = async (values:any) => {
-    if(values.type == 'buycard'){
-        delete values['number'];
-    };
-    const requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      };
-    let url = process.env.API + "/card/buy";
-    try{
-        const res = await fetch(url, requestOptions);
-        const data = await res.json();
-        return data;
-    }catch(err){
-        console.log('There was an error', err);
-    }
+    const payload = { ...values };
+    if (payload.type === 'buycard') delete payload.number;
+    // Use the same-origin proxy so browsers do not depend on upstream CORS.
+    const res = await fetch('/api/1/card/buy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(20_000),
+    });
+    if (!res.ok) throw new Error('Card order request failed');
+    const text = await res.text();
+    if (!text.trim()) throw new Error('Card order service returned an empty response');
+    return JSON.parse(text);
 }
 export const checkPayment = async (values:any) => {
     const requestOptions = {
