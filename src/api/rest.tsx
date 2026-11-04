@@ -227,8 +227,8 @@ export const getCards = async () => {
 export const cardBuy = async (values:any) => {
     const payload = { ...values };
     if (payload.type === 'buycard') delete payload.number;
-    // Use the same-origin proxy so browsers do not depend on upstream CORS.
-    const res = await fetch('/api/1/card/buy', {
+    // The payment API supports browser CORS; production cannot reach it through the proxy.
+    const res = await fetch(process.env.API + '/card/buy', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
