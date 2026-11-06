@@ -10,14 +10,14 @@ export function generateStaticParams() {
   return Object.keys(ENGLISH_TRANSPARENCY).map((category) => ({ category }));
 }
 
-export async function generateMetadata({ params }: { params: { category: string } }): Promise<Metadata> {
-  const { category } = params;
+export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {
+  const { category } = await params;
   const page = ENGLISH_TRANSPARENCY[category];
   return page ? { title: page.title } : {};
 }
 
-export default async function TransparencyPage({ params }: { params: { category: string } }) {
-  const { category } = params;
+export default async function TransparencyPage({ params }: { params: Promise<{ category: string }> }) {
+  const { category } = await params;
   const page = ENGLISH_TRANSPARENCY[category];
   if (!page) notFound();
   const sourcePerson = category === "audited" || category === "financial"

@@ -13,20 +13,23 @@ const Page = () => {
       <div className="min-w-0 flex-1">
       <Breadcrumb data={breadcrumb} />
       <div id="director-greeting" className="scroll-mt-6 border border-slate-300 p-6 rounded-2xl">
-        <h5 className="text-brand-1 text-xl font-semibold tracking-tight text-right my-2">
-          Захирлын мэндчилгээ
-        </h5>
-        <div className="flex flex-row flex-wrap justify-stretch">
-          <div className="relative h-[400px] md:h-auto w-[400px]">
+        <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+          <div className="w-full max-w-[400px] justify-self-center xl:justify-self-start">
             <Image
               src="/assets/images/gutseth_zahiral.png"
-              fill
-              alt="zahiral"
-              className="object-contain rounded-2xl"
+              width={10783}
+              height={15917}
+              sizes="(max-width: 440px) 100vw, 400px"
+              alt="Гүйцэтгэх захирал Т.Сайнжаргал"
+              className="h-auto w-full rounded-2xl"
               quality={100}
             />
           </div>
-          <div className="flex-1 text-sm leading-relaxed px-6 indent-14 text-justify min-w-[400px]">
+          <div className="min-w-0">
+            <h5 className="mb-4 text-xl font-semibold tracking-tight text-brand-1">
+              Захирлын мэндчилгээ
+            </h5>
+            <div className="text-sm leading-relaxed indent-14 text-justify">
              Та бүхэндээ Монголын цахилгаан холбоо ХК-ийн нийт хамт олон,
 холбоочдынхоо нэрийн өмнөөс энэ өдрийн мэндийг хүргэн мэндчилье. Бид
 харилцаа холбоо, мэдээллийн технологийн салбарын хурдтай хөгжилд нийцүүлсэн
@@ -59,6 +62,7 @@ const Page = () => {
               Монголын Цахилгаа Холбоо ХК-ийн
               <br />
               ГҮЙЦЭТГЭХ ЗАХИРАЛ Т.Сайнжаргал
+            </div>
             </div>
           </div>
         </div>

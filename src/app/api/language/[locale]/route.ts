@@ -4,9 +4,9 @@ export const dynamic = "force-dynamic";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { locale: string } }
+  { params }: { params: Promise<{ locale: string }> }
 ) {
-  const { locale } = params;
+  const { locale } = await params;
   const selectedLocale = locale === "en" ? "en" : "mn";
   const requestedPath = request.nextUrl.searchParams.get("returnTo") ?? "";
   const isSafePath = /^\/[A-Za-z0-9/_-]*$/.test(requestedPath) && !requestedPath.startsWith("//");

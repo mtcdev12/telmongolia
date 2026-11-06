@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import { getEachNews } from "@/api/rest";
 import { format_date } from "@/lib/helper";
 import Breadcrumb from "@/components/ui/breadcrumb";
@@ -19,7 +20,8 @@ async function getData(url:string) {
 }
 
 const breadcrumb = ["Урамшуулал"];
-const Page = ({ params }: { params: { each: number } }) => {
+const Page = () => {
+  const params = useParams<{ each: string }>();
   const [news, setNews] = useState();
     useEffect(() => {
       const fetchData = async () => {
