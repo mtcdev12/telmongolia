@@ -74,9 +74,8 @@ export default function Mip70Payment() {
   return (
     <div className="min-h-screen bg-slate-50 px-4 py-8 text-slate-900">
       <section className="mx-auto max-w-md rounded-2xl border bg-white p-6 shadow-sm">
-        <p className="text-sm font-semibold text-brand-1">Монголын Цахилгаан Холбоо</p>
+        <p className="text-sm font-semibold text-brand-1">Монголын Цахилгаан Холбоо ХК</p>
         <h1 className="mt-2 text-2xl font-bold">MIP70 цэнэглэх</h1>
-        <p className="mt-2 text-sm text-slate-600">Дугаар болон цэнэглэх дүнгээ сонгоод төлбөрөө төлнө үү.</p>
         <form onSubmit={submit} className="mt-6 space-y-5">
           <div>
             <label htmlFor="mip70-number" className="mb-2 block text-sm font-medium">MIP70 дугаар</label>
