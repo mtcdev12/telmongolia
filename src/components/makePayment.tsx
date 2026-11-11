@@ -19,13 +19,15 @@ type PaymentProps = {
   onPaymentClose: (open: boolean) => void;
   locale?: SiteLocale;
   bankAppsBelowQr?: boolean;
+  returnAfterSuccess?: boolean;
 };
 
-const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr = false }: PaymentProps) => {
+const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr = false, returnAfterSuccess = false }: PaymentProps) => {
   const isEnglish = locale === "en";
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(true);
+  const [paymentSucceeded, setPaymentSucceeded] = useState(false);
   const isDigiPay = paymentdata.payment_method === "digipay";
 
   const handleOpenChange = () => {
@@ -40,6 +42,10 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr =
         invoice_id: paymentdata.invoice_id,
         ...(isDigiPay ? { payment: "digipay" } : {}),
       });
+      if (returnAfterSuccess && response?.result === "ok") {
+        setPaymentSucceeded(true);
+        return;
+      }
       toast({
         title: isEnglish ? "Payment status" : "Төлбөрийн төлөв",
         description: isEnglish
@@ -83,8 +89,12 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr =
     : [];
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange} defaultOpen>
-      <DialogContent className="max-h-[98%] overflow-y-scroll sm:max-w-[525px]">
+    <Dialog open={open} onOpenChange={paymentSucceeded ? undefined : handleOpenChange} defaultOpen>
+      <DialogContent
+        className={`max-h-[98%] overflow-y-scroll sm:max-w-[525px] ${paymentSucceeded ? "[&>button]:hidden" : ""}`}
+        onEscapeKeyDown={paymentSucceeded ? (event) => event.preventDefault() : undefined}
+        onPointerDownOutside={paymentSucceeded ? (event) => event.preventDefault() : undefined}
+      >
         {loading && <Loader />}
         <DialogHeader>
           <DialogTitle className="text-brand-1">
@@ -92,7 +102,16 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr =
           </DialogTitle>
         </DialogHeader>
 
-        {isDigiPay ? (
+        {paymentSucceeded ? (
+          <div className="space-y-4 text-center">
+            <p role="status" className="font-semibold text-green-700">
+              {isEnglish ? "Payment successful." : "Төлбөр амжилттай төлөгдлөө."}
+            </p>
+            <Button onClick={handleOpenChange}>
+              {isEnglish ? "Back to top-up" : "Цэнэглэх хуудас руу буцах"}
+            </Button>
+          </div>
+        ) : isDigiPay ? (
           <div className="space-y-4 text-center">
             <p>
               {isEnglish

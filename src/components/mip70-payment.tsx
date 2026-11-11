@@ -110,7 +110,7 @@ export default function Mip70Payment() {
               </Button>}
         </form>
       </section>
-      {payment && <Payment paymentdata={payment} bankAppsBelowQr onPaymentClose={() => setPayment(null)} />}
+      {payment && <Payment paymentdata={payment} bankAppsBelowQr returnAfterSuccess onPaymentClose={() => setPayment(null)} />}
     </div>
   );
 }
