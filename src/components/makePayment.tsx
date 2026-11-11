@@ -119,11 +119,13 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr =
                 <h5 className="font-semibold text-brand-1">
                   {isEnglish ? "Pay with your bank app" : "Банкны апп-аар төлөх"}
                 </h5>
-                <p className="text-sm text-gray-600">
-                  {isEnglish
-                    ? "On your phone, select an installed app. On a computer, scan the QR code with your bank app."
-                    : "Утсан дээрээ ашигладаг банкны апп-аа сонгоно уу. Компьютероос төлөх бол банкны апп-аараа QR кодыг уншуулна уу."}
-                </p>
+                {!bankAppsBelowQr && (
+                  <p className="text-sm text-gray-600">
+                    {isEnglish
+                      ? "On your phone, select an installed app. On a computer, scan the QR code with your bank app."
+                      : "Утсан дээрээ ашигладаг банкны апп-аа сонгоно уу. Компьютероос төлөх бол банкны апп-аараа QR кодыг уншуулна уу."}
+                  </p>
+                )}
                 <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
                   {bankApps.map((app: { name: string; description?: string; logo?: string; link: string }) => (
                     <a
