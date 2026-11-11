@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -96,7 +96,7 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr =
         onEscapeKeyDown={paymentSucceeded ? (event) => event.preventDefault() : undefined}
         onPointerDownOutside={paymentSucceeded ? (event) => event.preventDefault() : undefined}
       >
-        {loading && <Loader />}
+        {loading && !returnAfterSuccess && <Loader />}
         {!paymentSucceeded && (
           <DialogHeader>
             <DialogTitle className="text-brand-1">
@@ -116,6 +116,9 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr =
               <DialogTitle className="text-xl font-semibold text-slate-900 sm:text-2xl">
                 {isEnglish ? "Payment successful" : "Төлбөр амжилттай төлөгдлөө"}
               </DialogTitle>
+              <p className="mt-3 text-sm text-slate-600 sm:text-base">
+                {isEnglish ? "Thank you for choosing us." : "Манайхыг сонгон үйлчлүүлсэн танд баярлалаа."}
+              </p>
             </div>
             <Button variant="outline" className="h-11 min-w-[9rem] rounded-full bg-slate-50 px-6 font-semibold" onClick={handleOpenChange}>
               {isEnglish ? "Done" : "Дуусгах"}
@@ -182,7 +185,12 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr =
               alt="QPay QR code"
             />
             <Button className={bankAppsBelowQr ? "order-2" : undefined} onClick={checkPaymentStatus} disabled={loading}>
-              {isEnglish ? "Check payment" : "Төлбөр шалгах"}
+              {loading && returnAfterSuccess ? (
+                <span role="status" className="inline-flex items-center gap-2">
+                  <Loader2 aria-hidden="true" className="h-4 w-4 animate-spin" />
+                  {isEnglish ? "Checking payment…" : "Төлбөр шалгаж байна…"}
+                </span>
+              ) : isEnglish ? "Check payment" : "Төлбөр шалгах"}
             </Button>
           </div>
         ) : (
