@@ -72,8 +72,8 @@ export default function Mip70Payment() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-8 text-slate-900">
-      <section className="mx-auto max-w-md rounded-2xl border bg-white p-6 shadow-sm">
+    <div className="grid min-h-screen place-items-center bg-slate-50 px-4 py-8 text-slate-900">
+      <section className="w-full max-w-md rounded-2xl border bg-white p-6 shadow-sm">
         <p className="text-sm font-semibold text-brand-1">Монголын Цахилгаан Холбоо ХК</p>
         <h1 className="mt-2 text-2xl font-bold">MIP70 цэнэглэх</h1>
         <form onSubmit={submit} className="mt-6 space-y-5">
