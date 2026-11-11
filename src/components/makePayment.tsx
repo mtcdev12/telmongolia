@@ -12,7 +12,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { checkPayment } from "@/api/rest";
 import { BiCopyAlt } from "react-icons/bi";
-import { useMobilePayment } from "./use-mobile-payment";
 import type { SiteLocale } from "@/lib/i18n/ui";
 
 type PaymentProps = {
@@ -24,7 +23,6 @@ type PaymentProps = {
 
 const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr = false }: PaymentProps) => {
   const isEnglish = locale === "en";
-  const isMobilePayment = useMobilePayment();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(true);
@@ -79,7 +77,8 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr =
         const item = app as Record<string, unknown>;
         return typeof item.name === "string" && typeof item.link === "string"
           && /^[a-z][a-z0-9+.-]*:\/\//i.test(item.link)
-          && !/^(javascript|data|file|vbscript):/i.test(item.link);
+          && !/^(javascript|data|file|vbscript):/i.test(item.link)
+          && (!bankAppsBelowQr || !/^qpaywallet:/i.test(item.link));
       })
     : [];
 
@@ -115,7 +114,7 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr =
           </div>
         ) : paymentdata.qr_image ? (
           <div className={bankAppsBelowQr ? "flex flex-col gap-4 text-center" : "space-y-4 text-center"}>
-            {bankApps.length > 0 && (!bankAppsBelowQr || isMobilePayment) && (
+            {bankApps.length > 0 && (
               <div className={bankAppsBelowQr ? "order-1 space-y-3" : "space-y-3"}>
                 <h5 className="font-semibold text-brand-1">
                   {isEnglish ? "Pay with your bank app" : "Банкны апп-аар төлөх"}
@@ -126,7 +125,7 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr =
                     : "Утсан дээрээ ашигладаг банкны апп-аа сонгоно уу. Компьютероос төлөх бол банкны апп-аараа QR кодыг уншуулна уу."}
                 </p>
                 <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-                  {bankApps.filter((app) => !bankAppsBelowQr || !/^qpaywallet:/i.test(app.link)).map((app: { name: string; description?: string; logo?: string; link: string }) => (
+                  {bankApps.map((app: { name: string; description?: string; logo?: string; link: string }) => (
                     <a
                       key={app.link}
                       href={app.link}
