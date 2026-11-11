@@ -26,6 +26,10 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
     document.cookie = `site-language=${locale}; path=/; max-age=31536000; samesite=lax`;
   }, [isEnglish]);
 
+  if (pathname === "/mip70/pay") {
+    return <main className="grow">{children}</main>;
+  }
+
   return (
     <>
       {isEnglish ? (
