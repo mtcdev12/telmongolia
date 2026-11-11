@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Check } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -96,19 +97,28 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr =
         onPointerDownOutside={paymentSucceeded ? (event) => event.preventDefault() : undefined}
       >
         {loading && <Loader />}
-        <DialogHeader>
-          <DialogTitle className="text-brand-1">
-            {isEnglish ? "Payment" : "Төлбөр төлөлт"}
-          </DialogTitle>
-        </DialogHeader>
+        {!paymentSucceeded && (
+          <DialogHeader>
+            <DialogTitle className="text-brand-1">
+              {isEnglish ? "Payment" : "Төлбөр төлөлт"}
+            </DialogTitle>
+          </DialogHeader>
+        )}
 
         {paymentSucceeded ? (
-          <div className="space-y-4 text-center">
-            <p role="status" className="font-semibold text-green-700">
-              {isEnglish ? "Payment successful." : "Төлбөр амжилттай төлөгдлөө."}
-            </p>
-            <Button onClick={handleOpenChange}>
-              {isEnglish ? "Back to top-up" : "Цэнэглэх хуудас руу буцах"}
+          <div className="flex flex-col items-center gap-6 px-2 py-10 text-center sm:py-14">
+            <div aria-hidden="true" className="grid h-24 w-24 place-items-center rounded-full border border-green-100 bg-green-50">
+              <div className="grid h-16 w-16 place-items-center rounded-full bg-green-600 text-white">
+                <Check className="h-8 w-8" strokeWidth={2.5} />
+              </div>
+            </div>
+            <div role="status">
+              <DialogTitle className="text-xl font-semibold text-slate-900 sm:text-2xl">
+                {isEnglish ? "Payment successful" : "Төлбөр амжилттай төлөгдлөө"}
+              </DialogTitle>
+            </div>
+            <Button variant="outline" className="h-11 min-w-[9rem] rounded-full bg-slate-50 px-6 font-semibold" onClick={handleOpenChange}>
+              {isEnglish ? "Done" : "Дуусгах"}
             </Button>
           </div>
         ) : isDigiPay ? (
