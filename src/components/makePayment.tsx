@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Check, Loader2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +13,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { checkPayment } from "@/api/rest";
 import { BiCopyAlt } from "react-icons/bi";
-import { useMobilePayment } from "./use-mobile-payment";
 import type { SiteLocale } from "@/lib/i18n/ui";
 
 type PaymentProps = {
@@ -20,14 +20,15 @@ type PaymentProps = {
   onPaymentClose: (open: boolean) => void;
   locale?: SiteLocale;
   bankAppsBelowQr?: boolean;
+  returnAfterSuccess?: boolean;
 };
 
-const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr = false }: PaymentProps) => {
+const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr = false, returnAfterSuccess = false }: PaymentProps) => {
   const isEnglish = locale === "en";
-  const isMobilePayment = useMobilePayment();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(true);
+  const [paymentSucceeded, setPaymentSucceeded] = useState(false);
   const isDigiPay = paymentdata.payment_method === "digipay";
 
   const handleOpenChange = () => {
@@ -42,6 +43,10 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr =
         invoice_id: paymentdata.invoice_id,
         ...(isDigiPay ? { payment: "digipay" } : {}),
       });
+      if (returnAfterSuccess && response?.result === "ok") {
+        setPaymentSucceeded(true);
+        return;
+      }
       toast({
         title: isEnglish ? "Payment status" : "Төлбөрийн төлөв",
         description: isEnglish
@@ -79,21 +84,47 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr =
         const item = app as Record<string, unknown>;
         return typeof item.name === "string" && typeof item.link === "string"
           && /^[a-z][a-z0-9+.-]*:\/\//i.test(item.link)
-          && !/^(javascript|data|file|vbscript):/i.test(item.link);
+          && !/^(javascript|data|file|vbscript):/i.test(item.link)
+          && (!bankAppsBelowQr || !/^qpaywallet:/i.test(item.link));
       })
     : [];
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange} defaultOpen>
-      <DialogContent className="max-h-[98%] overflow-y-scroll sm:max-w-[525px]">
-        {loading && <Loader />}
-        <DialogHeader>
-          <DialogTitle className="text-brand-1">
-            {isEnglish ? "Payment" : "Төлбөр төлөлт"}
-          </DialogTitle>
-        </DialogHeader>
+    <Dialog open={open} onOpenChange={paymentSucceeded ? undefined : handleOpenChange} defaultOpen>
+      <DialogContent
+        className={`max-h-[98%] overflow-y-scroll sm:max-w-[525px] ${paymentSucceeded ? "[&>button]:hidden" : ""}`}
+        onEscapeKeyDown={paymentSucceeded ? (event) => event.preventDefault() : undefined}
+        onPointerDownOutside={paymentSucceeded ? (event) => event.preventDefault() : undefined}
+      >
+        {loading && !returnAfterSuccess && <Loader />}
+        {!paymentSucceeded && (
+          <DialogHeader>
+            <DialogTitle className="text-brand-1">
+              {isEnglish ? "Payment" : "Төлбөр төлөлт"}
+            </DialogTitle>
+          </DialogHeader>
+        )}
 
-        {isDigiPay ? (
+        {paymentSucceeded ? (
+          <div className="flex flex-col items-center gap-6 px-2 py-10 text-center sm:py-14">
+            <div aria-hidden="true" className="grid h-24 w-24 place-items-center rounded-full border border-green-100 bg-green-50">
+              <div className="grid h-16 w-16 place-items-center rounded-full bg-green-600 text-white">
+                <Check className="h-8 w-8" strokeWidth={2.5} />
+              </div>
+            </div>
+            <div role="status">
+              <DialogTitle className="text-xl font-semibold text-slate-900 sm:text-2xl">
+                {isEnglish ? "Payment successful" : "Төлбөр амжилттай төлөгдлөө"}
+              </DialogTitle>
+              <p className="mt-3 text-sm text-slate-600 sm:text-base">
+                {isEnglish ? "Thank you for choosing us." : "Манайхыг сонгон үйлчлүүлсэн танд баярлалаа."}
+              </p>
+            </div>
+            <Button variant="outline" className="h-11 min-w-[9rem] rounded-full bg-slate-50 px-6 font-semibold" onClick={handleOpenChange}>
+              {isEnglish ? "Done" : "Дуусгах"}
+            </Button>
+          </div>
+        ) : isDigiPay ? (
           <div className="space-y-4 text-center">
             <p>
               {isEnglish
@@ -115,18 +146,20 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr =
           </div>
         ) : paymentdata.qr_image ? (
           <div className={bankAppsBelowQr ? "flex flex-col gap-4 text-center" : "space-y-4 text-center"}>
-            {bankApps.length > 0 && (!bankAppsBelowQr || isMobilePayment) && (
+            {bankApps.length > 0 && (
               <div className={bankAppsBelowQr ? "order-1 space-y-3" : "space-y-3"}>
                 <h5 className="font-semibold text-brand-1">
                   {isEnglish ? "Pay with your bank app" : "Банкны апп-аар төлөх"}
                 </h5>
-                <p className="text-sm text-gray-600">
-                  {isEnglish
-                    ? "On your phone, select an installed app. On a computer, scan the QR code with your bank app."
-                    : "Утсан дээрээ ашигладаг банкны апп-аа сонгоно уу. Компьютероос төлөх бол банкны апп-аараа QR кодыг уншуулна уу."}
-                </p>
+                {!bankAppsBelowQr && (
+                  <p className="text-sm text-gray-600">
+                    {isEnglish
+                      ? "On your phone, select an installed app. On a computer, scan the QR code with your bank app."
+                      : "Утсан дээрээ ашигладаг банкны апп-аа сонгоно уу. Компьютероос төлөх бол банкны апп-аараа QR кодыг уншуулна уу."}
+                  </p>
+                )}
                 <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-                  {bankApps.filter((app) => !bankAppsBelowQr || !/^qpaywallet:/i.test(app.link)).map((app: { name: string; description?: string; logo?: string; link: string }) => (
+                  {bankApps.map((app: { name: string; description?: string; logo?: string; link: string }) => (
                     <a
                       key={app.link}
                       href={app.link}
@@ -152,7 +185,12 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr =
               alt="QPay QR code"
             />
             <Button className={bankAppsBelowQr ? "order-2" : undefined} onClick={checkPaymentStatus} disabled={loading}>
-              {isEnglish ? "Check payment" : "Төлбөр шалгах"}
+              {loading && returnAfterSuccess ? (
+                <span role="status" className="inline-flex items-center gap-2">
+                  <Loader2 aria-hidden="true" className="h-4 w-4 animate-spin" />
+                  {isEnglish ? "Checking payment…" : "Төлбөр шалгаж байна…"}
+                </span>
+              ) : isEnglish ? "Check payment" : "Төлбөр шалгах"}
             </Button>
           </div>
         ) : (
