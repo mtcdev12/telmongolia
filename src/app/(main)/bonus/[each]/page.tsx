@@ -21,7 +21,7 @@ async function getData(url:string) {
 
 const breadcrumb = ["Урамшуулал"];
 const Page = () => {
-  const params = useParams<{ each: string }>();
+  const params = useParams() as { each: string };
   const [news, setNews] = useState();
     useEffect(() => {
       const fetchData = async () => {

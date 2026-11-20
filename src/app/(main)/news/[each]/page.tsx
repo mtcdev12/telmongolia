@@ -8,7 +8,7 @@ import parse from 'html-react-parser';
 
 const breadcrumb = ["Мэдээлэл"];
 const Page = () => {
-  const params = useParams<{ each: string }>();
+  const params = useParams() as { each: string };
   const [news, setNews] = useState();
   useEffect(() => {
     const fetchData = async () => {
