@@ -8,8 +8,7 @@ import { Input } from "@/components/ui/input";
 
 type MipCard = { TYPE: string; PREFIX: string; PRICE: string; CARD_TYPE: string; DAYS?: string };
 
-export default function Mip70Payment() {
-  const [number, setNumber] = useState("");
+export default function Mip70Payment({ acc }: { acc: string }) {
   const [cards, setCards] = useState<MipCard[]>([]);
   const [prefix, setPrefix] = useState("");
   const [receipt, setReceipt] = useState("personal");
@@ -18,11 +17,6 @@ export default function Mip70Payment() {
   const [error, setError] = useState("");
   const [payment, setPayment] = useState<Record<string, unknown> | null>(null);
   const [attempt, setAttempt] = useState(0);
-
-  useEffect(() => {
-    const value = new URLSearchParams(window.location.search).get("number");
-    if (value && /^7008\d{4}$/.test(value)) setNumber(value);
-  }, []);
 
   useEffect(() => {
     let active = true;
@@ -49,7 +43,7 @@ export default function Mip70Payment() {
     event.preventDefault();
     if (submitting) return;
     const card = cards.find((item) => item.PREFIX === prefix && item.TYPE === "MIP");
-    if (!/^7008\d{4}$/.test(number.trim()) || !card) {
+    if (!/^7008\d{4}$/.test(acc) || !card) {
       setError("7008-аар эхэлсэн 8 оронтой MIP70 дугаар болон цэнэглэх дүнгээ шалгана уу.");
       return;
     }
@@ -57,7 +51,7 @@ export default function Mip70Payment() {
     setError("");
     try {
       const response = await cardBuy({
-        type: "recharge", number: number.trim(), payment: "qpay",
+        type: "recharge", number: acc, payment: "qpay",
         email: "", ebarimt: receipt, card_type: "MIP", prefix: card.PREFIX,
       });
       if (response?.result !== "ok" || !response.data?.invoice_id || !response.data?.qr_image) {
@@ -80,8 +74,7 @@ export default function Mip70Payment() {
           <div>
             <label htmlFor="mip70-number" className="mb-2 block text-sm font-medium">MIP70 дугаар</label>
             <Input id="mip70-number" type="tel" inputMode="numeric" autoComplete="tel-national"
-              placeholder="7008XXXX" pattern="7008[0-9]{4}" maxLength={8} required
-              value={number} onChange={(event) => setNumber(event.target.value.replace(/[^0-9]/g, ""))} />
+              readOnly aria-readonly="true" className="bg-slate-50" value={acc} />
           </div>
           <div>
             <label htmlFor="mip70-amount" className="mb-2 block text-sm font-medium">Цэнэглэх дүн</label>
