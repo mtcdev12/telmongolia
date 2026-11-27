@@ -600,7 +600,10 @@ export const pstGetDetailedData =  async (user_id:any ,token:string) =>  {
 }
 export const getPaymentMethods = async (): Promise<{ digipay: boolean }> => {
     try {
-        const res = await fetch(process.env.API + "/payment/methods");
+        const res = await fetch(process.env.API + "/payment/methods", {
+            cache: "no-store",
+            signal: AbortSignal.timeout(10_000),
+        });
         if (!res.ok) return { digipay: false };
         const data = await res.json();
         return { digipay: data?.result === "ok" && data?.data?.digipay === true };

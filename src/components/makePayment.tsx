@@ -30,6 +30,9 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr =
   const [open, setOpen] = useState(true);
   const [paymentSucceeded, setPaymentSucceeded] = useState(false);
   const isDigiPay = paymentdata.payment_method === "digipay";
+  const digiPayLink = typeof paymentdata.deeplink === "string"
+    && /^digipay:\/\/payment\/[A-Za-z0-9_.-]{1,128}$/.test(paymentdata.deeplink)
+    ? paymentdata.deeplink : null;
 
   const handleOpenChange = () => {
     setOpen(false);
@@ -131,12 +134,15 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr =
                 ? "Open Digi Pay on your phone to approve this payment."
                 : "Digi Pay апп суусан утсан дээр доорх товчийг дарж төлбөрөө баталгаажуулна уу."}
             </p>
-            <a
-              href={String(paymentdata.deeplink ?? "")}
+            {digiPayLink ? <a
+              href={digiPayLink}
               className="inline-flex items-center justify-center rounded-md bg-brand-1 px-4 py-2 text-white hover:bg-brand-1/90"
             >
               {isEnglish ? "Open Digi Pay" : "Digi Pay апп нээх"}
-            </a>
+            </a> : <p role="alert" className="text-sm text-red-700">
+              {isEnglish ? "The payment link is invalid. Please create a new invoice."
+                : "Төлбөрийн холбоос буруу байна. Нэхэмжлэхээ дахин үүсгэнэ үү."}
+            </p>}
             <p className="break-all text-sm text-gray-600">
               {isEnglish ? "Invoice" : "Нэхэмжлэхийн дугаар"}: {String(paymentdata.invoice_id ?? "")}
             </p>
