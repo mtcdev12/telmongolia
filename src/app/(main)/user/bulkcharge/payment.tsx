@@ -23,7 +23,7 @@ import * as z from "zod";
 import { bulkPay } from "@/api/rest";
 import { DigiPayOption, useDigiPayAvailable } from "@/components/digipay-option";
 import { getDigiPayPaymentLink, tryDigiPayHandoff } from "@/lib/digipay";
-import Payment from "@/components/makePayment";
+import PaymentDialog from "@/components/makePayment";
 import Pay from "./pay";
 
 
@@ -80,7 +80,7 @@ const Payment = (props:any) => {
         <div>
         {Object.keys(paymentData).length > 0 ? (
           paymentData.payment_method === "digipay"
-            ? <Payment paymentdata={paymentData} onPaymentClose={closePayment} returnAfterSuccess />
+            ? <PaymentDialog paymentdata={paymentData} onPaymentClose={closePayment} returnAfterSuccess />
             : <Pay paymentdata={paymentData} onPaymentClose={closePayment} />
         ) : (
           <Dialog
