@@ -32,6 +32,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { cardBuy } from "@/api/rest";
 import Payment from "./makePayment";
+import { DigiPayOption, useDigiPayAvailable } from "@/components/digipay-option";
+import { getDigiPayPaymentLink, tryDigiPayHandoff } from "@/lib/digipay";
 import { translateCardText, type SiteLocale } from "@/lib/i18n/ui";
 
 const formSchema = z.object({
@@ -61,6 +63,7 @@ const SelectedCard = ({ card, onCardClose, locale = "mn" }: SelectedCardProps) =
   const isEnglish = locale === "en";
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const digipayAvailable = useDigiPayAvailable();
   const [open, setOpen] = useState(true);
   const [paymentData, setPaymentData] = useState<Record<string, unknown>>({});
 
@@ -90,17 +93,21 @@ const SelectedCard = ({ card, onCardClose, locale = "mn" }: SelectedCardProps) =
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (loading || (values.payment === "digipay" && !digipayAvailable)) return;
     setLoading(true);
     try {
       const response = await cardBuy({
         ...values,
         number: values.number?.trim(),
         email: values.email.trim(),
-        // Card orders support QPay invoices; bank apps pay the same invoice.
+        // The bank apps option pays the QPay invoice.
         payment: values.payment === "bank-app" ? "qpay" : values.payment,
       });
-      if (response?.result === "ok" && response.data?.invoice_id && response.data?.qr_image) {
+      const isDigiPay = values.payment === "digipay";
+      const link = isDigiPay ? getDigiPayPaymentLink(response?.data ?? {}) : null;
+      if (response?.result === "ok" && response.data?.invoice_id && (isDigiPay ? link : response.data?.qr_image)) {
         setPaymentData(response.data);
+        if (link) tryDigiPayHandoff(link);
         return;
       }
       toast({
@@ -250,6 +257,7 @@ const SelectedCard = ({ card, onCardClose, locale = "mn" }: SelectedCardProps) =
                                 <span>{isEnglish ? "Bank apps" : "Банкны апп"}</span>
                               </FormLabel>
                             </FormItem>
+                            {digipayAvailable && <DigiPayOption />}
                           </RadioGroup>
                         </FormControl>
                         <FormMessage />
