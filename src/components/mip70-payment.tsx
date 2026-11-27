@@ -5,6 +5,8 @@ import { cardBuy, getCards } from "@/api/rest";
 import Payment from "@/components/makePayment";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useDigiPayAvailable } from "@/components/digipay-option";
+import { getDigiPayPaymentLink, tryDigiPayHandoff } from "@/lib/digipay";
 
 type MipCard = { TYPE: string; PREFIX: string; PRICE: string; CARD_TYPE: string; DAYS?: string };
 
@@ -17,6 +19,8 @@ export default function Mip70Payment({ acc }: { acc: string }) {
   const [error, setError] = useState("");
   const [payment, setPayment] = useState<Record<string, unknown> | null>(null);
   const [attempt, setAttempt] = useState(0);
+  const [method, setMethod] = useState("qpay");
+  const digipayAvailable = useDigiPayAvailable();
 
   useEffect(() => {
     let active = true;
@@ -41,7 +45,7 @@ export default function Mip70Payment({ acc }: { acc: string }) {
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (submitting) return;
+    if (submitting || (method === "digipay" && !digipayAvailable)) return;
     const card = cards.find((item) => item.PREFIX === prefix && item.TYPE === "MIP");
     if (!/^7008\d{4}$/.test(acc) || !card) {
       setError("7008-аар эхэлсэн 8 оронтой MIP70 дугаар болон цэнэглэх дүнгээ шалгана уу.");
@@ -51,13 +55,16 @@ export default function Mip70Payment({ acc }: { acc: string }) {
     setError("");
     try {
       const response = await cardBuy({
-        type: "recharge", number: acc, payment: "qpay",
+        type: "recharge", number: acc, payment: method,
         email: "", ebarimt: receipt, card_type: "MIP", prefix: card.PREFIX,
       });
-      if (response?.result !== "ok" || !response.data?.invoice_id || !response.data?.qr_image) {
+      const link = method === "digipay" ? getDigiPayPaymentLink(response?.data ?? {}) : null;
+      if (response?.result !== "ok" || !response.data?.invoice_id
+        || (method === "digipay" ? !link : !response.data?.qr_image)) {
         throw new Error(response?.message || "Төлбөрийн нэхэмжлэх үүсгэж чадсангүй.");
       }
       setPayment(response.data);
+      if (link) tryDigiPayHandoff(link);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Төлбөрийн үйлчилгээтэй холбогдож чадсангүй. Дахин оролдоно уу.");
     } finally {
@@ -95,6 +102,16 @@ export default function Mip70Payment({ acc }: { acc: string }) {
               <option value="business">Албан байгууллага</option>
             </select>
           </div>
+          {digipayAvailable && (
+            <div>
+              <label htmlFor="mip70-method" className="mb-2 block text-sm font-medium">Төлбөрийн хэлбэр</label>
+              <select id="mip70-method" value={method} onChange={(event) => setMethod(event.target.value)}
+                disabled={submitting} className="h-11 w-full rounded-md border bg-white px-3 text-sm">
+                <option value="qpay">QPay</option>
+                <option value="digipay">Digi Pay</option>
+              </select>
+            </div>
+          )}
           {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
           {!loadingCards && !cards.length
             ? <Button type="button" className="w-full" onClick={() => setAttempt((value) => value + 1)}>Дахин оролдох</Button>

@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { checkPayment } from "@/api/rest";
 import { BiCopyAlt } from "react-icons/bi";
 import type { SiteLocale } from "@/lib/i18n/ui";
+import { getDigiPayPaymentLink } from "@/lib/digipay";
 
 type PaymentProps = {
   paymentdata: Record<string, any>;
@@ -30,6 +31,7 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr =
   const [open, setOpen] = useState(true);
   const [paymentSucceeded, setPaymentSucceeded] = useState(false);
   const isDigiPay = paymentdata.payment_method === "digipay";
+  const digiPayLink = getDigiPayPaymentLink(paymentdata);
 
   const handleOpenChange = () => {
     setOpen(false);
@@ -126,17 +128,30 @@ const Payment = ({ paymentdata, onPaymentClose, locale = "mn", bankAppsBelowQr =
           </div>
         ) : isDigiPay ? (
           <div className="space-y-4 text-center">
-            <p>
-              {isEnglish
-                ? "Open Digi Pay on your phone to approve this payment."
-                : "Digi Pay апп суусан утсан дээр доорх товчийг дарж төлбөрөө баталгаажуулна уу."}
-            </p>
-            <a
-              href={String(paymentdata.deeplink ?? "")}
-              className="inline-flex items-center justify-center rounded-md bg-brand-1 px-4 py-2 text-white hover:bg-brand-1/90"
-            >
-              {isEnglish ? "Open Digi Pay" : "Digi Pay апп нээх"}
-            </a>
+            {digiPayLink ? (
+              <>
+                <a
+                  href={digiPayLink}
+                  className="inline-flex items-center justify-center rounded-md bg-brand-1 px-4 py-2 text-white hover:bg-brand-1/90"
+                >
+                  {isEnglish ? "Continue to Digi Pay payment" : "Digi Pay төлбөр рүү шилжих"}
+                </a>
+                <p className="text-sm text-gray-600">
+                  {isEnglish
+                    ? "If the payment screen does not open on your phone, install or update Digi Pay, then return here and try again."
+                    : "Утсан дээр төлбөрийн дэлгэц нээгдэхгүй бол Digi Pay-ийг суулгах эсвэл шинэчлээд энд буцаж дахин оролдоорой."}
+                </p>
+                <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm">
+                  <a href="https://play.google.com/store/apps/details?id=com.khanbank.wallet" target="_blank" rel="noopener noreferrer" className="text-brand-1 underline">Google Play</a>
+                  <a href="https://apps.apple.com/mn/app/digi-pay/id6478477781" target="_blank" rel="noopener noreferrer" className="text-brand-1 underline">App Store</a>
+                </div>
+              </>
+            ) : (
+              <p role="alert" className="text-sm text-red-700">
+                {isEnglish ? "The payment link is invalid. Please create a new invoice."
+                  : "Төлбөрийн холбоос буруу байна. Нэхэмжлэхээ дахин үүсгэнэ үү."}
+              </p>
+            )}
             <p className="break-all text-sm text-gray-600">
               {isEnglish ? "Invoice" : "Нэхэмжлэхийн дугаар"}: {String(paymentdata.invoice_id ?? "")}
             </p>

@@ -21,6 +21,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { bulkPay } from "@/api/rest";
+import { DigiPayOption, useDigiPayAvailable } from "@/components/digipay-option";
+import { getDigiPayPaymentLink, tryDigiPayHandoff } from "@/lib/digipay";
+import Payment from "@/components/makePayment";
 import Pay from "./pay";
 
 
@@ -33,8 +36,9 @@ const formSchema = z.object({
 const Payment = (props:any) => {
     const { toast } = useToast();
     const [loading, setLoading] = useState(false);
+    const digipayAvailable = useDigiPayAvailable();
     const [open, setOpen] = useState(true);
-    const [paymentData, setPaymentData] = useState({});
+    const [paymentData, setPaymentData] = useState<Record<string, any>>({});
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -51,18 +55,22 @@ const Payment = (props:any) => {
       };
 
       async function onSubmit(values: z.infer<typeof formSchema>) {
-        // console.log(values);
+        const isDigiPay = values.payment === "digipay";
+        if (loading || (isDigiPay && !digipayAvailable)) return;
         setLoading(true);
-        const res = await bulkPay(props.custId, props.data, props.token, values, props.beforeCalculation);
-        console.log(res);
-        setLoading(false);
-        if (res["result"] === "ok") {
-          setPaymentData(res['data']);
-        }else{
-          toast({
-            title: "Payment",
-            description: res["message"],
-          });
+        try {
+          const res = await bulkPay(props.custId, props.data, props.token, values, props.beforeCalculation);
+          const link = isDigiPay ? getDigiPayPaymentLink(res?.data ?? {}) : null;
+          if (res?.result !== "ok" || !res.data || (isDigiPay && !link)) {
+            toast({ title: "Төлбөр", description: res?.message || "Нэхэмжлэх үүсгэж чадсангүй." });
+            return;
+          }
+          setPaymentData(res.data);
+          if (link) tryDigiPayHandoff(link);
+        } catch {
+          toast({ title: "Төлбөр", description: "Төлбөрийн үйлчилгээтэй холбогдож чадсангүй." });
+        } finally {
+          setLoading(false);
         }
       }
       const closePayment = () => {
@@ -71,7 +79,9 @@ const Payment = (props:any) => {
     return (
         <div>
         {Object.keys(paymentData).length > 0 ? (
-          <Pay paymentdata={paymentData} onPaymentClose={closePayment} />
+          paymentData.payment_method === "digipay"
+            ? <Payment paymentdata={paymentData} onPaymentClose={closePayment} returnAfterSuccess />
+            : <Pay paymentdata={paymentData} onPaymentClose={closePayment} />
         ) : (
           <Dialog
             open={open}
@@ -128,7 +138,8 @@ const Payment = (props:any) => {
                                   <span>Банк шилжүүлэг</span>
                                 </FormLabel>
                               </FormItem>
-                            </RadioGroup>
+                              {digipayAvailable && <DigiPayOption />}
+                          </RadioGroup>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -181,7 +192,7 @@ const Payment = (props:any) => {
                         </FormItem>
                       )}
                     />
-                    <Button type="submit">Үргэлжлүүлэх</Button>
+                    <Button type="submit" disabled={loading}>Үргэлжлүүлэх</Button>
                   </form>
                 </Form>
               </DialogHeader>

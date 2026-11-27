@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -25,6 +25,7 @@ import * as z from "zod";
 import { getPaymentMethods, paymentPay } from "@/api/rest";
 import Payment from "./makePayment";
 import type { SiteLocale } from "@/lib/i18n/ui";
+import { getDigiPayPaymentLink, tryDigiPayHandoff } from "@/lib/digipay";
 
 const formSchema = z.object({
   user_id: z.string(),
@@ -42,17 +43,19 @@ const PayBill = ({ user_id, onCardClose, locale = "mn" }: PayBillProps) => {
   const isEnglish = locale === "en";
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const submitting = useRef(false);
+  const active = useRef(false);
   const [open, setOpen] = useState(true);
   const [paymentData, setPaymentData] = useState<Record<string, unknown>>({});
   const [digipayAvailable, setDigipayAvailable] = useState(false);
 
   useEffect(() => {
-    let mounted = true;
+    active.current = true;
     getPaymentMethods().then((methods) => {
-      if (mounted) setDigipayAvailable(methods.digipay);
+      if (active.current) setDigipayAvailable(methods.digipay);
     });
     return () => {
-      mounted = false;
+      active.current = false;
     };
   }, []);
 
@@ -65,12 +68,24 @@ const PayBill = ({ user_id, onCardClose, locale = "mn" }: PayBillProps) => {
     },
   });
 
+  const isDigiPaySelected = form.watch("payment") === "digipay";
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    const isDigiPay = values.payment === "digipay";
+    if (submitting.current || (isDigiPay && !digipayAvailable)) return;
+
+    submitting.current = true;
     setLoading(true);
     try {
       const response = await paymentPay(values);
+      if (!active.current) return;
       if (response?.result === "ok") {
-        setPaymentData(response.data ?? {});
+        const invoice = response.data ?? {};
+        setPaymentData(invoice);
+        if (isDigiPay) {
+          const link = getDigiPayPaymentLink(invoice);
+          if (link) tryDigiPayHandoff(link);
+        }
         return;
       }
       toast({
@@ -80,7 +95,8 @@ const PayBill = ({ user_id, onCardClose, locale = "mn" }: PayBillProps) => {
           : response?.message || "Төлбөрийн хүсэлт үүсгэж чадсангүй.",
       });
     } finally {
-      setLoading(false);
+      submitting.current = false;
+      if (active.current) setLoading(false);
     }
   }
 
@@ -96,6 +112,7 @@ const PayBill = ({ user_id, onCardClose, locale = "mn" }: PayBillProps) => {
         <Dialog
           open={open}
           onOpenChange={() => {
+            active.current = false;
             setOpen(false);
             onCardClose(false);
           }}
@@ -199,7 +216,11 @@ const PayBill = ({ user_id, onCardClose, locale = "mn" }: PayBillProps) => {
                       </FormItem>
                     )}
                   />
-                  <Button type="submit">{isEnglish ? "Continue" : "Үргэлжлүүлэх"}</Button>
+                  <Button type="submit" disabled={loading || (isDigiPaySelected && !digipayAvailable)}>
+                    {isDigiPaySelected
+                      ? isEnglish ? "Pay with Digi Pay" : "Digi Pay-ээр төлөх"
+                      : isEnglish ? "Continue" : "Үргэлжлүүлэх"}
+                  </Button>
                 </form>
               </Form>
             </DialogHeader>
